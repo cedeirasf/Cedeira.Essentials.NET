@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cedeira.Essentials.NET", "Cedeira.Essentials.NET\Cedeira.Essentials.NET.csproj", "{3509ABB5-A246-4F1D-9701-ADB281748E99}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cedeira.Essentials.NET-unittests", "Cedeira.Essentials.NET-unittests\Cedeira.Essentials.NET-unittests.csproj", "{82D82DE3-D40C-4E1E-982F-3EDC3F9AD603}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3509ABB5-A246-4F1D-9701-ADB281748E99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3509ABB5-A246-4F1D-9701-ADB281748E99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3509ABB5-A246-4F1D-9701-ADB281748E99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3509ABB5-A246-4F1D-9701-ADB281748E99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82D82DE3-D40C-4E1E-982F-3EDC3F9AD603}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82D82DE3-D40C-4E1E-982F-3EDC3F9AD603}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82D82DE3-D40C-4E1E-982F-3EDC3F9AD603}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82D82DE3-D40C-4E1E-982F-3EDC3F9AD603}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {189FFD98-21A3-416D-906F-C0539C683D5F}
+	EndGlobalSection
+EndGlobal
