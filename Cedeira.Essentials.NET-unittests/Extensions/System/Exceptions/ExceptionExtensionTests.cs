@@ -1,6 +1,6 @@
-using Cedeira.Essentials.NET.Extensions;
+using Cedeira.Essentials.NET.Extensions.System.Exceptions;
 
-namespace Cedeira.Essentials.NET_unittests.ExtensionsTest
+namespace Cedeira.Essentials.NET_unittests.Extensions.System.Exceptions
 {
     [TestClass]
     public class ExceptionExtensionTests
@@ -35,7 +35,7 @@ namespace Cedeira.Essentials.NET_unittests.ExtensionsTest
         public void FullMessage_WithMultipleInnerExceptions_ReturnsAllCombinedMessages()
         {
             Random rnd = new Random();
-            int numberOfInnerExceptions = rnd.Next(2, 10); 
+            int numberOfInnerExceptions = rnd.Next(2, 10);
             var exceptionMessages = new string[numberOfInnerExceptions];
             Exception? currentException = null;
 
@@ -51,6 +51,34 @@ namespace Cedeira.Essentials.NET_unittests.ExtensionsTest
             var result = outerException?.FullMessage();
 
             Assert.AreEqual(expectedMessage, result);
+        }
+
+        [TestMethod]
+        public void FullMessage_WithCustomSeparators_ReturnsCombinedMessages()
+        {
+            var testCases = new Dictionary<(List<string> exceptionMessages, string separator), string>
+            {
+                { (new List<string> { "Outer exception", "Inner exception" }, " | "), "Outer exception | Inner exception" },
+                { (new List<string> { "Outer exception", "Middle exception", "Inner exception" }, ""), "Outer exceptionMiddle exceptionInner exception" },
+                { (new List<string> { "Outer exception", "Inner exception" }, ","), "Outer exception,Inner exception" }
+            };
+
+            foreach (var testCase in testCases)
+            {
+                var exceptionMessages = testCase.Key.exceptionMessages;
+                var separator = testCase.Key.separator;
+                var expectedMessage = testCase.Value;
+
+                Exception? currentException = null;
+                for (int i = exceptionMessages.Count - 1; i >= 0; i--)
+                {
+                    currentException = new Exception(exceptionMessages[i], currentException);
+                }
+
+                var result = currentException?.FullMessage(separator);
+
+                Assert.AreEqual(expectedMessage, result);
+            }
         }
     }
 }

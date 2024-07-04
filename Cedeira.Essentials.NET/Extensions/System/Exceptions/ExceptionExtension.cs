@@ -1,4 +1,4 @@
-﻿namespace Cedeira.Essentials.NET.Extensions
+﻿namespace Cedeira.Essentials.NET.Extensions.System.Exceptions
 {
     public static class ExceptionExtension
     {
@@ -9,7 +9,7 @@
             return e.FullMessage(DefaultSeparator);
         }
 
-        private static string FullMessage(this Exception e, string separator)
+        public static string FullMessage(this Exception e, string separator)
         {
             if (e is null) return string.Empty;
             var message = e.Message;
