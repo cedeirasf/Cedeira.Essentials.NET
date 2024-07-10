@@ -8,4 +8,15 @@
         bool IsFailure();
         bool IsWarning();
     }
+
+    public interface IResult<TSuccess, TFailure> : IResult
+    {
+        TSuccess SuccessValue { get; }
+        TFailure FailureValue { get; }
+    }
+
+    public interface IResult<TSuccess> : IResult
+    {
+        TSuccess SuccessValue { get; }
+    }
 }
