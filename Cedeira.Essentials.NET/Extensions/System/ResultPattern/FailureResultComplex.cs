@@ -4,7 +4,7 @@ namespace Cedeira.Essentials.NET.Extensions.System.ResultPattern
 {
     public class FailureResultComplex<TSuccess, TFailure> : ResultBase, IResultComplex<TSuccess, TFailure>
     {
-        public TSuccess SuccessValue => default;
+        public TSuccess SuccessValue => throw new InvalidOperationException("Cannot access SuccessValue in a failure result.");
         public TFailure FailureValue { get; private set; }
 
         public FailureResultComplex(TFailure failureValue, string message)

@@ -7,11 +7,11 @@ namespace Cedeira.Essentials.NET.Extensions.System.ResultPattern
     {
         public TSuccess SuccessValue { get; private set; }
 
-        public SuccessResultSimple(TSuccess successValue)
+        public SuccessResultSimple(TSuccess successValue, string message = "")
         {
             SuccessValue = successValue;
             Status = ResultStatus.Success;
-            Message = string.Empty;
+            Message = message;
         }
     }
 
