@@ -108,5 +108,53 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.System.ResultPattern
             Assert.AreEqual(expectedFailureValue, result.FailureValue);
             Assert.AreEqual(expectedMessage, result.Message);
         }
+
+        /// <summary>
+        /// Prueba que se lance InvalidOperationException al acceder a FailureValue en un resultado exitoso con tipo de fallo.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void SuccessResultWithFailureType_ShouldThrowExceptionOnFailureValueAccess()
+        {
+            var result = _resultFactory.Success<string, string>("Operación completada exitosamente");
+
+            var failureValue = result.FailureValue;
+        }
+
+        /// <summary>
+        /// Prueba que se lance InvalidOperationException al acceder a FailureValue en un resultado de advertencia con tipo de fallo.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void WarningResultWithFailureType_ShouldThrowExceptionOnFailureValueAccess()
+        {
+            var result = _resultFactory.Warning<string, string>("Operación completada con advertencias", "Esto es una advertencia");
+
+            var failureValue = result.FailureValue; 
+        }
+
+        /// <summary>
+        /// Prueba que se lance InvalidOperationException al acceder a SuccessValue en un resultado fallido.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void FailureResult_ShouldThrowExceptionOnSuccessValueAccess()
+        {
+            var result = _resultFactory.Failure<string>("Operación fallida");
+
+            var successValue = result.SuccessValue; 
+        }
+
+        /// <summary>
+        /// Prueba que se lance InvalidOperationException al acceder a SuccessValue en un resultado fallido con tipo de fallo.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void FailureResultWithFailureType_ShouldThrowExceptionOnSuccessValueAccess()
+        {
+            var result = _resultFactory.Failure<string, string>("Valor de operación fallida", "Operación fallida");
+
+            var successValue = result.SuccessValue;
+        }
     }
 }
