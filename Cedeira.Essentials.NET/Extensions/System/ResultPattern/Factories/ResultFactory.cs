@@ -1,6 +1,4 @@
-﻿using Cedeira.Essentials.NET.Extensions.System.ResultPattern.Abstractions;
-
-namespace Cedeira.Essentials.NET.Extensions.System.ResultPattern.Factories
+﻿namespace Cedeira.Essentials.NET.Extensions.System.ResultPattern.Factories
 {
     public class ResultFactory : IResultFactory
     {

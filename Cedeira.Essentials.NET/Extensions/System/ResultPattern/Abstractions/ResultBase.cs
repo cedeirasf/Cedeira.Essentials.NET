@@ -3,7 +3,7 @@
     public abstract class ResultBase : IResult
     {
         public ResultStatus Status { get; protected set; }
-        public string Message { get; protected set; } = string.Empty;
+        public string Message { get; protected set; }  = string.Empty;
 
         public bool IsSuccess() => Status == ResultStatus.Success;
         public bool IsFailure() => Status == ResultStatus.Failure;
