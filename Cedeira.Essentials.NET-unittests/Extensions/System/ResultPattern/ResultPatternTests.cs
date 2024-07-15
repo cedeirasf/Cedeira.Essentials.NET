@@ -3,18 +3,24 @@ using Cedeira.Essentials.NET.Extensions.System.ResultPattern;
 
 namespace Cedeira.Essentials.NET_unittests.Extensions.System.ResultPattern
 {
+    /// <summary>
+    /// Contiene pruebas unitarias para la implementación de patrones de resultado en la clase <vea cref="ResultFactory"/>.
+    /// </summary>
     [TestClass]
     public class ResultPatternTests
     {
         private IResultFactory _resultFactory;
 
+        /// <summary>
+        /// Inicializa una nueva instancia de la clase <ver cref="ResultPatternTests"/> y configura <ver cref="_resultFactory"/> con una nueva instancia de <ver cref="ResultFactory"/>.
+        /// </summary>
         public ResultPatternTests()
         {
             _resultFactory = new ResultFactory();
         }
 
         /// <summary>
-        /// Prueba que un resultado exitoso tenga el estado y valor correspondiente
+        /// Prueba que un resultado exitoso tenga el estado y valor correspondiente.
         /// </summary>
         [TestMethod]
         public void SuccessResult_ShouldHaveCorrectStatusAndValue()
@@ -29,7 +35,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.System.ResultPattern
         }
 
         /// <summary>
-        /// Prueba que un resultado de advertencia tenga el estado y mensaje correspondiente
+        /// Prueba que un resultado de advertencia tenga el estado y mensaje correspondiente.
         /// </summary>
         [TestMethod]
         public void WarningResult_ShouldHaveCorrectStatusAndMessage()
@@ -46,7 +52,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.System.ResultPattern
         }
 
         /// <summary>
-        /// Prueba que un resultado fallido tenga el estado y mensaje correspondiente
+        /// Prueba que un resultado fallido tenga el estado y mensaje correspondiente.
         /// </summary>
         [TestMethod]
         public void FailureResult_ShouldHaveCorrectStatusAndMessage()
@@ -61,7 +67,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.System.ResultPattern
         }
 
         /// <summary>
-        /// Prueba que un resultado exitoso con tipo de fallo tenga el estado y valor correspondiente
+        /// Prueba que un resultado exitoso con tipo de fallo tenga el estado y valor correspondiente.
         /// </summary>
         [TestMethod]
         public void SuccessResultWithFailureType_ShouldHaveCorrectStatusAndValue()
@@ -76,7 +82,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.System.ResultPattern
         }
 
         /// <summary>
-        /// Prueba que un resultado de advertencia con tipo de fallo tenga el estado y mensaje correspondiente
+        /// Prueba que un resultado de advertencia con tipo de fallo tenga el estado y mensaje correspondiente.
         /// </summary>
         [TestMethod]
         public void WarningResultWithFailureType_ShouldHaveCorrectStatusAndMessage()
@@ -93,7 +99,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.System.ResultPattern
         }
 
         /// <summary>
-        /// Prueba que un resultado fallido con tipo de fallo tenga el estado y valores correspondiente
+        /// Prueba que un resultado fallido con tipo de fallo tenga el estado y valores correspondientes.
         /// </summary>
         [TestMethod]
         public void FailureResultWithFailureType_ShouldHaveCorrectStatusAndValues()
@@ -110,7 +116,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.System.ResultPattern
         }
 
         /// <summary>
-        /// Prueba que se lance InvalidOperationException al acceder a FailureValue en un resultado exitoso con tipo de fallo.
+        /// Prueba que se lance <vea cref="InvalidOperationException"/> al acceder a <vea cref="IResult{TSuccess, TFailure}.FailureValue"/> en un resultado exitoso con tipo de fallo.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
@@ -118,11 +124,12 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.System.ResultPattern
         {
             var result = _resultFactory.Success<string, string>("Operación completada exitosamente");
 
+            // Intentar acceder a FailureValue debe lanzar una excepción
             var failureValue = result.FailureValue;
         }
 
         /// <summary>
-        /// Prueba que se lance InvalidOperationException al acceder a FailureValue en un resultado de advertencia con tipo de fallo.
+        /// Prueba que se lance <vea cref="InvalidOperationException"/> al acceder a <vea cref="IResult{TSuccess, TFailure}.FailureValue"/> en un resultado de advertencia con tipo de fallo.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
@@ -130,11 +137,12 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.System.ResultPattern
         {
             var result = _resultFactory.Warning<string, string>("Operación completada con advertencias", "Esto es una advertencia");
 
-            var failureValue = result.FailureValue; 
+            // Intentar acceder a FailureValue debe lanzar una excepción
+            var failureValue = result.FailureValue;
         }
 
         /// <summary>
-        /// Prueba que se lance InvalidOperationException al acceder a SuccessValue en un resultado fallido.
+        /// Prueba que se lance <vea cref="InvalidOperationException"/> al acceder a <vea cref="IResult{TSuccess}.SuccessValue"/> en un resultado fallido.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
@@ -142,11 +150,12 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.System.ResultPattern
         {
             var result = _resultFactory.Failure<string>("Operación fallida");
 
-            var successValue = result.SuccessValue; 
+            // Intentar acceder a SuccessValue debe lanzar una excepción
+            var successValue = result.SuccessValue;
         }
 
         /// <summary>
-        /// Prueba que se lance InvalidOperationException al acceder a SuccessValue en un resultado fallido con tipo de fallo.
+        /// Prueba que se lance <vea cref="InvalidOperationException"/> al acceder a <vea cref="IResult{TSuccess, TFailure}.SuccessValue"/> en un resultado fallido con tipo de fallo.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
@@ -154,6 +163,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.System.ResultPattern
         {
             var result = _resultFactory.Failure<string, string>("Valor de operación fallida", "Operación fallida");
 
+            // Intentar acceder a SuccessValue debe lanzar una excepción
             var successValue = result.SuccessValue;
         }
     }

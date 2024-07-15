@@ -1,5 +1,8 @@
 ﻿namespace Cedeira.Essentials.NET.Extensions.System.ResultPattern.Factories
 {
+    /// <summary>
+    /// Implementacion de la fabrica para instanciar objetos
+    /// </summary>
     public class ResultFactory : IResultFactory
     {
         public IResult<TSuccess> Success<TSuccess>(TSuccess value) =>
