@@ -81,7 +81,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         }
 
         [TestMethod]
-        //[ExpectedException(typeof(ArgumentException))]
+        //[ExpectedException(typeof(FormatException))]
         public void Chaining_ShouldThrow_WhenOneValidationFails()
         {
             var validator = Invariants.For("Hello@123");
@@ -90,6 +90,18 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
                 .IsNotNullOrEmpty()
                 .MaximumLength(10)
                 .MatchesRegex("^[a-zA-Z0-9]*$"); 
+        }
+
+        [TestMethod]
+        //[ExpectedException(typeof(ArgumentException))]
+        public void Chaining_ShouldThrow_MultipleValidationsFail()
+        {
+            var validator = Invariants.For("Hello@123456");
+            validator
+                .IsNotNull()
+                .IsNotNullOrEmpty()
+                .MaximumLength(10)
+                .MatchesRegex("^[a-zA-Z0-9]*$");
         }
     }
 

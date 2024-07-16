@@ -41,7 +41,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         {
             if (_value is string x && x.Length > maxLength)
             {
-                throw new ArgumentException(errorMessage ?? $"El valor no puede excedecerse de {maxLength} caracteres.");
+                throw new ArgumentException(errorMessage ?? $"El valor no puede excederse de {maxLength} caracteres.");
             }
             return this;
         }
@@ -50,12 +50,11 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         {
             if (_value is string x && !Regex.IsMatch(x, pattern))
             {
-                throw new FormatException(errorMessage ?? $"El formato del valor debe seguir el patrón {pattern}.");
+                throw new FormatException(errorMessage ?? $"El valor no puede contener caracteres especiales.");
             }
             return this;
         }
 
-        //public InvariantValidator<T> Custom(Action<T> validationAction);
     }
 }
 
