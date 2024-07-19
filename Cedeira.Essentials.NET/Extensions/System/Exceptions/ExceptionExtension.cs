@@ -33,5 +33,21 @@
             }
             return message;
         }
+
+        /// <summary>
+        /// Recupera el mensaje de la última excepción anidada
+        /// </summary>
+        /// <param name="e">La instancia de la excepcion</param>
+        /// <returns>El mensaje de la última excepción anidada</returns>
+        public static string LastExceptionMessage(this Exception e)
+        {
+            if (e is null) return string.Empty;
+            
+            while(e.InnerException is not null)
+            {
+                e = e.InnerException;
+            }
+            return e.Message;
+        }
     }
 }
