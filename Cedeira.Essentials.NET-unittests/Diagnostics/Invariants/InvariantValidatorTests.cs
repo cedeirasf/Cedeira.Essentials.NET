@@ -13,7 +13,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         }
 
         [TestMethod]
-        //[ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void IsEqual_ShouldThrow_WhenValuesAreNotEqual()
         {
             var validator = Invariants.For(5);
@@ -28,7 +28,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         }
 
         [TestMethod]
-        //[ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void IsNotNull_ShouldThrow_WhenValueIsNull()
         {
             var validator = Invariants.For<string>(null);
@@ -43,7 +43,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         }
 
         [TestMethod]
-        //[ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void IsNotNullOrEmpty_ShouldThrow_WhenValueIsEmpty()
         {
             var validator = Invariants.For("");
@@ -58,7 +58,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         }
 
         [TestMethod]
-        //[ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void MaximumLength_ShouldThrow_WhenValueLengthExceedsMax()
         {
             var validator = Invariants.For("Hello, World!");
@@ -73,7 +73,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         }
 
         [TestMethod]
-        //[ExpectedException(typeof(FormatException))]
+        [ExpectedException(typeof(FormatException))]
         public void MatchesRegex_ShouldThrow_WhenValueDoesNotMatchPattern()
         {
             var validator = Invariants.For("Hello@123");
@@ -81,7 +81,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         }
 
         [TestMethod]
-        //[ExpectedException(typeof(FormatException))]
+        [ExpectedException(typeof(FormatException))]
         public void Chaining_ShouldThrow_WhenOneValidationFails()
         {
             var validator = Invariants.For("Hello@123");
@@ -93,7 +93,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         }
 
         [TestMethod]
-        //[ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void Chaining_ShouldThrow_MultipleValidationsFail()
         {
             var validator = Invariants.For("Hello@123456");
