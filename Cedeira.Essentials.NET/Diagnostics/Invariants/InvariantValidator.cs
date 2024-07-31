@@ -39,7 +39,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             }
             if (!Equals(_value, expected))
             {
-                throw new ArgumentException(errorMessage ?? $"Value must be equal to {expected}.");
+                throw new ArgumentException(errorMessage);
             }
             return this;
         }
@@ -69,7 +69,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             }
             if (_value == null)
             {
-                throw new ArgumentNullException(errorMessage ?? "Value cannot be null.");
+                throw new ArgumentNullException(errorMessage);
             }
             return this;
         }
@@ -100,7 +100,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             }
             if (_value is string x && string.IsNullOrEmpty(x))
             {
-                throw new ArgumentException(errorMessage ?? "Value cannot be null or empty.");
+                throw new ArgumentException(errorMessage);
             }
             return this;
         }
@@ -133,7 +133,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             }
             if (_value is string x && x.Length > maxLength)
             {
-                throw new ArgumentException(errorMessage ?? $"Value cannot exceed {maxLength} characters.");
+                throw new ArgumentException(errorMessage);
             }
             return this;
         }
@@ -166,7 +166,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             }
             if (_value is string x && !Regex.IsMatch(x, pattern))
             {
-                throw new FormatException(errorMessage ?? "Value cannot contain especial characters.");
+                throw new FormatException(errorMessage);
             }
             return this;
         }
