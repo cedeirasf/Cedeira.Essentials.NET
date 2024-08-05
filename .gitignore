@@ -396,3 +396,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# docfx artifacts
+docs/
+!docs/docfx.json
+!docs/index.md
+!docs/toc.yml

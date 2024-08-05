@@ -2,10 +2,16 @@ using Cedeira.Essentials.NET.Extensions.System.Exceptions;
 
 namespace Cedeira.Essentials.NET_unittests.Extensions.System.Exceptions
 {
+    /// <summary>
+    /// Contiene pruebas unitarias para la clase <vea cref="ExceptionExtension"/>.
+    /// </summary>
     [TestClass]
     public class ExceptionExtensionTests
     {
-
+        /// <summary>
+        /// Verifica que el método <vea cref="ExceptionExtension.FullMessage(Exception)"/> 
+        /// devuelve el mensaje correcto cuando no hay excepción interna.
+        /// </summary>
         [TestMethod]
         public void FullMessage_WithoutInnerException_ReturnsCorrectMessage()
         {
@@ -17,6 +23,10 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.System.Exceptions
             Assert.AreEqual(exceptionMessage, result);
         }
 
+        /// <summary>
+        /// Verifica que el método <vea cref="ExceptionExtension.FullMessage(Exception)"/> 
+        /// devuelve el mensaje combinado cuando hay una excepción interna.
+        /// </summary>
         [TestMethod]
         public void FullMessage_WithOneInnerException_ReturnsCombinedMessage()
         {
@@ -31,6 +41,10 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.System.Exceptions
             Assert.AreEqual(expectedMessage, result);
         }
 
+        /// <summary>
+        /// Verifica que el método <vea cref="ExceptionExtension.FullMessage(Exception)"/> 
+        /// devuelve todos los mensajes combinados cuando hay múltiples excepciones internas.
+        /// </summary>
         [TestMethod]
         public void FullMessage_WithMultipleInnerExceptions_ReturnsAllCombinedMessages()
         {
@@ -53,6 +67,10 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.System.Exceptions
             Assert.AreEqual(expectedMessage, result);
         }
 
+        /// <summary>
+        /// Verifica que el método <vea cref="ExceptionExtension.FullMessage(Exception, string)"/> 
+        /// devuelve los mensajes combinados utilizando separadores personalizados.
+        /// </summary>
         [TestMethod]
         public void FullMessage_WithCustomSeparators_ReturnsCombinedMessages()
         {
@@ -79,6 +97,54 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.System.Exceptions
 
                 Assert.AreEqual(expectedMessage, result);
             }
+        }
+
+        /// <summary>
+        /// Verifica que el método <vea cref="ExceptionExtension.LastExceptionMessage(Exception)"/> 
+        /// devuelve el mensaje correcto cuando no hay excepción interna.
+        /// </summary>
+        [TestMethod]
+        public void LastExceptionMessage_WithoutInnerException_ReturnsCorrectMessage()
+        {
+            var exceptionMessage = "This is a test exception";
+            var exception = new Exception(exceptionMessage);
+
+            var result = exception.LastExceptionMessage();
+
+            Assert.AreEqual(exceptionMessage, result);
+        }
+
+        /// <summary>
+        /// Verifica que el método <vea cref="ExceptionExtension.LastExceptionMessage(Exception)"/> 
+        /// devuelve el mensaje de la última excepción anidada.
+        /// </summary>
+        [TestMethod]
+        public void LastExceptionMessage_WithOneInnerException_ReturnsInnerExceptionMessage()
+        {
+            var innerExceptionMessage = "This is an inner exception";
+            var outerExceptionMessage = "This is an outer exception";
+            var innerException = new Exception(innerExceptionMessage);
+            var outerException = new Exception(outerExceptionMessage, innerException);
+
+            var result = outerException.LastExceptionMessage();
+
+            Assert.AreEqual(innerExceptionMessage, result);
+        }
+
+        /// <summary>
+        /// Verifica que el método <vea cref="ExceptionExtension.LastExceptionMessage(Exception)"/> 
+        /// devuelve el mensaje de la última excepción anidada cuando hay múltiples excepciones internas.
+        /// </summary>
+        [TestMethod]
+        public void LastExceptionMessage_WithMultipleInnerExceptions_ReturnsLastInnerExceptionMessage()
+        {
+            var lastInnerExceptionMessage = "This is the last inner exception";
+            var innerException = new Exception("Inner exception 2", new Exception(lastInnerExceptionMessage));
+            var outerException = new Exception("Outer exception", innerException);
+
+            var result = outerException.LastExceptionMessage();
+
+            Assert.AreEqual(lastInnerExceptionMessage, result);
         }
     }
 }
