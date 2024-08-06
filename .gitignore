@@ -397,6 +397,8 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-# Ignore docfx results
-**/docs/_site
-**/docs/api
+# docfx artifacts
+docs/
+!docs/docfx.json
+!docs/index.md
+!docs/toc.yml
