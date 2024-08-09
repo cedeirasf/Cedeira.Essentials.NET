@@ -1,6 +1,6 @@
-using Cedeira.Essentials.NET.Extensions.System.Exceptions;
+using Cedeira.Essentials.NET.Extensions.Exceptions;
 
-namespace Cedeira.Essentials.NET_unittests.Extensions.System.Exceptions
+namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
 {
     /// <summary>
     /// Contiene pruebas unitarias para la clase <vea cref="ExceptionExtension"/>.
@@ -18,7 +18,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.System.Exceptions
             var exceptionMessage = "This is a test exception";
             var exception = new Exception(exceptionMessage);
 
-            var result = ExceptionExtension.FullMessage(exception);
+            var result = exception.FullMessage();
 
             Assert.AreEqual(exceptionMessage, result);
         }

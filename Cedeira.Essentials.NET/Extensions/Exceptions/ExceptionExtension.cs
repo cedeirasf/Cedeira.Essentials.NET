@@ -1,4 +1,4 @@
-﻿namespace Cedeira.Essentials.NET.Extensions.System.Exceptions
+﻿namespace Cedeira.Essentials.NET.Extensions.Exceptions
 {
     /// <summary>
     /// Proporciona métodos de extensión para la clase Exception para obtener mensajes completos
@@ -42,8 +42,8 @@
         public static string LastExceptionMessage(this Exception e)
         {
             if (e is null) return string.Empty;
-            
-            while(e.InnerException is not null)
+
+            while (e.InnerException is not null)
             {
                 e = e.InnerException;
             }

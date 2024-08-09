@@ -1,7 +1,9 @@
-﻿using Cedeira.Essentials.NET.Extensions.System.ResultPattern.Factories;
-using Cedeira.Essentials.NET.Extensions.System.ResultPattern;
+﻿
 
-namespace Cedeira.Essentials.NET_unittests.Extensions.System.ResultPattern
+using Cedeira.Essentials.NET.System.ResultPattern;
+using Cedeira.Essentials.NET.System.ResultPattern.Factories;
+
+namespace Cedeira.Essentials.NET_unittests.System.ResultPattern
 {
     /// <summary>
     /// Contiene pruebas unitarias para la implementación de patrones de resultado en la clase <vea cref="ResultFactory"/>.
