@@ -1,4 +1,4 @@
-﻿namespace Cedeira.Essentials.NET.Extensions.System.ResultPattern.Factories
+﻿namespace Cedeira.Essentials.NET.System.ResultPattern.Factories
 {
     /// <summary>
     /// Implementacion de la fabrica para instanciar objetos

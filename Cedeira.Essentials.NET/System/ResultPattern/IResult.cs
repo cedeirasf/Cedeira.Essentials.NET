@@ -1,6 +1,4 @@
-﻿using Cedeira.Essentials.NET.Extensions.System.ResultPattern.Abstractions;
-
-namespace Cedeira.Essentials.NET.Extensions.System.ResultPattern
+﻿namespace Cedeira.Essentials.NET.System.ResultPattern
 {
     /// <summary>
     /// Define la interfaz de resultado.

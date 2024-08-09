@@ -1,6 +1,6 @@
-﻿using Cedeira.Essentials.NET.Extensions.System.ResultPattern.Abstractions;
+﻿using Cedeira.Essentials.NET.System.Abstractions;
 
-namespace Cedeira.Essentials.NET.Extensions.System.ResultPattern
+namespace Cedeira.Essentials.NET.System.ResultPattern
 {
     /// <summary>
     /// Representa un resultado de advertencia

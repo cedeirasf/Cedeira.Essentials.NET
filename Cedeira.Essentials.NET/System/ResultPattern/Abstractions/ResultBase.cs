@@ -1,4 +1,6 @@
-﻿namespace Cedeira.Essentials.NET.Extensions.System.ResultPattern.Abstractions
+﻿using Cedeira.Essentials.NET.System.ResultPattern;
+
+namespace Cedeira.Essentials.NET.System.Abstractions
 {
     /// <summary>
     /// Representa la clase base para el patron resultado

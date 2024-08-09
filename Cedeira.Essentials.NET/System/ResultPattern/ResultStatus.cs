@@ -1,4 +1,4 @@
-﻿namespace Cedeira.Essentials.NET.Extensions.System.ResultPattern
+﻿namespace Cedeira.Essentials.NET.System.ResultPattern
 {
     public enum ResultStatus
     {
