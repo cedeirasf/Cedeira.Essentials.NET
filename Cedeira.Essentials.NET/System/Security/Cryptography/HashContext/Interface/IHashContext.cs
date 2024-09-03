@@ -5,7 +5,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashContext.Interf
 {
     public interface IHashContext
     {
-        //HashAlgorithmName AlgorithmName { get; set; }
-        //Encoding TextEncoding { get; set; }
+        HashAlgorithmName AlgorithmName { get; set; }
+        Encoding TextEncoding { get; set; }
     }
 }

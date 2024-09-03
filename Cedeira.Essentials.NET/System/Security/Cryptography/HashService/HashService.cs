@@ -4,14 +4,14 @@ using Cedeira.Essentials.NET.System.Security.Cryptography.HashService.Interface;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
 {
-    public abstract class HashService<T> : IHashService where T : HashAlgorithm, new()  
+    public class HashService<T> : IHashService where T : HashAlgorithm, new()  
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public string CreateHash(string input)
+        public string CaculateHash(string input)
         {
             using T algorithm = new();
 
@@ -24,7 +24,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
         /// </summary>
         /// <param name="input"></param>
         /// <param name="output"></param>
-        public void CreateHash(string input, Stream output)
+        public void CalculateHash(string input, Stream output)
         {
             using T algorithm = new();
 
@@ -53,7 +53,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
         /// <returns></returns>
         public bool HashValidate(string input, string hash)
         {
-            string computedHash = CreateHash(input);
+            string computedHash = CaculateHash(input);
 
             return string.Equals(computedHash, hash, StringComparison.OrdinalIgnoreCase);
         }
