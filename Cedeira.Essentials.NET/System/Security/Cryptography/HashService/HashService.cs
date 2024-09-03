@@ -6,6 +6,11 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
 {
     public abstract class HashService<T> : IHashService where T : HashAlgorithm, new()  
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public string CreateHash(string input)
         {
             using T algorithm = new();
@@ -14,7 +19,11 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
 
             return ConvertHashToString(hashBytes);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="output"></param>
         public void CreateHash(string input, Stream output)
         {
             using T algorithm = new();
@@ -23,7 +32,11 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
 
             output.Write(hashBytes,0,hashBytes.Length);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="hashBytes"></param>
+        /// <returns></returns>
         protected string ConvertHashToString(byte[] hashBytes)
         {
             StringBuilder sb = new StringBuilder(hashBytes.Length * 2);
@@ -32,37 +45,29 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
 
             return sb.ToString();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="hash"></param>
+        /// <returns></returns>
         public bool HashValidate(string input, string hash)
         {
             string computedHash = CreateHash(input);
+
             return string.Equals(computedHash, hash, StringComparison.OrdinalIgnoreCase);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="algorithm"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
         protected byte[] ComputeHash(HashAlgorithm algorithm, string input)
         {
             byte[] inputBytes = Encoding.UTF8.GetBytes(input);
 
             return algorithm.ComputeHash(inputBytes);
-        }
-
-
-        private byte[] ConvertInputToByteArray(object input)
-        {
-            if (input is string str)
-            {
-                return Encoding.ASCII.GetBytes(str);
-            }
-            else if (input is Stream stream)
-            {
-                using MemoryStream ms = new();
-                stream.CopyTo(ms);
-                return ms.ToArray();
-            }
-            else
-            {
-                throw new ArgumentException("Data type nos supported. We recomend either string or stream ", nameof(input));
-            }
         }
 
     }
