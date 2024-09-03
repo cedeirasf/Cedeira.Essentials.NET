@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using Cedeira.Essentials.NET.System.Security.Cryptography.HashContext.Interface;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashContext
 {

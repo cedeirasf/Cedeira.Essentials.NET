@@ -4,22 +4,39 @@ using Cedeira.Essentials.NET.System.Security.Cryptography.HashService.Interface;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
 {
-    public class HashService : IHashService
+    public abstract class HashService<T> : IHashService where T : HashAlgorithm, new()  
     {
-
-        //context
-        public string CreateHash<T>(object data) where T : HashAlgorithm, new()
+        public string CreateHash(string input)
         {
-            using T hashAlgorithm = new();
-            return ComputeHashInternal(data, hashAlgorithm);
+            using T algorithm = new T();
+
+            byte[] hashBytes = ComputeHash(algorithm,input);
+
+            return ConvertHashToString(hashBytes);
         }
 
-        private string ComputeHashInternal(object input, HashAlgorithm hashAlgorithm)
+        protected string ConvertHashToString(byte[] hashBytes)
         {
-            byte[] data = ConvertInputToByteArray(input);
-            byte[] hashBytes = hashAlgorithm.ComputeHash(data);
-            return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+            StringBuilder sb = new StringBuilder(hashBytes.Length * 2);
+
+            foreach (byte b in hashBytes) sb.AppendFormat("{0:x2}", b);
+
+            return sb.ToString();
         }
+
+        protected byte[] ComputeHash(HashAlgorithm algorithm, string input)
+        {
+            byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+
+            return algorithm.ComputeHash(inputBytes);
+        }
+
+        //private string ComputeHash(string input, HashAlgorithm hashAlgorithm)
+        //{
+        //    byte[] data = ConvertInputToByteArray(input);
+        //    byte[] hashBytes = hashAlgorithm.ComputeHash(data);
+        //    return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+        //}
 
         private byte[] ConvertInputToByteArray(object input)
         {

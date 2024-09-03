@@ -1,9 +1,14 @@
 ﻿using System.Security.Cryptography;
 
-namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
+namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService.Interface
 {
     public interface IHashService
     {
-        public string CreateHash<T>(object data) where T : HashAlgorithm, new();
+        //Genera el hash de una cadena de entrada y devuelve el resultado como una cadena.
+        string CreateHash(string input);
+        //Genera el hash de una cadena de entrada
+        void CreateHashFlow(string input, Stream output);
+        //Valida si el hash generado
+        bool HashValidate(string input, string hash);   
     }
 }
