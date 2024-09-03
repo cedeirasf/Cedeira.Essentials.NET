@@ -8,11 +8,20 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
     {
         public string CreateHash(string input)
         {
-            using T algorithm = new T();
+            using T algorithm = new();
 
             byte[] hashBytes = ComputeHash(algorithm,input);
 
             return ConvertHashToString(hashBytes);
+        }
+
+        public void CreateHash(string input, Stream output)
+        {
+            using T algorithm = new();
+
+            byte[] hashBytes = ComputeHash(algorithm, input);
+
+            output.Write(hashBytes,0,hashBytes.Length);
         }
 
         protected string ConvertHashToString(byte[] hashBytes)
@@ -24,6 +33,12 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
             return sb.ToString();
         }
 
+        public bool HashValidate(string input, string hash)
+        {
+            string computedHash = CreateHash(input);
+            return string.Equals(computedHash, hash, StringComparison.OrdinalIgnoreCase);
+        }
+
         protected byte[] ComputeHash(HashAlgorithm algorithm, string input)
         {
             byte[] inputBytes = Encoding.UTF8.GetBytes(input);
@@ -31,12 +46,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
             return algorithm.ComputeHash(inputBytes);
         }
 
-        //private string ComputeHash(string input, HashAlgorithm hashAlgorithm)
-        //{
-        //    byte[] data = ConvertInputToByteArray(input);
-        //    byte[] hashBytes = hashAlgorithm.ComputeHash(data);
-        //    return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
-        //}
 
         private byte[] ConvertInputToByteArray(object input)
         {
@@ -55,5 +64,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
                 throw new ArgumentException("Data type nos supported. We recomend either string or stream ", nameof(input));
             }
         }
+
     }
 }
