@@ -168,5 +168,48 @@ namespace Cedeira.Essentials.NET_unittests.System.ResultPattern
             // Intentar acceder a SuccessValue debe lanzar una excepción
             var successValue = result.SuccessValue;
         }
+
+
+        /// <summary>
+        /// Prueba que un resultado exitoso sin valor asociado tenga el estado correcto.
+        /// </summary>
+        [TestMethod]
+        public void SuccessResultWithoutValue_ShouldHaveCorrectStatus()
+        {
+            var result = _resultFactory.Success();
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(ResultStatus.Success, result.Status);
+        }
+
+        /// <summary>
+        /// Prueba que un resultado de advertencia con mensaje tenga el estado y mensaje correctos.
+        /// </summary>
+        [TestMethod]
+        public void WarningResultWithMessage_ShouldHaveCorrectStatusAndMessage()
+        {
+            var expectedMessage = "Esto es una advertencia";
+
+            var result = _resultFactory.Warning(expectedMessage);
+
+            Assert.IsTrue(result.IsWarning());
+            Assert.AreEqual(ResultStatus.Warning, result.Status);
+            Assert.AreEqual(expectedMessage, ((WarningResult)result).Message);
+        }
+
+        /// <summary>
+        /// Prueba que un resultado de fallo con mensaje de error tenga el estado y mensaje correctos.
+        /// </summary>
+        [TestMethod]
+        public void FailureResultWithErrorMessage_ShouldHaveCorrectStatusAndMessage()
+        {
+            var expectedMessage = "Operación fallida";
+
+            var result = _resultFactory.Failure(expectedMessage);
+
+            Assert.IsTrue(result.IsFailure());
+            Assert.AreEqual(ResultStatus.Failure, result.Status);
+            Assert.AreEqual(expectedMessage, ((FailureResult)result).Message);
+        }
     }
 }
