@@ -3,6 +3,50 @@
 namespace Cedeira.Essentials.NET.System.ResultPattern
 {
     /// <summary>
+    /// Representa un resultado de advertencia de una operación.
+    /// </summary>
+    public class WarningResult : IResult
+    {
+        /// <summary>
+        /// Obtiene el estado del resultado. Siempre será <see cref="ResultStatus.Warning"/>.
+        /// </summary>
+        public ResultStatus Status { get; private set; }
+
+        /// <summary>
+        /// Obtiene el mensaje asociado con la advertencia.
+        /// </summary>
+        public string Message { get; private set; }
+
+        /// <summary>
+        /// Inicializa una nueva instancia de la clase <see cref="WarningResult"/> con un mensaje específico.
+        /// </summary>
+        /// <param name="message">El mensaje que describe la advertencia.</param>
+        public WarningResult(string message)
+        {
+            Status = ResultStatus.Warning;
+            Message = message;
+        }
+
+        /// <summary>
+        /// Determina si el resultado indica éxito.
+        /// </summary>
+        /// <returns>Siempre retorna <c>false</c> porque no es un éxito completo.</returns>
+        public bool IsSuccess() => Status == ResultStatus.Success;
+
+        /// <summary>
+        /// Determina si el resultado indica fallo.
+        /// </summary>
+        /// <returns>Siempre retorna <c>false</c> porque no es un fallo.</returns>
+        public bool IsFailure() => Status == ResultStatus.Failure;
+
+        /// <summary>
+        /// Determina si el resultado indica una advertencia.
+        /// </summary>
+        /// <returns>Siempre retorna <c>true</c> porque es una advertencia.</returns>
+        public bool IsWarning() => Status == ResultStatus.Warning;
+    }
+
+    /// <summary>
     /// Representa un resultado de advertencia
     /// </summary>
     /// <typeparam name="TSuccess">El tipo del valor de éxito</typeparam>
