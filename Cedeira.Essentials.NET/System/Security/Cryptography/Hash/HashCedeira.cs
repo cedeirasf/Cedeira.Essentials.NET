@@ -6,6 +6,13 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
 {
     public class HashCedeira<T> : IHashCedeira where T : HashAlgorithm, new()  
     {
+        private readonly T _hashAlgorithm;       
+
+        public HashCedeira(T hashAlgorithm) 
+        {
+            _hashAlgorithm = hashAlgorithm;       
+        }  
+
         /// <summary>
         /// 
         /// </summary>
@@ -13,12 +20,11 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
         /// <returns></returns>
         public string CaculateHash(string input)
         {
-            using T algorithm = new();
-
-            byte[] hashBytes = ComputeHash(algorithm,input);
+            byte[] hashBytes = ComputeHash(_hashAlgorithm, input);
 
             return ConvertHashToString(hashBytes);
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -26,12 +32,11 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
         /// <param name="output"></param>
         public void CalculateHash(string input, Stream output)
         {
-            using T algorithm = new();
-
-            byte[] hashBytes = ComputeHash(algorithm, input);
+            byte[] hashBytes = ComputeHash(_hashAlgorithm, input);
 
             output.Write(hashBytes,0,hashBytes.Length);
         }
+
         /// <summary>
         /// 
         /// </summary>
