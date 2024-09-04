@@ -3,6 +3,7 @@
     /// <summary>
     /// Proporciona métodos de extensión para la clase Exception para obtener mensajes completos
     /// </summary>
+    /// Esto es una prueba
     public static class ExceptionExtension
     {
         private const string DefaultSeparator = ". ";
