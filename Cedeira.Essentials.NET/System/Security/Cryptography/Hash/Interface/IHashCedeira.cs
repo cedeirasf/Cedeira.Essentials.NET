@@ -2,7 +2,7 @@
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService.Interface
 {
-    public interface IHashService
+    public interface IHashCedeira
     {
         //Genera el hash de una cadena de entrada y devuelve el resultado como una cadena.
         string CaculateHash(string input);

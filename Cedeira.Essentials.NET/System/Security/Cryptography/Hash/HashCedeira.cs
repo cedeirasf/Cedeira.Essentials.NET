@@ -4,7 +4,7 @@ using Cedeira.Essentials.NET.System.Security.Cryptography.HashService.Interface;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
 {
-    public class HashService<T> : IHashService where T : HashAlgorithm, new()  
+    public class HashCedeira<T> : IHashCedeira where T : HashAlgorithm, new()  
     {
         /// <summary>
         /// 
