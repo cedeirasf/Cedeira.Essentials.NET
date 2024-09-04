@@ -14,7 +14,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
         }  
 
         /// <summary>
-        /// 
+        /// pendiente
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -26,7 +26,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
         }
 
         /// <summary>
-        /// 
+        ///  pendiente
         /// </summary>
         /// <param name="input"></param>
         /// <param name="output"></param>
@@ -38,7 +38,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
         }
 
         /// <summary>
-        /// 
+        ///  pendiente
         /// </summary>
         /// <param name="hashBytes"></param>
         /// <returns></returns>
@@ -50,6 +50,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
 
             return sb.ToString();
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -62,8 +63,9 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
 
             return string.Equals(computedHash, hash, StringComparison.OrdinalIgnoreCase);
         }
+
         /// <summary>
-        /// 
+        ///  pendiente
         /// </summary>
         /// <param name="algorithm"></param>
         /// <param name="input"></param>
