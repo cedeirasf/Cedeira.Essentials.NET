@@ -1,7 +1,7 @@
 ---
-name: 🚀 Solicitud de mejora
-about: Sugerí una idea para este proyecto
-title: 'Como [role], quiero [accion], para que [beneficio]'
+name: 🚀 Enhancement Request
+about: Suggest an idea for this project
+title: 'As a [role], I want [action], so that [benefit]'
 labels: enhancement
 assignees: ''
 projects:
