@@ -6,8 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="System\Security\Cryptography\Hash\Extension\" />
-  </ItemGroup>
-
 </Project>

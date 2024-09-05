@@ -13,15 +13,14 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
             _hashAlgorithm = hashAlgorithm;       
         }
 
-
         /// <summary>
         /// pendiente
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public string CaculateHash(string input)
+        public string CalculateHash(string input)
         {
-            byte[] hashBytes = ComputeHash(_hashAlgorithm, input);
+            byte[] hashBytes = ComputeHash(input);
 
             return ConvertHashToString(hashBytes);
         }
@@ -33,9 +32,16 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
         /// <param name="output"></param>
         public void CalculateHash(string input, Stream output)
         {
-            byte[] hashBytes = ComputeHash(_hashAlgorithm, input);
+            ///Posibilidad de IResult
+            if (output == null)
+                throw new ArgumentNullException(nameof(output), "El stream de salida no puede ser null.");
+            ///Posibilidad de IResult
+            if (!output.CanWrite)
+                throw new InvalidOperationException("El stream de salida no está en modo escritura.");
 
-            output.Write(hashBytes,0,hashBytes.Length);
+            byte[] hashBytes = ComputeHash(input);
+
+            output.Write(hashBytes, 0, hashBytes.Length);
         }
 
         /// <summary>
@@ -60,7 +66,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
         /// <returns></returns>
         public bool HashValidate(string input, string hash)
         {
-            string computedHash = CaculateHash(input);
+            string computedHash = CalculateHash(input);
 
             return string.Equals(computedHash, hash, StringComparison.OrdinalIgnoreCase);
         }
@@ -71,11 +77,11 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
         /// <param name="algorithm"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected byte[] ComputeHash(HashAlgorithm algorithm, string input)
+        protected byte[] ComputeHash(string input)
         {
             byte[] inputBytes = Encoding.UTF8.GetBytes(input);
 
-            return algorithm.ComputeHash(inputBytes);
+            return _hashAlgorithm.ComputeHash(inputBytes);
         }
 
     }

@@ -5,7 +5,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService.Interf
     public interface IHashCedeira
     {
         //Genera el hash de una cadena de entrada y devuelve el resultado como una cadena.
-        string CaculateHash(string input);
+        string CalculateHash(string input);
         //Genera el hash de una cadena de entrada y completa un stream 
         void CalculateHash(string input, Stream output);
         //Valida si el hash generado
