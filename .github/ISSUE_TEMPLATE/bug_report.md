@@ -1,6 +1,6 @@
 ---
-name: 🐛 Reporte de Bug
-about: Creá un reporte para ayudarnos a mejorar
+name: 🐛 Bug Report
+about: Create a report to help us improve
 title: ''
 labels: bug
 assignees: ''
@@ -9,8 +9,8 @@ projects:
 
 ---
 
-### Descripción del Bug
-<!-- Una clara y concisa descripción del bug. -->
+### Bug Description
+<!-- A clear and concise description of the bug.  -->
 
-### Pasos para Reproducir
-<!-- Pasos para reproducir el comportamiento no deseado: -->
+### Steps to Reproduce
+<!-- Steps to reproduce the undesired behavior: -->
