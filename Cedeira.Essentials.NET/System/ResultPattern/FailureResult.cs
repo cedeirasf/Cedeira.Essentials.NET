@@ -3,6 +3,50 @@
 namespace Cedeira.Essentials.NET.System.ResultPattern
 {
     /// <summary>
+    /// Representa un resultado de fallo de una operación.
+    /// </summary>
+    public class FailureResult : IResult
+    {
+        /// <summary>
+        /// Obtiene el estado del resultado. Siempre será <see cref="ResultStatus.Failure"/>.
+        /// </summary>
+        public ResultStatus Status { get; private set; }
+
+        /// <summary>
+        /// Obtiene el mensaje asociado con el fallo.
+        /// </summary>
+        public string Message { get; private set; }
+
+        /// <summary>
+        /// Inicializa una nueva instancia de la clase <see cref="FailureResult"/> con un mensaje específico.
+        /// </summary>
+        /// <param name="message">El mensaje que describe el fallo.</param>
+        public FailureResult(string message)
+        {
+            Status = ResultStatus.Failure;
+            Message = message;
+        }
+
+        /// <summary>
+        /// Determina si el resultado indica éxito.
+        /// </summary>
+        /// <returns>Siempre retorna <c>false</c> porque no es un éxito.</returns>
+        public bool IsSuccess() => Status == ResultStatus.Success;
+
+        /// <summary>
+        /// Determina si el resultado indica fallo.
+        /// </summary>
+        /// <returns>Siempre retorna <c>true</c> porque es un fallo.</returns>
+        public bool IsFailure() => Status == ResultStatus.Failure;
+
+        /// <summary>
+        /// Determina si el resultado indica una advertencia.
+        /// </summary>
+        /// <returns>Siempre retorna <c>false</c> porque no es una advertencia.</returns>
+        public bool IsWarning() => Status == ResultStatus.Warning;
+    }
+
+    /// <summary>
     /// Representa un resultado de fallo
     /// </summary>
     /// <typeparam name="TSuccess">El tipo del valor de éxito</typeparam>

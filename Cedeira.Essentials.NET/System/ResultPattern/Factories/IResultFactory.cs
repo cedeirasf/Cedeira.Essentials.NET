@@ -6,6 +6,27 @@
     public interface IResultFactory
     {
         /// <summary>
+        /// Crea un resultado de éxito sin valor asociado.
+        /// </summary>
+        /// <returns>Un resultado de éxito.</returns>
+        IResult Success();
+
+        /// <summary>
+        /// Crea un resultado de advertencia con un mensaje especificado.
+        /// </summary>
+        /// <param name="message">El mensaje que describe la advertencia.</param>
+        /// <returns>Un resultado de advertencia.</returns>
+        IResult Warning(string message);
+
+        /// <summary>
+        /// Crea un resultado de fallo con un mensaje de error especificado.
+        /// </summary>
+        /// <param name="errorMessage">El mensaje que describe el error.</param>
+        /// <returns>Un resultado de fallo.</returns>
+        IResult Failure(string errorMessage);
+
+
+        /// <summary>
         /// Crea un resultado de éxito con el valor especificado
         /// </summary>
         /// <typeparam name="TSuccess">El tipo del valor de éxito (enum)</typeparam>
