@@ -15,7 +15,7 @@ namespace Cedeira.Essentials.NET.System.ResultPattern
         /// <summary>
         /// Obtiene el mensaje asociado con el resultado. Siempre será una cadena vacía para un éxito.
         /// </summary>
-        public string Message => string.Empty;
+        public string Message => throw new InvalidOperationException("El mensaje es inaccesible.");
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="SuccessResult"/>.
