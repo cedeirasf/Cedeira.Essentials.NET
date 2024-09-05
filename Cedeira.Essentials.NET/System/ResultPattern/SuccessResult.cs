@@ -13,7 +13,7 @@ namespace Cedeira.Essentials.NET.System.ResultPattern
         public ResultStatus Status { get; private set; }
 
         /// <summary>
-        /// Obtiene el mensaje asociado con el resultado. Siempre será una cadena vacía para un éxito.
+        /// Obtiene el mensaje asociado con el resultado. No se puede acceder
         /// </summary>
         public string Message => throw new InvalidOperationException("El mensaje es inaccesible.");
 
@@ -57,6 +57,12 @@ namespace Cedeira.Essentials.NET.System.ResultPattern
         public TSuccess SuccessValue { get; private set; }
 
         /// <summary>
+        /// Obtiene el mensaje asociado con el resultado. No se puede acceder
+        /// </summary>
+        public string Message => throw new InvalidOperationException("El mensaje es inaccesible.");
+
+
+        /// <summary>
         /// Inicializa una nueva instancia de la clase <vea cref="SuccessResult{TSuccess}"/> con el valor de éxito
         /// </summary>
         /// <param name="successValue">El valor de éxito</param>
@@ -78,6 +84,12 @@ namespace Cedeira.Essentials.NET.System.ResultPattern
         /// Obtiene el valor de éxito
         /// </summary>
         public TSuccess SuccessValue { get; private set; }
+
+
+        /// <summary>
+        /// Obtiene el mensaje asociado con el resultado. No se puede acceder
+        /// </summary>
+        public string Message => throw new InvalidOperationException("El mensaje es inaccesible.");
 
         /// <summary>
         /// Obtiene el valor de fallo
