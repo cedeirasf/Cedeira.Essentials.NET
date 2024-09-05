@@ -38,7 +38,7 @@
 
 For the moment, this project is in early development phase, so that all version are inestables.
 
-You can take a look to the [upcoming features](#rocket-upcomming-features) to know more about `Cedeira.Essentials.NET` future.
+You can take a look to the [upcoming features](#rocket-upcoming-features) to know more about `Cedeira.Essentials.NET` future.
 
 Hey! don't be discouraged, you can help me to carry out this project in many ways, contributing with new features, reporting bugs, sharing in your social networks or supporting with a :star:
 
