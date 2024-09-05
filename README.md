@@ -42,7 +42,7 @@ You can take a look to the [upcoming features](#rocket-upcomming-features) to kn
 
 Hey! don't be discouraged, you can help me to carry out this project in many ways, contributing with new features, reporting bugs, sharing in your social networks or supporting with a :star:
 
-Please, look at [Contributing to `Cedeira Essentials NET`](#handshake-contributing-to-Cedeira-Essentials) to choose the way to collaborate that with you feel better.
+Please, look at [Contributing to `Cedeira Essentials`](#handshake-contributing-to-Cedeira-Essentials) to choose the way to collaborate that with you feel better.
 
 &nbsp;
 # Install
