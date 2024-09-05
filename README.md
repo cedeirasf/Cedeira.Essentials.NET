@@ -15,11 +15,11 @@
 
   <br />
 
-  <a href="https://github.com/cedeirasf/Cedeira.Essentials.NET/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=">Report Bug</a>
+  <a href="https://github.com/cedeirasf/Cedeira.Essentials.NET/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=">🐛Report Bug</a>
   ·
-  <a href="https://github.com/cedeirasf/Cedeira.Essentials.NET/issues/new?assignees=&labels=enhancement&projects=&template=enhancement_request.md&title=As+a+%5Brole%5D%2C+I+want+%5Baction%5D%2C+so+that+%5Bbenefit%5D">Request Feature</a>
+  <a href="https://github.com/cedeirasf/Cedeira.Essentials.NET/issues/new?assignees=&labels=enhancement&projects=&template=enhancement_request.md&title=As+a+%5Brole%5D%2C+I+want+%5Baction%5D%2C+so+that+%5Bbenefit%5D">🚀Request Feature</a>
   ·
-  <a href="https://github.com/cedeirasf/Cedeira.Essentials.NET/issues/new?assignees=&labels=help+wanted&projects=&template=help_wanted_request.md&title=">Help Wanted</a>
+  <a href="https://github.com/cedeirasf/Cedeira.Essentials.NET/issues/new?assignees=&labels=help+wanted&projects=&template=help_wanted_request.md&title=">🤔Help Wanted</a>
 </div>
 
 &nbsp;
