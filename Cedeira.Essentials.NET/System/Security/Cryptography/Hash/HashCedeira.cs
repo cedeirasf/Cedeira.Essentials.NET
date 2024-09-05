@@ -4,14 +4,15 @@ using Cedeira.Essentials.NET.System.Security.Cryptography.HashService.Interface;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
 {
-    public class HashCedeira<T> : IHashCedeira where T : HashAlgorithm, new()  
+    public class HashCedeira : IHashCedeira 
     {
-        private readonly T _hashAlgorithm;       
+        private readonly HashAlgorithm _hashAlgorithm;       
 
-        public HashCedeira(T hashAlgorithm) 
+        public HashCedeira(HashAlgorithm hashAlgorithm) 
         {
             _hashAlgorithm = hashAlgorithm;       
-        }  
+        }
+
 
         /// <summary>
         /// pendiente
