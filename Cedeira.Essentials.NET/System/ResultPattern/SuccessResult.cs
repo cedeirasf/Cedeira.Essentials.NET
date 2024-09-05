@@ -44,6 +44,7 @@ namespace Cedeira.Essentials.NET.System.ResultPattern
         public bool IsWarning() => Status == ResultStatus.Warning;
     }
 
+
     /// <summary>
     /// Representa un resultado de éxito
     /// </summary>
@@ -56,15 +57,13 @@ namespace Cedeira.Essentials.NET.System.ResultPattern
         public TSuccess SuccessValue { get; private set; }
 
         /// <summary>
-        /// Inicializa una nueva instancia de la clase <vea cref="SuccessResult{TSuccess}"/> con el valor de éxito y el mensaje especificados
+        /// Inicializa una nueva instancia de la clase <vea cref="SuccessResult{TSuccess}"/> con el valor de éxito
         /// </summary>
         /// <param name="successValue">El valor de éxito</param>
-        /// <param name="message">El mensaje de éxito</param>
-        public SuccessResult(TSuccess successValue, string message = "")
+        public SuccessResult(TSuccess successValue)
         {
             SuccessValue = successValue;
             Status = ResultStatus.Success;
-            Message = message;
         }
     }
 
@@ -87,15 +86,13 @@ namespace Cedeira.Essentials.NET.System.ResultPattern
         public TFailure FailureValue => throw new InvalidOperationException("No se puede acceder a FailureValue en un resultado de éxito.");
 
         /// <summary>
-        /// Inicializa una nueva instancia de la clase <vea cref="SuccessResult{TSuccess, TFailure}"/> con el valor de éxito y el mensaje especificados
+        /// Inicializa una nueva instancia de la clase <vea cref="SuccessResult{TSuccess, TFailure}"/> con el valor de éxito
         /// </summary>
         /// <param name="successValue">El valor de éxito</param>
-        /// <param name="message">El mensaje de éxito</param>
-        public SuccessResult(TSuccess successValue, string message = "")
+        public SuccessResult(TSuccess successValue)
         {
             SuccessValue = successValue;
             Status = ResultStatus.Success;
-            Message = message;
         }
     }
 }
