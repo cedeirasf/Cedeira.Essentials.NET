@@ -1,7 +1,7 @@
 # Cedeira.Essentials.NET <!-- omit in toc -->
 
-&nbsp;
-
+<div>
+<center>
 <a href="https://github.com/cedeirasf/Cedeira.Essentials.NET/blob/main/LICENSE">
 	<img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg">
 </a>
@@ -17,14 +17,13 @@
 <a href="https://github.com/cedeirasf/Cedeira.Essentials.NET/issues/new/choose">Report Bug</a>
 ·
 <a href="https://github.com/cedeirasf/Cedeira.Essentials.NET/issues/new/choose">Request Feature</a>
-
-
+</center>
 </div>
 
 &nbsp;
 
 # Content <!-- omit in toc -->
-- [:wave: Introducing `Cedeira.Essentials.NET`](#wave-introducing-Cedeira-Essentials)
+- [:wave: Introducing Library](#wave-introducing-library)
 - [Install](#install)
 	- [Via NuGet Package Manager](#via-nuget-package-manager)
 	- [Via .NET CLI](#via-net-cli)
@@ -34,7 +33,7 @@
 
 
 &nbsp;
-# :wave: Introducing `Cedeira Essentials`
+# :wave: Introducing Library
 `Cedeira.Essentials.NET` is a library for .NET with common and reusable functionalities.
 
 For the moment, this project is in early development phase, so that all version are inestables.
@@ -51,7 +50,9 @@ Please, look at [Contributing to `Cedeira Essentials NET`](#handshake-contributi
 
 To install the latest version of Cedeira.Essentials.NET via the NuGet Package Manager, run the following command in the NuGet Package Manager Console:
 
+```
 Install-Package Cedeira.Essentials.NET
+```
 
 ## Via .NET CLI
 
