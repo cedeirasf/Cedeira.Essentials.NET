@@ -1,23 +1,27 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using Cedeira.Essentials.NET.System.ResultPattern;
+using Cedeira.Essentials.NET.System.ResultPattern.Factories;
 using Cedeira.Essentials.NET.System.Security.Cryptography.HashService.Interface;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
 {
     public class HashCedeira : IHashCedeira 
     {
-        private readonly HashAlgorithm _hashAlgorithm;       
+        private readonly HashAlgorithm _hashAlgorithm;
+        private readonly IResultFactory _resultFactory;
 
-        public HashCedeira(HashAlgorithm hashAlgorithm) 
+        public HashCedeira(HashAlgorithm hashAlgorithm, IResultFactory resultFactory)
         {
-            _hashAlgorithm = hashAlgorithm;       
+            _hashAlgorithm = hashAlgorithm;
+            _resultFactory = resultFactory;
         }
 
         /// <summary>
-        /// pendiente
+        /// Calcula el hash de una cadena de entrada utilizando el algoritmo de hash configurado.
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// <param name="input">La cadena de entrada a ser hasheada.</param>
+        /// <returns>El hash de la cadena de entrada en formato hexadecimal.</returns>
         public string CalculateHash(string input)
         {
             byte[] hashBytes = ComputeHash(input);
@@ -26,30 +30,32 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
         }
 
         /// <summary>
-        ///  pendiente
+        /// Calcula el hash de una cadena de entrada y lo escribe en un `Stream` de salida. 
+        /// Se valida la consistencia del `Stream` antes de proceder con la escritura.
         /// </summary>
-        /// <param name="input"></param>
-        /// <param name="output"></param>
-        public void CalculateHash(string input, Stream output)
+        /// <param name="input">La cadena de entrada que será hasheada.</param>
+        /// <param name="output">El `Stream` de salida donde se escribirá el hash.</param>
+        /// <returns>Un objeto `IResult` indicando el éxito o el fallo de la operación.</returns>
+        public IResult CalculateHash(string input, Stream output)
         {
-
-            //Oferta de chat GPT
-            if (output == null)
-                throw new ArgumentNullException(nameof(output), "El stream de salida no puede ser null.");
-    
+            if (output == null) 
+                 return _resultFactory.Failure("El stream de salida no puede ser null.");
+             
             if (!output.CanWrite)
-                throw new InvalidOperationException("El stream de salida no está en modo escritura.");
+                return _resultFactory.Failure("El stream de salida no está en modo escritura.");
 
             byte[] hashBytes = ComputeHash(input);
 
             output.Write(hashBytes, 0, hashBytes.Length);
+
+            return _resultFactory.Success(true);
         }
 
         /// <summary>
-        ///  pendiente
+        /// Convierte un arreglo de bytes de hash en su representación hexadecimal como una cadena.
         /// </summary>
-        /// <param name="hashBytes"></param>
-        /// <returns></returns>
+        /// <param name="hashBytes">El arreglo de bytes del hash a convertir.</param>
+        /// <returns>Una cadena que representa el hash en formato hexadecimal.</returns>
         protected string ConvertHashToString(byte[] hashBytes)
         {
             StringBuilder sb = new StringBuilder(hashBytes.Length * 2);
@@ -60,24 +66,25 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
         }
 
         /// <summary>
-        /// 
+        /// Valida si una cadena de hash proporcionada coincide con el hash calculado de una cadena de entrada.
         /// </summary>
-        /// <param name="input"></param>
-        /// <param name="hash"></param>
-        /// <returns></returns>
-        public bool HashValidate(string input, string hash)
+        /// <param name="input">La cadena de entrada a ser validada</param>
+        /// <param name="hash">El hash con el que se comparará el hash calculado.</param>
+        /// <returns>Un objeto `IResult` que indica si el hash calculado coincide con el proporcionado</returns>
+        public IResult HashValidate(string input, string hash)
         {
             string computedHash = CalculateHash(input);
 
-            return string.Equals(computedHash, hash, StringComparison.OrdinalIgnoreCase);
+            bool respuesta = string.Equals(computedHash, hash, StringComparison.OrdinalIgnoreCase);
+
+            return _resultFactory.Success(respuesta);
         }
 
         /// <summary>
-        ///  pendiente
+        ///  Calcula el hash de una cadena de entrada y devuelve el resultado como un arreglo de bytes.
         /// </summary>
-        /// <param name="algorithm"></param>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// <param name="input">El arreglo de bytes que representa el hash calculado.</param>
+        /// <returns>El arreglo de bytes que representa el hash calculado.</returns>
         protected byte[] ComputeHash(string input)
         {
             byte[] inputBytes = Encoding.UTF8.GetBytes(input);
