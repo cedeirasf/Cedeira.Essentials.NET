@@ -3,6 +3,49 @@
 namespace Cedeira.Essentials.NET.System.ResultPattern
 {
     /// <summary>
+    /// Representa un resultado exitoso de una operación.
+    /// </summary>
+    public class SuccessResult : IResult
+    {
+        /// <summary>
+        /// Obtiene el estado del resultado. Siempre será <see cref="ResultStatus.Success"/>.
+        /// </summary>
+        public ResultStatus Status { get; private set; }
+
+        /// <summary>
+        /// Obtiene el mensaje asociado con el resultado. No se puede acceder
+        /// </summary>
+        public string Message => throw new InvalidOperationException("El mensaje es inaccesible.");
+
+        /// <summary>
+        /// Inicializa una nueva instancia de la clase <see cref="SuccessResult"/>.
+        /// </summary>
+        public SuccessResult()
+        {
+            Status = ResultStatus.Success;
+        }
+
+        /// <summary>
+        /// Determina si el resultado indica éxito.
+        /// </summary>
+        /// <returns>Siempre retorna <c>true</c> porque es un resultado exitoso.</returns>
+        public bool IsSuccess() => Status == ResultStatus.Success;
+
+        /// <summary>
+        /// Determina si el resultado indica fallo.
+        /// </summary>
+        /// <returns>Siempre retorna <c>false</c> porque no es un fallo.</returns>
+        public bool IsFailure() => Status == ResultStatus.Failure;
+
+        /// <summary>
+        /// Determina si el resultado indica una advertencia.
+        /// </summary>
+        /// <returns>Siempre retorna <c>false</c> porque no es una advertencia.</returns>
+        public bool IsWarning() => Status == ResultStatus.Warning;
+    }
+
+
+    /// <summary>
     /// Representa un resultado de éxito
     /// </summary>
     /// <typeparam name="TSuccess">El tipo del valor de éxito</typeparam>
@@ -14,15 +57,19 @@ namespace Cedeira.Essentials.NET.System.ResultPattern
         public TSuccess SuccessValue { get; private set; }
 
         /// <summary>
-        /// Inicializa una nueva instancia de la clase <vea cref="SuccessResult{TSuccess}"/> con el valor de éxito y el mensaje especificados
+        /// Obtiene el mensaje asociado con el resultado. No se puede acceder
+        /// </summary>
+        public string Message => throw new InvalidOperationException("El mensaje es inaccesible.");
+
+
+        /// <summary>
+        /// Inicializa una nueva instancia de la clase <vea cref="SuccessResult{TSuccess}"/> con el valor de éxito
         /// </summary>
         /// <param name="successValue">El valor de éxito</param>
-        /// <param name="message">El mensaje de éxito</param>
-        public SuccessResult(TSuccess successValue, string message = "")
+        public SuccessResult(TSuccess successValue)
         {
             SuccessValue = successValue;
             Status = ResultStatus.Success;
-            Message = message;
         }
     }
 
@@ -38,6 +85,12 @@ namespace Cedeira.Essentials.NET.System.ResultPattern
         /// </summary>
         public TSuccess SuccessValue { get; private set; }
 
+
+        /// <summary>
+        /// Obtiene el mensaje asociado con el resultado. No se puede acceder
+        /// </summary>
+        public string Message => throw new InvalidOperationException("El mensaje es inaccesible.");
+
         /// <summary>
         /// Obtiene el valor de fallo
         /// </summary>
@@ -45,15 +98,13 @@ namespace Cedeira.Essentials.NET.System.ResultPattern
         public TFailure FailureValue => throw new InvalidOperationException("No se puede acceder a FailureValue en un resultado de éxito.");
 
         /// <summary>
-        /// Inicializa una nueva instancia de la clase <vea cref="SuccessResult{TSuccess, TFailure}"/> con el valor de éxito y el mensaje especificados
+        /// Inicializa una nueva instancia de la clase <vea cref="SuccessResult{TSuccess, TFailure}"/> con el valor de éxito
         /// </summary>
         /// <param name="successValue">El valor de éxito</param>
-        /// <param name="message">El mensaje de éxito</param>
-        public SuccessResult(TSuccess successValue, string message = "")
+        public SuccessResult(TSuccess successValue)
         {
             SuccessValue = successValue;
             Status = ResultStatus.Success;
-            Message = message;
         }
     }
 }

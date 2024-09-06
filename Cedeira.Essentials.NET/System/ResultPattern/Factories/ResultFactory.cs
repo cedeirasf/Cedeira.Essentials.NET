@@ -5,6 +5,10 @@
     /// </summary>
     public class ResultFactory : IResultFactory
     {
+        public IResult Success() => new SuccessResult();
+
+        public IResult Warning(string message) => new WarningResult(message);
+        public IResult Failure(string message) => new FailureResult(message);
         public IResult<TSuccess> Success<TSuccess>(TSuccess value) =>
             new SuccessResult<TSuccess>(value);
 

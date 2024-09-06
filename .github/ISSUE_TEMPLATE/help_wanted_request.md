@@ -1,6 +1,6 @@
 ---
-name: 🤔 Solicitud de ayuda
-about: Solicitá ayuda para resolver un problema o completar una tarea
+name: 🤔 Help Request
+about: Request help to resolve an issue or complete a task
 title: ''
 labels: help wanted
 assignees: ''
