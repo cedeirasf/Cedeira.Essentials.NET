@@ -32,10 +32,11 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
         /// <param name="output"></param>
         public void CalculateHash(string input, Stream output)
         {
-            ///Posibilidad de IResult
+
+            //Oferta de chat GPT
             if (output == null)
                 throw new ArgumentNullException(nameof(output), "El stream de salida no puede ser null.");
-            ///Posibilidad de IResult
+    
             if (!output.CanWrite)
                 throw new InvalidOperationException("El stream de salida no está en modo escritura.");
 

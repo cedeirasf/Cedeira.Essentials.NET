@@ -11,7 +11,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
  
         public HashContext(HashAlgorithmName algorithmName)
         {
-            HashAlgorithNameExtension.SetAlgorithm(algorithmName);
+            HashAlgorithmNameExtension.SetAlgorithm(algorithmName);
             this.AlgorithmName = algorithmName;
         }
     }

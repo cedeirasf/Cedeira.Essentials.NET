@@ -2,7 +2,7 @@
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Extension
 {
-    public static class HashAlgorithNameExtension
+    public static class HashAlgorithmNameExtension
     {
         private static readonly HashSet<HashAlgorithmName> ValidAlgorithms = new()
         {
