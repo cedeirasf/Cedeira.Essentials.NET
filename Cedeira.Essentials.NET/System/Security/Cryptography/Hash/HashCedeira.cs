@@ -31,7 +31,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
 
         /// <summary>
         /// Calcula el hash de una cadena de entrada y lo escribe en un `Stream` de salida. 
-        /// Se valida la consistencia del `Stream` antes de proceder con la escritura.
+        /// Se valida la consistencia del Stream antes de proceder con la escritura.
         /// </summary>
         /// <param name="input">La cadena de entrada que será hasheada.</param>
         /// <param name="output">El `Stream` de salida donde se escribirá el hash.</param>
