@@ -1,12 +1,13 @@
 ﻿using Cedeira.Essentials.NET.System.ResultPattern;
-using System.Security.Cryptography;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService.Interface
+namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Interface
 {
-    /// <summary>
-    /// Interfaz que define los métodos para generar y validar hashes.
-    /// </summary>
-    public interface IHashCedeira
+    public interface IHashHandlerResult
     {
         /// <summary>
         /// Genera el hash de una cadena de entrada y devuelve el resultado como una cadena en formato hexadecimal.
@@ -30,5 +31,4 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService.Interf
         /// <returns>Un objeto `IResult` que indica si la validación fue exitosa o fallida.</returns>
         IResult HashValidate(string input, string hash);
     }
-
 }

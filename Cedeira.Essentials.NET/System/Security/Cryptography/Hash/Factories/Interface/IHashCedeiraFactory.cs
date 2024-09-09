@@ -1,4 +1,4 @@
-﻿using Cedeira.Essentials.NET.System.Security.Cryptography.HashService;
+﻿using Cedeira.Essentials.NET.System.ResultPattern.Factories;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Interface
 {
@@ -12,6 +12,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Int
         /// </summary>
         /// <param name="hashContext"></param>
         /// <returns></returns>
-        HashCedeira CreateHash(HashContext hashContext);
+        HashHandler CreateHash(HashContext hashContext);
+        HashHandlerResult CreateHashResult(HashContext hashContext,IResultFactory resultfactory);
     }
 }

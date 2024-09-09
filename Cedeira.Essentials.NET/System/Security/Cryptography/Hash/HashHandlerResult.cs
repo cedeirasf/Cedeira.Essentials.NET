@@ -1,17 +1,17 @@
-﻿using System.Security.Cryptography;
-using System.Text;
-using Cedeira.Essentials.NET.System.ResultPattern;
+﻿using Cedeira.Essentials.NET.System.ResultPattern;
 using Cedeira.Essentials.NET.System.ResultPattern.Factories;
-using Cedeira.Essentials.NET.System.Security.Cryptography.HashService.Interface;
+using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Interface;
+using System.Security.Cryptography;
+using System.Text;
 
-namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
+namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 {
-    public class HashCedeira : IHashCedeira 
+    public class HashHandlerResult : IHashHandlerResult
     {
         private readonly HashAlgorithm _hashAlgorithm;
         private readonly IResultFactory _resultFactory;
 
-        public HashCedeira(HashAlgorithm hashAlgorithm, IResultFactory resultFactory)
+        public HashHandlerResult(HashAlgorithm hashAlgorithm, IResultFactory resultFactory)
         {
             _hashAlgorithm = hashAlgorithm;
             _resultFactory = resultFactory;
@@ -38,9 +38,9 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
         /// <returns>Un objeto `IResult` indicando el éxito o el fallo de la operación.</returns>
         public IResult CalculateHash(string input, Stream output)
         {
-            if (output == null) 
-                 return _resultFactory.Failure("El stream de salida no puede ser null.");
-             
+            if (output == null)
+                return _resultFactory.Failure("El stream de salida no puede ser null.");
+
             if (!output.CanWrite)
                 return _resultFactory.Failure("El stream de salida no está en modo escritura.");
 
@@ -51,19 +51,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
             return _resultFactory.Success(true);
         }
 
-        /// <summary>
-        /// Convierte un arreglo de bytes de hash en su representación hexadecimal como una cadena.
-        /// </summary>
-        /// <param name="hashBytes">El arreglo de bytes del hash a convertir.</param>
-        /// <returns>Una cadena que representa el hash en formato hexadecimal.</returns>
-        protected string ConvertHashToString(byte[] hashBytes)
-        {
-            StringBuilder sb = new StringBuilder(hashBytes.Length * 2);
-
-            foreach (byte b in hashBytes) sb.AppendFormat("{0:x2}", b);
-
-            return sb.ToString();
-        }
 
         /// <summary>
         /// Valida si una cadena de hash proporcionada coincide con el hash calculado de una cadena de entrada.
@@ -92,5 +79,18 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.HashService
             return _hashAlgorithm.ComputeHash(inputBytes);
         }
 
+        /// <summary>
+        /// Convierte un arreglo de bytes de hash en su representación hexadecimal como una cadena.
+        /// </summary>
+        /// <param name="hashBytes">El arreglo de bytes del hash a convertir.</param>
+        /// <returns>Una cadena que representa el hash en formato hexadecimal.</returns>
+        protected string ConvertHashToString(byte[] hashBytes)
+        {
+            StringBuilder sb = new StringBuilder(hashBytes.Length * 2);
+
+            foreach (byte b in hashBytes) sb.AppendFormat("{0:x2}", b);
+
+            return sb.ToString();
+        }
     }
 }

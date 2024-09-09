@@ -1,4 +1,4 @@
-﻿using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Extension;
+﻿using Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Hash;
 using System.Security.Cryptography;
 using System.Text;
 
