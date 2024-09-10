@@ -1,132 +1,120 @@
 ﻿using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Interface;
+using System.Runtime.InteropServices;
+using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 {
-    public class HashHandler : IHashHandler
+    public class HashHandler<T> : IHashHandler<T> where T : IEquatable<T>
     {
         private readonly HashAlgorithm _hashAlgorithm;
-        private readonly Func<byte[], object> _hashFormatter;
+        private readonly Func<byte[], T> _hashFormatter;
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="HashHandler"/> con el algoritmo de hash especificado.
         /// </summary>
         /// <param name="hashAlgorithm">El algoritmo de hash a utilizar.</param>
-        public HashHandler(HashAlgorithm hashAlgorithm, Func<byte[], object> hashFormatter)
+        public HashHandler(HashAlgorithm hashAlgorithm, Func<byte[], T> hashFormatter)
         {
             _hashAlgorithm = hashAlgorithm;
-            _hashFormatter = hashFormatter;     
+            _hashFormatter = hashFormatter;
         }
 
-        /// <summary>
-        /// Calcula el hash de una cadena de entrada utilizando el algoritmo de hash configurado y devuelve el resultado formateado según el formateador configurado.
-        /// </summary>
-        /// <param name="input">La cadena de entrada a ser hasheada.</param>
-        /// <returns>El hash formateado según el formateador configurado.</returns>
-        public object CalculateHash(string input)
-        {
-            byte[] hashBytes = ComputeHash(input);
 
-            // Devuelve el hash utilizando el formateador configurado en el contexto.
+        public T CalculateHash(string input)
+        {
+            byte[] hashBytes = ComputeHash(Encoding.UTF8.GetBytes(input));
             return _hashFormatter(hashBytes);
         }
 
-        ///// <summary>
-        ///// Calcula el hash de una cadena de entrada utilizando el algoritmo de hash configurado y devuelve el resultado en un arreglo de bytes.
-        ///// </summary>
-        ///// <param name="input">La cadena de entrada a ser hasheada.</param>
-        ///// <returns>El hash de la cadena de entrada en formato de bytes.</returns>
-        //public byte[] CalculateHashByte(string input)
-        //{
-        //    return ComputeHash(input);
-        //}
-
-        ///// <summary>
-        ///// Calcula el hash de una cadena de entrada utilizando el algoritmo de hash configurado y devuelve el resultado como una cadena en formato hexadecimal.
-        ///// </summary>
-        ///// <param name="input">La cadena de entrada a ser hasheada.</param>
-        ///// <returns>El hash de la cadena de entrada en formato hexadecimal.</returns>
-        //public string CalculateHashHexadecimal(string input)
-        //{
-        //    byte[] hashBytes = ComputeHash(input);
-
-        //    StringBuilder sb = new StringBuilder(hashBytes.Length * 2);
-        //    foreach (byte b in hashBytes)
-        //    {
-        //        sb.AppendFormat("{0:x2}", b);
-        //    }
-
-        //    return sb.ToString();
-        //}
-
-        ///// <summary>
-        ///// Calcula el hash de una cadena de entrada utilizando el algoritmo de hash configurado y devuelve el resultado como un <see cref="Stream"/>.
-        ///// </summary>
-        ///// <param name="input">La cadena de entrada a ser hasheada.</param>
-        ///// <returns>Un <see cref="Stream"/> que contiene el hash de la cadena de entrada.</returns>
-        //public Stream CalculateHashStream(string input)
-        //{
-        //    byte[] hashBytes = ComputeHash(input);
-
-        //    return new MemoryStream(hashBytes);
-        //}
-
-        ///// <summary>
-        ///// Calcula el hash de una cadena de entrada utilizando el algoritmo de hash configurado y devuelve el resultado en formato Base64.
-        ///// </summary>
-        ///// <param name="input">La cadena de entrada a ser hasheada.</param>
-        ///// <returns>El hash de la cadena de entrada en formato Base64.</returns>
-        //public string CalculateHashBase64(string input)
-        //{
-        //    byte[] hashBytes = ComputeHash(input);
-
-        //    return Convert.ToBase64String(hashBytes);
-        //}
-
-        /// <summary>
-        /// Calcula el hash de una cadena de entrada y lo escribe en un <see cref="Stream"/> de salida.
-        /// Se valida la consistencia del <see cref="Stream"/> antes de proceder con la escritura.
-        /// </summary>
-        /// <param name="input">La cadena de entrada que será hasheada.</param>
-        /// <param name="output">El <see cref="Stream"/> de salida donde se escribirá el hash.</param>
-        /// <exception cref="ArgumentException">Lanza una excepción si el <see cref="Stream"/> es null o no está en modo escritura.</exception>
-        //public void CalculateHash(string input, Stream output)
-        //{
-        //    if (output == null)
-        //        throw new ArgumentException("El stream de salida no puede ser null.");
-
-        //    if (!output.CanWrite)
-        //        throw new ArgumentException("El stream de salida no está en modo escritura.");
-
-        //    byte[] hashBytes = ComputeHash(input);
-
-        //    output.Write(hashBytes, 0, hashBytes.Length);
-        //}
-
-        /// <summary>
-        /// Valida si una cadena de hash proporcionada coincide con el hash calculado de una cadena de entrada.
-        /// </summary>
-        /// <param name="input">La cadena de entrada a ser validada.</param>
-        /// <param name="hash">El hash con el que se comparará el hash calculado.</param>
-        /// <returns>Un valor booleano que indica si el hash calculado coincide con el hash proporcionado.</returns>
-        public bool HashValidate(string input, string hash)
+        public T CalculateHash(byte[] input)
         {
-            object computedHash = CalculateHash(input);
-
-            return string.Equals(computedHash.ToString(), hash, StringComparison.OrdinalIgnoreCase);
+            byte[] hashBytes = ComputeHash(input);
+            return _hashFormatter(hashBytes);
         }
 
-        /// <summary>
-        /// Calcula el hash de una cadena de entrada y devuelve el resultado como un arreglo de bytes.
-        /// </summary>
-        /// <param name="input">La cadena de entrada a ser hasheada.</param>
-        /// <returns>El arreglo de bytes que representa el hash calculado.</returns>
-        protected byte[] ComputeHash(string input)
+        public T CalculateHash(StreamReader input)
         {
-            byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+            byte[] hashBytes = ComputeHash(Encoding.UTF8.GetBytes(input.ReadToEnd()));
+            return _hashFormatter(hashBytes);
+        }
 
-            return _hashAlgorithm.ComputeHash(inputBytes);
+        public T CalculateHash(SecureString input)
+        {
+            var bstr = Marshal.SecureStringToBSTR(input);
+            try
+            {
+                var length = Marshal.ReadInt32(bstr, -4);
+                var bytes = new byte[length];
+                Marshal.Copy(bstr, bytes, 0, length);
+                byte[] hashBytes = ComputeHash(bytes);
+                return _hashFormatter(hashBytes);
+            }
+            finally
+            {
+                Marshal.ZeroFreeBSTR(bstr);
+            }
+        }
+
+        public bool HashValidate(string input, T hash)
+        {
+            var computedHash = CalculateHash(input);
+            return computedHash.Equals(hash);
+        }
+
+        public bool HashValidate(byte[] input, T hash)
+        {
+            var computedHash = CalculateHash(input);
+            return computedHash.Equals(hash);
+        }
+
+        public bool HashValidate(SecureString input, T hash)
+        {
+            var computedHash = CalculateHash(input);
+            return computedHash.Equals(hash);
+        }
+
+        public bool HashValidate(StreamReader input, T hash)
+        {
+            var computedHash = CalculateHash(input);
+            return computedHash.Equals(hash);
+        }
+
+        public void ThrowIfInvalidHash(string input, T hash)
+        {
+            if (!HashValidate(input, hash))
+            {
+                throw new ArgumentException("Invalid hash.");
+            }
+        }
+
+        public void ThrowIfInvalidHash(byte[] input, T hash)
+        {
+            if (!HashValidate(input, hash))
+            {
+                throw new ArgumentException("Invalid hash.");
+            }
+        }
+
+        public void ThrowIfInvalidHash(SecureString input, T hash)
+        {
+            if (!HashValidate(input, hash))
+            {
+                throw new ArgumentException("Invalid hash.");
+            }
+        }
+
+        public void ThrowIfInvalidHash(StreamReader input, T hash)
+        {
+            if (!HashValidate(input, hash))
+            {
+                throw new ArgumentException("Invalid hash.");
+            }
+        }
+        protected byte[] ComputeHash(byte[] input)
+        {
+            return _hashAlgorithm.ComputeHash(input);
         }
     }
 }

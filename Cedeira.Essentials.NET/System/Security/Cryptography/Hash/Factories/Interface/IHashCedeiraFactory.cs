@@ -13,7 +13,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Int
         /// </summary>
         /// <param name="hashContext"></param>
         /// <returns></returns>
-        IHashHandler<T> CreateHash(IHashContext<T> hashContext);
-        IHashHandlerResultPattern<T> CreateHashResult(IHashContext<T> hashContext,IResultFactory resultfactory);
+        IHashHandler<T> CreateHash();
+        IHashHandlerResultPattern<T> CreateHashResult();
     }
 }
