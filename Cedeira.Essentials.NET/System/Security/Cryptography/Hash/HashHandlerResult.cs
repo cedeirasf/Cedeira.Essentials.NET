@@ -6,15 +6,17 @@ using System.Text;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 {
-    public class HashHandlerResult : IHashHandlerResult
+    public class HashHandlerResult : IHashHandlerResultPattern
     {
         private readonly HashAlgorithm _hashAlgorithm;
         private readonly IResultFactory _resultFactory;
+        private readonly Func<byte[], object> _hashFormatter;
 
-        public HashHandlerResult(HashAlgorithm hashAlgorithm, IResultFactory resultFactory)
+        public HashHandlerResult(HashAlgorithm hashAlgorithm, IResultFactory resultFactory, Func<byte[], object> hashFormatter)
         {
             _hashAlgorithm = hashAlgorithm;
             _resultFactory = resultFactory;
+            _hashFormatter = hashFormatter; 
         }
 
         /// <summary>

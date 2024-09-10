@@ -14,18 +14,18 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
         /// </summary>
         /// <param name="hashContext"></param>
         /// <returns> Devuelve un HashCedeira</returns>
-        public HashHandler CreateHash(HashContext hashContext) 
+        public HashHandler CreateHash(HashContext<T> hashContext) 
         {
             HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashContext.AlgorithmName.Name);
 
-            return new HashHandler(hashAlgorithm);      
+            return new HashHandler(hashAlgorithm, hashContext.HashFormatter);      
         }
 
         public HashHandlerResult CreateHashResult(HashContext hashContext, IResultFactory resultfactory)
         {
             HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashContext.AlgorithmName.Name);
 
-            return new HashHandlerResult(hashAlgorithm, resultfactory);
+            return new HashHandlerResult(hashAlgorithm, resultfactory, hashContext.HashFormatter);
            
         }
     }
