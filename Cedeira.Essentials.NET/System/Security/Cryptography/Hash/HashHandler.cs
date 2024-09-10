@@ -21,7 +21,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
             _hashFormatter = hashFormatter;
         }
 
-
         public T CalculateHash(string input)
         {
             byte[] hashBytes = ComputeHash(Encoding.UTF8.GetBytes(input));
