@@ -15,7 +15,11 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
         [TestInitialize]
         public void Setup()
         {
+            
+            ///Inicializa hashAlgorithm con tipo especifico.
             _hashAlgorithm = SHA256.Create();
+            ///convierte el arreglo de bytes a una cadena hexadecimal separada por guiones ,
+            ///elimina los guiones de la cadena hexadecimal.convierte la cadena resultante a minúsculas.
             _hashFormatter = bytes => BitConverter.ToString(bytes).Replace("-", "").ToLower();
         }
 
@@ -100,8 +104,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
 
             Assert.IsTrue(result);
         }
-
-
 
     }
 }

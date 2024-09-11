@@ -10,31 +10,30 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
     /// </summary>
     public class HashHandlerFactory<T> : IHashCedeiraFactory<T> where T : IEquatable<T>
     {
-        ///// <summary>
-        ///// Define la implementacion de fábrica para instanciar objetos de tipo HashCedeira
-        ///// </summary>
-        ///// <param name="hashContext"></param>
-        ///// <returns> Devuelve un HashCedeira</returns>
-        //public HashHandler CreateHash(HashContext<T> hashContext) 
+
+        //private readonly IHashHandlerResultPattern<T> _resultPatternPattern;       
+        //private readonly IHashContext<>   
+
+
+        //public IHashHandler<T> CreateHash() 
         //{
         //    HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashContext.AlgorithmName.Name);
 
-        //    return new HashHandler(hashAlgorithm, hashContext.HashFormatter);      
+        //    return new HashHandler<T>(hashAlgorithm, hashContext.HashFormatter);
         //}
 
-        //public HashHandlerResult CreateHashResult(HashContext hashContext, IResultFactory resultfactory)
+        //public IHashHandlerResultPattern<T> CreateHashResultPattern()
         //{
         //    HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashContext.AlgorithmName.Name);
 
-        //    return new HashHandlerResult(hashAlgorithm, resultfactory, hashContext.HashFormatter);
-
+        //    return new HashHandlerResultPattern<T>(hashAlgorithm, resultfactory, hashContext.HashFormatter);
         //}
-        public IHashHandler<T> CreateHash() 
+        public IHashHandler<T> CreateHash()
         {
             throw new NotImplementedException();
         }
 
-        public IHashHandlerResultPattern<T> CreateHashResult()
+        public IHashHandlerResultPattern<T> CreateHashResultPattern()
         {
             throw new NotImplementedException();
         }
