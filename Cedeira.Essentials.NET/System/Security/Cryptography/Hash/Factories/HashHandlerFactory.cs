@@ -10,24 +10,21 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
     /// </summary>
     public class HashHandlerFactory<T> : IHashCedeiraFactory<T> where T : IEquatable<T>
     {
-
         //private readonly IHashHandlerResultPattern<T> _resultPatternPattern;       
         //private readonly IHashContext<>   
-
 
         //public IHashHandler<T> CreateHash() 
         //{
         //    HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashContext.AlgorithmName.Name);
-
         //    return new HashHandler<T>(hashAlgorithm, hashContext.HashFormatter);
         //}
 
         //public IHashHandlerResultPattern<T> CreateHashResultPattern()
         //{
         //    HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashContext.AlgorithmName.Name);
-
         //    return new HashHandlerResultPattern<T>(hashAlgorithm, resultfactory, hashContext.HashFormatter);
         //}
+
         public IHashHandler<T> CreateHash()
         {
             throw new NotImplementedException();

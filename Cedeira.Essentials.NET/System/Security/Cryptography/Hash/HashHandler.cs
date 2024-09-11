@@ -46,8 +46,11 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
             {
                 var length = Marshal.ReadInt32(bstr, -4);
                 var bytes = new byte[length];
+
                 Marshal.Copy(bstr, bytes, 0, length);
+
                 byte[] hashBytes = ComputeHash(bytes);
+
                 return _hashFormatter(hashBytes);
             }
             finally
@@ -61,7 +64,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
             var computedHash = CalculateHash(input);
             return computedHash.Equals(hash);
         }
-
+       
         public bool HashValidate(byte[] input, T hash)
         {
             var computedHash = CalculateHash(input);
