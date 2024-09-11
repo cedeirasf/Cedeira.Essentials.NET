@@ -1,5 +1,4 @@
-﻿using Cedeira.Essentials.NET.System.ResultPattern;
-using System.Security;
+﻿using System.Security;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Interface
 {

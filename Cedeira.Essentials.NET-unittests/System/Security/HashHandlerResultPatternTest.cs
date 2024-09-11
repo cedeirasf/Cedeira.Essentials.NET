@@ -60,9 +60,13 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
         {
 
             var handler = new HashHandlerResultPattern<string>(_hashAlgorithm,_resultFactory, _hashFormatter);
+
             var inputString = "HolaMundo@";
+
             var inputStream = new MemoryStream(Encoding.UTF8.GetBytes(inputString));
+
             using var input = new StreamReader(inputStream);
+
             var expectedHash = _hashFormatter(_hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(inputString)));
 
             input.BaseStream.Seek(0, SeekOrigin.Begin); // Reinicia el StreamReader
