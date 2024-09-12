@@ -12,7 +12,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
     public class HashHandlerResultPatternTest
     {
         private Dictionary<string, (HashAlgorithm hashAlgorithm, IResultFactory resultFactory, Func<byte[], string> hashFormatter)> handlersCreateOutputString;
-        private Dictionary<string, (HashAlgorithm hashAlgorithm, IResultFactory resultFactory, Func<byte[], byte[]> hashFormatter)> handlersCreateOutputBytes;
 
         [TestInitialize]
         public void Setup()
@@ -23,11 +22,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
             { "SHA256", (SHA256.Create(), new ResultFactory(), bytes => BitConverter.ToString(bytes).Replace("-", "").ToLower()) },
             };
 
-            handlersCreateOutputBytes = new Dictionary<string, (HashAlgorithm, IResultFactory, Func<byte[], byte[]>)>
-            {
-            { "SHA256", (SHA256.Create(), new ResultFactory(),bytes => bytes)},
-            { "MD5", (MD5.Create(), new ResultFactory(),bytes => bytes )}};
-
         }
 
         [TestMethod]
@@ -35,10 +29,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
         {
             foreach (var handler in handlersCreateOutputString)
             {
-                var handlerInstance = new HashHandlerResultPattern<string>(
+                var handlerInstance = new HashHandlerResultPattern(
                     handler.Value.hashAlgorithm,
-                    handler.Value.resultFactory,
-                    handler.Value.hashFormatter
+                    handler.Value.resultFactory
                 );
 
                 var testCases = new Dictionary<string, (string inputName, bool estadoEsperado, string hashEsperado)>

@@ -8,7 +8,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
     /// <summary>
     /// Implementacion de la fabrica para instanciar objetos
     /// </summary>
-    public class HashHandlerFactory<T> : IHashCedeiraFactory<T> where T : IEquatable<T>
+    public class HashHandlerFactory : IHashCedeiraFactory 
     {
         //private readonly IHashHandlerResultPattern<T> _resultPatternPattern;       
         //private readonly IHashContext<>   
@@ -25,12 +25,12 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
         //    return new HashHandlerResultPattern<T>(hashAlgorithm, resultfactory, hashContext.HashFormatter);
         //}
 
-        public IHashHandler<T> CreateHash()
+        public IHashHandler CreateHash()
         {
             throw new NotImplementedException();
         }
 
-        public IHashHandlerResultPattern<T> CreateHashResultPattern()
+        public IHashHandlerResultPattern CreateHashResultPattern()
         {
             throw new NotImplementedException();
         }

@@ -1,64 +1,56 @@
 ﻿using Cedeira.Essentials.NET.System.ResultPattern;
 using Cedeira.Essentials.NET.System.ResultPattern.Factories;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Interface;
-using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 {
-    public class HashHandlerResultPattern<T> : IHashHandlerResultPattern<T> where T : IEquatable<T>
+    public class HashHandlerResultPattern : IHashHandlerResultPattern
     {
         private readonly HashAlgorithm _hashAlgorithm;
         private readonly IResultFactory _resultFactory;
-        private readonly Func<byte[], T> _hashFormatter;
+        private readonly HashHandler _hashHandler;
 
-        public HashHandlerResultPattern(HashAlgorithm hashAlgorithm, IResultFactory resultFactory, Func<byte[], T> hashFormatter)
+
+        public HashHandlerResultPattern(HashAlgorithm hashAlgorithm, IResultFactory resultFactory)
         {
             _hashAlgorithm = hashAlgorithm;
             _resultFactory = resultFactory;
-            _hashFormatter = hashFormatter;
+            _hashHandler = new HashHandler(hashAlgorithm);
         }
 
-        public IResult<T> CalculateHash(string input)
+        public IResult<string> CalculateHash(string input)
         {
-            byte[] hashBytes = ComputeHash(Encoding.UTF8.GetBytes(input));
-            return _resultFactory.Success(_hashFormatter(hashBytes));
+            string calculatedHash = _hashHandler.CalculateHash(input);
+
+            return _resultFactory.Success(calculatedHash);
         }
 
-        public IResult<T> CalculateHash(byte[] input)
+        public IResult<string> CalculateHash(byte[] input)
         {
-            byte[] hashBytes = ComputeHash(input);
-            return _resultFactory.Success(_hashFormatter(hashBytes));
+            string calculatedHash = _hashHandler.CalculateHash(input);
+
+            return _resultFactory.Success(calculatedHash);
         }
 
-        public IResult<T> CalculateHash(StreamReader input)
+        public IResult<string> CalculateHash(StreamReader input)
         {
-            byte[] hashBytes = ComputeHash(Encoding.UTF8.GetBytes(input.ReadToEnd()));
-            return _resultFactory.Success(_hashFormatter(hashBytes));
+            string calculatedHash = _hashHandler.CalculateHash(input);
+
+            return _resultFactory.Success(calculatedHash);
         }
 
-        public IResult<T> CalculateHash(SecureString input)
+        public IResult<string> CalculateHash(SecureString input)
         {
-            var bstr = Marshal.SecureStringToBSTR(input);
-            try
-            {
-                var length = Marshal.ReadInt32(bstr, -4);
-                var bytes = new byte[length];
-                Marshal.Copy(bstr, bytes, 0, length);
-                byte[] hashBytes = ComputeHash(bytes);
-                return _resultFactory.Success(_hashFormatter(hashBytes));
-            }
-            finally
-            {
-                Marshal.ZeroFreeBSTR(bstr);
-            }
+            var calculatedHash = _hashHandler.CalculateHash(input);
+
+            return _resultFactory.Success(calculatedHash);
         }
 
-        public IResult HashValidate(string input, T hash)
+        public IResult HashValidate(string input, string hash)
         {
-            IResult<T> computedHash = CalculateHash(input);
+            IResult<string> computedHash = CalculateHash(input);
 
             bool isValid = computedHash.Equals(hash);
 
@@ -67,9 +59,9 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
                 : _resultFactory.Failure("Hashes do not match.");
         }
 
-        public IResult HashValidate(byte[] input, T hash)
+        public IResult HashValidate(byte[] input, string hash)
         {
-            IResult<T> computedHash = CalculateHash(input);
+            IResult<string> computedHash = CalculateHash(input);
 
             bool isValid = computedHash.Equals(hash);
 
@@ -78,9 +70,9 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
                 : _resultFactory.Failure("Hashes do not match.");
         }
 
-        public IResult HashValidate(SecureString input, T hash)
+        public IResult HashValidate(SecureString input, string hash)
         {
-            IResult<T> computedHash = CalculateHash(input);
+            IResult<string> computedHash = CalculateHash(input);
 
             bool isValid = computedHash.Equals(hash);
 
@@ -89,9 +81,9 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
                 : _resultFactory.Failure("Hashes do not match.");
         }
 
-        public IResult HashValidate(StreamReader input, T hash)
+        public IResult HashValidate(StreamReader input, string hash)
         {
-            IResult<T> computedHash = CalculateHash(input);
+            IResult<string> computedHash = CalculateHash(input);
 
             bool isValid = computedHash.Equals(hash);
 

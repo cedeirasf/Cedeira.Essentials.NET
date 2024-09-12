@@ -6,40 +6,50 @@ using System.Text;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 {
-    public class HashHandler<T> : IHashHandler<T> where T :  IEquatable<T>
+    public class HashHandler : IHashHandler 
     {
         private readonly HashAlgorithm _hashAlgorithm;
-        private readonly Func<byte[], T> _hashFormatter;
+        private readonly Func<byte[], string> _hashFormatter;
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="HashHandler"/> con el algoritmo de hash especificado.
         /// </summary>
         /// <param name="hashAlgorithm">El algoritmo de hash a utilizar.</param>
-        public HashHandler(HashAlgorithm hashAlgorithm, Func<byte[], T> hashFormatter)
+        public HashHandler(HashAlgorithm hashAlgorithm)
         {
             _hashAlgorithm = hashAlgorithm;
-            _hashFormatter = hashFormatter;
+            _hashFormatter = BytesToHex;
         }
 
-        public T CalculateHash(string input)
+        public static string BytesToHex(byte[] bytes)
+        {
+            StringBuilder hex = new StringBuilder(bytes.Length * 2);
+            foreach (byte b in bytes)
+            {
+                hex.AppendFormat("{0:x2}", b); // Formato hexadecimal con dos dígitos, en minúscula
+            }
+            return hex.ToString();
+        }
+
+        public string CalculateHash(string input)
         {
             byte[] hashBytes = ComputeHash(Encoding.UTF8.GetBytes(input));
             return _hashFormatter(hashBytes);
         }
 
-        public T CalculateHash(byte[] input)
+        public string CalculateHash(byte[] input)
         {
             byte[] hashBytes = ComputeHash(input);
             return _hashFormatter(hashBytes);
         }
 
-        public T CalculateHash(StreamReader input)
+        public string CalculateHash(StreamReader input)
         {
             byte[] hashBytes = ComputeHash(Encoding.UTF8.GetBytes(input.ReadToEnd()));
             return _hashFormatter(hashBytes);
         }
 
-        public T CalculateHash(SecureString input)
+        public string CalculateHash(SecureString input)
         {
             var bstr = Marshal.SecureStringToBSTR(input);
             try
@@ -59,59 +69,59 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
             }
         }
 
-        public bool HashValidate(string input, T hash)
+        public bool HashValidate(string input, string hash)
         {
             var computedHash = CalculateHash(input);
             return computedHash.Equals(hash);
         }
        
-        public bool HashValidate(byte[] input, T hash)
+        public bool HashValidate(byte[] input, string hash)
         {
             var computedHash = CalculateHash(input);
             return computedHash.Equals(hash);
         }
 
-        public bool HashValidate(SecureString input, T hash)
+        public bool HashValidate(SecureString input, string hash)
         {
             var computedHash = CalculateHash(input);
             return computedHash.Equals(hash);
         }
 
-        public bool HashValidate(StreamReader input, T hash)
+        public bool HashValidate(StreamReader input, string hash)
         {
             var computedHash = CalculateHash(input);
             return computedHash.Equals(hash);
         }
 
-        public void ThrowIfInvalidHash(string input, T hash)
+        public void ThrowIfInvalidHash(string input, string hash)
         {
             if (!HashValidate(input, hash))
             {
-                throw new ArgumentException("Invalid hash.");
+                throw new CryptographicException("Invalid hash.");
             }
         }
 
-        public void ThrowIfInvalidHash(byte[] input, T hash)
+        public void ThrowIfInvalidHash(byte[] input, string hash)
         {
             if (!HashValidate(input, hash))
             {
-                throw new ArgumentException("Invalid hash.");
+                throw new CryptographicException("Invalid hash.");
             }
         }
 
-        public void ThrowIfInvalidHash(SecureString input, T hash)
+        public void ThrowIfInvalidHash(SecureString input, string hash)
         {
             if (!HashValidate(input, hash))
             {
-                throw new ArgumentException("Invalid hash.");
+                throw new CryptographicException("Invalid hash.");
             }
         }
 
-        public void ThrowIfInvalidHash(StreamReader input, T hash)
+        public void ThrowIfInvalidHash(StreamReader input, string hash)
         {
             if (!HashValidate(input, hash))
             {
-                throw new ArgumentException("Invalid hash.");
+                throw new CryptographicException("Invalid hash.");
             }
         }
         protected byte[] ComputeHash(byte[] input)

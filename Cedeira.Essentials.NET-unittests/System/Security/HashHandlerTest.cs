@@ -27,7 +27,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
         public void CalculateHash_StringInput_ReturnsExpectedHash()
         {
          
-            var handler = new HashHandler<string>(_hashAlgorithm, _hashFormatter);
+            var handler = new HashHandler(_hashAlgorithm);
 
             var input = "test";
 
@@ -44,7 +44,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
         public void CalculateHash_ByteArrayInput_ReturnsExpectedHash()
         {
     
-            var handler = new HashHandler<string>(_hashAlgorithm, _hashFormatter);
+            var handler = new HashHandler(_hashAlgorithm);
 
             var input = Encoding.UTF8.GetBytes("test");
 
@@ -59,7 +59,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
         public void CalculateHash_StreamReaderInput_ReturnsExpectedHash()
         {
         
-            var handler = new HashHandler<string>(_hashAlgorithm, _hashFormatter);
+            var handler = new HashHandler(_hashAlgorithm);
             var inputString = "test";
             var inputStream = new MemoryStream(Encoding.UTF8.GetBytes(inputString));
             using var input = new StreamReader(inputStream);
@@ -75,7 +75,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
         public void CalculateHash_SecureStringInput_ReturnsExpectedHash()
         {
            
-            var handler = new HashHandler<string>(_hashAlgorithm, _hashFormatter);
+            var handler = new HashHandler(_hashAlgorithm);
             var secureString = new SecureString();
             foreach (char c in "test") secureString.AppendChar(c);
             secureString.MakeReadOnly();
@@ -94,7 +94,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
         [TestMethod]
         public void HashValidate_StringInput_ReturnsTrueForValidHash()
         {
-            var handler = new HashHandler<string>(_hashAlgorithm, _hashFormatter);
+            var handler = new HashHandler(_hashAlgorithm);
 
             var input = "test";
 
