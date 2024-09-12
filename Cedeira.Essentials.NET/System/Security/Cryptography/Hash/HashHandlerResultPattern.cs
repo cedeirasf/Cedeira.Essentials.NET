@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 {
-    public class HashHandlerResultPattern<T> : IHashHandlerResultPattern<T> where T : IEquatable<T>    
+    public class HashHandlerResultPattern<T> : IHashHandlerResultPattern<T> where T : IEquatable<T>
     {
         private readonly HashAlgorithm _hashAlgorithm;
         private readonly IResultFactory _resultFactory;

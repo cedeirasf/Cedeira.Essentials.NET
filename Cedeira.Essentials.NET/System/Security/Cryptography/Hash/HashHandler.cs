@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 {
-    public class HashHandler<T> : IHashHandler<T> where T : IEquatable<T>
+    public class HashHandler<T> : IHashHandler<T> where T :  IEquatable<T>
     {
         private readonly HashAlgorithm _hashAlgorithm;
         private readonly Func<byte[], T> _hashFormatter;
