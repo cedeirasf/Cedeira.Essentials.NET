@@ -11,14 +11,16 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
         private readonly HashAlgorithm _hashAlgorithm;
         private readonly Func<byte[], string> _hashFormatter;
 
-        /// <summary>
-        /// Inicializa una nueva instancia de la clase <see cref="HashHandler"/> con el algoritmo de hash especificado.
-        /// </summary>
-        /// <param name="hashAlgorithm">El algoritmo de hash a utilizar.</param>
         public HashHandler(HashAlgorithm hashAlgorithm)
         {
             _hashAlgorithm = hashAlgorithm;
             _hashFormatter = BytesToHex;
+        }
+
+        public HashHandler(HashAlgorithm hashAlgorithm, Func<byte[], string> hashFormatter)
+        {
+            _hashAlgorithm = hashAlgorithm;
+            _hashFormatter = hashFormatter;
         }
 
         public static string BytesToHex(byte[] bytes)
@@ -45,7 +47,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 
         public string CalculateHash(StreamReader input)
         {
-            byte[] hashBytes = ComputeHash(Encoding.UTF8.GetBytes(input.ReadToEnd()));
+            byte[] hashBytes = ComputeHash(input);
             return _hashFormatter(hashBytes);
         }
 
@@ -72,24 +74,28 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
         public bool HashValidate(string input, string hash)
         {
             var computedHash = CalculateHash(input);
+
             return computedHash.Equals(hash);
         }
        
         public bool HashValidate(byte[] input, string hash)
         {
             var computedHash = CalculateHash(input);
+
             return computedHash.Equals(hash);
         }
 
         public bool HashValidate(SecureString input, string hash)
         {
             var computedHash = CalculateHash(input);
+
             return computedHash.Equals(hash);
         }
 
         public bool HashValidate(StreamReader input, string hash)
         {
             var computedHash = CalculateHash(input);
+
             return computedHash.Equals(hash);
         }
 
@@ -127,6 +133,11 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
         protected byte[] ComputeHash(byte[] input)
         {
             return _hashAlgorithm.ComputeHash(input);
+        }
+
+        protected byte[] ComputeHash(StreamReader input)
+        {
+            return _hashAlgorithm.ComputeHash(input.BaseStream);
         }
     }
 }
