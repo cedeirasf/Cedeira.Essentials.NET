@@ -35,6 +35,9 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 
         public string CalculateHash(string input)
         {
+            if (string.IsNullOrEmpty(input))
+                input = ""; 
+
             byte[] hashBytes = ComputeHash(Encoding.UTF8.GetBytes(input));
             return _hashFormatter(hashBytes);
         }
