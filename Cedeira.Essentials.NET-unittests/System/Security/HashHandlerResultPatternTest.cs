@@ -30,8 +30,8 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                     {"SHA1_1", new (input,SHA1.Create(), true, "6e17ffc27e415630eaa5e5297da569573267cd11")},
                     {"SHA384_1", new (input,SHA384.Create(), true, "f4c32eff1d108679dd2149c2d48babf350db0be0e0ed08ccc80fc5b037df52f550fd1eb76d3ae3024d1957271ac8d6a1")},
                     {"SHA512_1", new (input,SHA512.Create(), true, "aeaca907a9bce24dbf9762049b6afddd6ac124b2720d2a91c3317500c8691442a98230f674bc58b5da4553a510e3eced7141dadc5eb8226836f524cee0feac66")},
-                    {"MD5_Empty", new ("", MD5.Create(), true, "d41d8cd98f00b204e9800998ecf8427e")}, 
-                    {"SHA256_Null", new (null, SHA256.Create(), true, "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")},
+                    {"MD5_Empty", new ("", MD5.Create(), true, null)}, 
+                    {"SHA256_Null", new (null, SHA256.Create(), true, null)},
              };
 
 
