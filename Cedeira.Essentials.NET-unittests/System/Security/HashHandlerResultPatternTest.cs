@@ -11,17 +11,22 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
     [TestClass]
     public class HashHandlerResultPatternTest
     {
-        private Dictionary<string, (HashAlgorithm hashAlgorithm, IResultFactory resultFactory, Func<byte[], string> hashFormatter)> handlersCreateOutputString;
+        private Dictionary<string, (HashAlgorithm hashAlgorithm, IResultFactory resultFactory)> handlersCreateOutputString;
 
         [TestInitialize]
         public void Setup()
         {
-            handlersCreateOutputString = new Dictionary<string, (HashAlgorithm, IResultFactory, Func<byte[], string>)>
+            handlersCreateOutputString = new Dictionary<string, (HashAlgorithm, IResultFactory)>
             {
-            { "MD5", (MD5.Create(), new ResultFactory(), bytes => BitConverter.ToString(bytes).Replace("-", "").ToLower())},
-            { "SHA256", (SHA256.Create(), new ResultFactory(), bytes => BitConverter.ToString(bytes).Replace("-", "").ToLower()) },
+            { "MD5", (MD5.Create(), new ResultFactory())},
+            { "SHA256", (SHA256.Create(), new ResultFactory())},
+            { "SHA1", (SHA1.Create(), new ResultFactory())},
+            { "SHA384", (SHA384.Create(), new ResultFactory())},
+            { "SHA512", (SHA512.Create(), new ResultFactory())},
+            { "SHA3_256", (SHA3_256.Create(), new ResultFactory())},
+            { "SHA3_384", (SHA3_384.Create(), new ResultFactory())},
+            { "SHA3_512", (SHA3_512.Create(), new ResultFactory())},
             };
-
         }
 
         [TestMethod]
@@ -34,10 +39,18 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                     handler.Value.resultFactory
                 );
 
+                string input = "Testeo123";
+
                 var testCases = new Dictionary<string, (string inputName, bool estadoEsperado, string hashEsperado)>
                 {
-                    {"MD5_1", new ("Testeo123", true, "320dee96d097dda6f108c62983def31f") },
-                    {"SHA256_1", new ("Testeo123", true, "167c675e41e07059088728924744805f06dfc328eedf5f1939dd8143d6d78226")},
+                    {"MD5_1", new ( input, true, "320dee96d097dda6f108c62983def31f") },
+                    {"SHA256_2", new (input, true, "167c675e41e07059088728924744805f06dfc328eedf5f1939dd8143d6d78226")}
+                    //{"SHA1_3", new (input, true, "167c675e41e07059088728924744805f06dfc328eedf5f1939dd8143d6d78226")},
+                    //{"SHA384_4", new (input, true, "167c675e41e07059088728924744805f06dfc328eedf5f1939dd8143d6d78226")},
+                    //{"SHA512_5", new (input, true, "167c675e41e07059088728924744805f06dfc328eedf5f1939dd8143d6d78226")},
+                    //{"SHA3_256_6", new (input, true, "167c675e41e07059088728924744805f06dfc328eedf5f1939dd8143d6d78226")},
+                    //{"SHA3_384_7", new (input, true, "167c675e41e07059088728924744805f06dfc328eedf5f1939dd8143d6d78226")},
+                    //{"SHA3_512_8", new (input, true, "167c675e41e07059088728924744805f06dfc328eedf5f1939dd8143d6d78226")},
                 };
 
                 foreach (var testCase in testCases.Where(x=>x.Key.Contains(handler.Key)).ToDictionary())
@@ -53,17 +66,16 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
         //[TestMethod]
         //public void CalculateHash_ByteArrayInput_ReturnsExpectedHashWithIResultPattern()
         //{
-        //    foreach (var handler in handlersCreateOutputBytes)
+        //    foreach (var handler in handlersCreateOutputString)
         //    {
-        //        var handlerInstance = new HashHandlerResultPattern<byte[]>(
+        //        var handlerInstance = new HashHandlerResultPattern(
         //                handler.Value.hashAlgorithm,
-        //                handler.Value.resultFactory,
-        //                handler.Value.hashFormatter
+        //                handler.Value.resultFactory
         //            );
 
         //        var testCases = new Dictionary<string, (string inputName, bool estadoEsperado, byte[] hashEsperado)>
         //        {
-        //            { "ok_1", new ("Testeo123", true, Encoding.UTF8.GetBytes("320dee96d097dda6f108c62983def31f"))}
+        //            { "ok_1", new (Encoding.UTF8.GetBytes()"Testeo123", true, "320dee96d097dda6f108c62983def31f")}
         //        };
 
         //        foreach (var testCase in testCases)

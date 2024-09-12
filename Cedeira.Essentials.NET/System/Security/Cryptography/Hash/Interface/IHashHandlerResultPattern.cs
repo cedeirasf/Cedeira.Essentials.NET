@@ -3,7 +3,7 @@ using System.Security;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Interface
 {
-    public interface IHashHandlerResultPattern
+    public interface IHashHandlerResultPattern 
     {
         /// <summary>
         /// Calcula el hash de una cadena de texto y devuelve el resultado.
