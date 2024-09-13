@@ -23,33 +23,72 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
             _hashHandler = new HashHandler(hashAlgorithm, hashFormatter);
         }
 
-
         public IResult<string> CalculateHash(string input)
         {
-            string calculatedHash = _hashHandler.CalculateHash(input);
+            IResult<string> result;
 
-            return _resultFactory.Success(calculatedHash);
+            try
+            {
+                string calculatedHash = _hashHandler.CalculateHash(input);
+                result = _resultFactory.Success(calculatedHash);
+            }
+            catch (ArgumentException ex)
+            {
+                result =_resultFactory.Failure<string>(ex.Message);
+            }
+
+            return result;
         }
 
         public IResult<string> CalculateHash(byte[] input)
         {
-            string calculatedHash = _hashHandler.CalculateHash(input);
+            IResult<string> result;
 
-            return _resultFactory.Success(calculatedHash);
+            try
+            {
+                string calculatedHash = _hashHandler.CalculateHash(input);
+                result = _resultFactory.Success(calculatedHash);
+            }
+            catch (ArgumentException ex)
+            {
+                result = _resultFactory.Failure<string>(ex.Message);
+            }
+
+            return result;
         }
 
         public IResult<string> CalculateHash(StreamReader input)
         {
-            string calculatedHash = _hashHandler.CalculateHash(input);
+            IResult<string> result;
 
-            return _resultFactory.Success(calculatedHash);
+            try
+            {
+                string calculatedHash = _hashHandler.CalculateHash(input);
+                result = _resultFactory.Success(calculatedHash);
+            }
+            catch (ArgumentException ex)
+            {
+                result = _resultFactory.Failure<string>(ex.Message);
+            }
+
+            return result;
         }
 
         public IResult<string> CalculateHash(SecureString input)
         {
-            var calculatedHash = _hashHandler.CalculateHash(input);
+            IResult<string> result;
 
-            return _resultFactory.Success(calculatedHash);
+            try
+            {
+                string calculatedHash = _hashHandler.CalculateHash(input);
+                result = _resultFactory.Success(calculatedHash);
+            }
+            catch (ArgumentException ex)
+            {
+                result = _resultFactory.Failure<string>(ex.Message);
+            }
+
+            return result;
         }
 
         public IResult HashValidate(string input, string hash)
@@ -63,11 +102,11 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 
         public IResult HashValidate(byte[] input, string hash)
         {
-           bool isValid = _hashHandler.HashValidate(input, hash);
+            bool isValid = _hashHandler.HashValidate(input, hash);
 
-           return isValid
-                ? _resultFactory.Success(isValid)
-                : _resultFactory.Failure("Hashes do not match.");
+            return isValid
+                 ? _resultFactory.Success(isValid)
+                 : _resultFactory.Failure("Hashes do not match.");
         }
 
         public IResult HashValidate(SecureString input, string hash)

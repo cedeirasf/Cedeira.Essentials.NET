@@ -28,34 +28,40 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
             StringBuilder hex = new StringBuilder(bytes.Length * 2);
             foreach (byte b in bytes)
             {
-                hex.AppendFormat("{0:x2}", b); // Formato hexadecimal con dos dígitos, en minúscula
+                hex.AppendFormat("{0:x2}", b);
             }
             return hex.ToString();
         }
 
         public string CalculateHash(string input)
         {
-            if (string.IsNullOrEmpty(input))
-                return null;
-            
+            ValidateNullInput(input);
             byte[] hashBytes = ComputeHash(Encoding.UTF8.GetBytes(input));
+
             return _hashFormatter(hashBytes);
         }
 
+
         public string CalculateHash(byte[] input)
         {
+            ValidateNullInput(input);
             byte[] hashBytes = ComputeHash(input);
+
             return _hashFormatter(hashBytes);
         }
 
         public string CalculateHash(StreamReader input)
         {
+            ValidateNullInput(input);
             byte[] hashBytes = ComputeHash(input);
+
             return _hashFormatter(hashBytes);
         }
 
         public string CalculateHash(SecureString input)
         {
+            ValidateNullInput(input);
+
             var bstr = Marshal.SecureStringToBSTR(input);
             try
             {
@@ -76,6 +82,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 
         public bool HashValidate(string input, string hash)
         {
+
             var computedHash = CalculateHash(input);
 
             return computedHash.Equals(hash);
@@ -133,14 +140,22 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
                 throw new CryptographicException("Invalid hash.");
             }
         }
-        protected byte[] ComputeHash(byte[] input)
+        private byte[] ComputeHash(byte[] input)
         {
             return _hashAlgorithm.ComputeHash(input);
         }
 
-        protected byte[] ComputeHash(StreamReader input)
+        private byte[] ComputeHash(StreamReader input)
         {
             return _hashAlgorithm.ComputeHash(input.BaseStream);
         }
+        private void ValidateNullInput<T>(T input)
+        {
+            if (input is null)
+            {
+                throw new ArgumentException("Input can not be null");
+            }
+        }
+
     }
 }
