@@ -1,7 +1,7 @@
 # Cedeira.Essentials.NET <!-- omit in toc -->
 
 <div align="center">
-  <a href="https://github.com/cedeirasf/Cedeira.Essentials.NET/blob/main/LICENSE">
+  <a href="https://github.com/cedeirasf/Cedeira.Essentials.NET/blob/main/LICENSE.txt">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg">
   </a>
 
