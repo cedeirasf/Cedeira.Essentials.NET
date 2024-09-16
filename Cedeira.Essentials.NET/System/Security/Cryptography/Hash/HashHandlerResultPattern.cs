@@ -93,38 +93,82 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 
         public IResult HashValidate(string input, string hash)
         {
-            bool isValid = _hashHandler.HashValidate(input, hash);
+            IResult result;
 
-            return isValid
-                ? _resultFactory.Success(isValid)
-                : _resultFactory.Failure("Hashes do not match.");
+            try
+            {
+                bool isValid = _hashHandler.HashValidate(input, hash);
+
+                result = isValid
+                    ? _resultFactory.Success(isValid)
+                    : _resultFactory.Failure("Hashes do not match.");
+            }
+            catch (ArgumentException ex) 
+            {
+                result = _resultFactory.Failure(ex.Message);
+            }
+
+            return result; 
         }
 
         public IResult HashValidate(byte[] input, string hash)
         {
-            bool isValid = _hashHandler.HashValidate(input, hash);
+            IResult result;
 
-            return isValid
-                 ? _resultFactory.Success(isValid)
-                 : _resultFactory.Failure("Hashes do not match.");
+            try
+            {
+                bool isValid = _hashHandler.HashValidate(input, hash);
+
+                result = isValid
+                    ? _resultFactory.Success(isValid)
+                    : _resultFactory.Failure("Hashes do not match.");
+            }
+            catch (ArgumentException ex)
+            {
+                result = _resultFactory.Failure(ex.Message);
+            }
+
+            return result;
         }
 
         public IResult HashValidate(SecureString input, string hash)
         {
-            bool isValid = _hashHandler.HashValidate(input, hash);
+            IResult result;
 
-            return isValid
-                ? _resultFactory.Success(isValid)
-                : _resultFactory.Failure("Hashes do not match.");
+            try
+            {
+                bool isValid = _hashHandler.HashValidate(input, hash);
+
+                result = isValid
+                    ? _resultFactory.Success(isValid)
+                    : _resultFactory.Failure("Hashes do not match.");
+            }
+            catch (ArgumentException ex)
+            {
+                result = _resultFactory.Failure(ex.Message);
+            }
+
+            return result;
         }
 
         public IResult HashValidate(StreamReader input, string hash)
         {
-            bool isValid = _hashHandler.HashValidate(input, hash);
+            IResult result;
 
-            return isValid
-                ? _resultFactory.Success(isValid)
-                : _resultFactory.Failure("Hashes do not match.");
+            try
+            {
+                bool isValid = _hashHandler.HashValidate(input, hash);
+
+                result = isValid
+                    ? _resultFactory.Success(isValid)
+                    : _resultFactory.Failure("Hashes do not match.");
+            }
+            catch (ArgumentException ex)
+            {
+                result = _resultFactory.Failure(ex.Message);
+            }
+
+            return result;
         }
 
     }

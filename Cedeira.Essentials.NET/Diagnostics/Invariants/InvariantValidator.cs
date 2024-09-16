@@ -49,9 +49,10 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         /// Lanza una ArgumentNullException si el valor es nulo.
         /// </summary>
         /// <returns>El propio InvariantValidator para permitir chaining.</returns>
+       
         public InvariantValidator<T> IsNotNull()
         {
-            return this.IsNotNull("Value cannot be null.");
+            return this.IsNotNull($"Value can not be null.");
         }
 
         /// <summary>
