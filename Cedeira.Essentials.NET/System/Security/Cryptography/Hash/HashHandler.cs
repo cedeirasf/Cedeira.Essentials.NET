@@ -147,6 +147,8 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 
         private byte[] ComputeHash(StreamReader input)
         {
+            input.BaseStream.Position = 0;
+            input.DiscardBufferedData();
             return _hashAlgorithm.ComputeHash(input.BaseStream);
         }
         private void ValidateNullInput<T>(T input)
