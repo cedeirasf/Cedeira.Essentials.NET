@@ -17,7 +17,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
         private Func<byte[], string> _hashformatterBase64;
         private string _input;
         private byte[] _inputByte;
-        private string _message;
+        private string _messageValidateNull;
         private string _messageValidate;
         private StreamReader _inputStreamReader;
         private SecureString _inputSecureString;
@@ -26,7 +26,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
         public void Setup()
         {
             _input = "Testeo123";
-            _message = "Input can not be null";
+            _messageValidateNull = "input cannot be null";
             _messageValidate = "Hashes do not match.";
             _inputByte = Encoding.UTF8.GetBytes(_input);
             _inputStreamReader = new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes(_input)));
@@ -52,7 +52,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                 {"SHA384_1", new (_input, SHA384.Create(), true, "F4C32EFF1D108679DD2149C2D48BABF350DB0BE0E0ED08CCC80FC5B037DF52F550FD1EB76D3AE3024D1957271AC8D6A1")},
                 {"SHA512_1", new (_input, SHA512.Create(), true, "AEACA907A9BCE24DBF9762049B6AFDDD6AC124B2720D2A91C3317500C8691442A98230F674BC58B5DA4553A510E3ECED7141DADC5EB8226836F524CEE0FEAC66")},
                 {"MD5_Empty", new ("", MD5.Create(), true, "D41D8CD98F00B204E9800998ECF8427E")},
-                {"SHA256_Null", new (null, SHA256.Create(), false, _message)},
+                {"SHA256_Null", new (null, SHA256.Create(), false, _messageValidateNull)},
             };
 
             foreach (var testCase in _testCasesinputString)
@@ -85,7 +85,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                     {"SHA384_1", new (_input,SHA384.Create(), true, "9MMu/x0QhnndIUnC1Iur81DbC+Dg7QjMyA/FsDffUvVQ/R63bTrjAk0ZVycayNah")},
                     {"SHA512_1", new (_input,SHA512.Create(), true, "rqypB6m84k2/l2IEm2r93WrBJLJyDSqRwzF1AMhpFEKpgjD2dLxYtdpFU6UQ4+ztcUHa3F64Img29STO4P6sZg==")},
                     {"MD5_Empty", new ("", MD5.Create(), true, "1B2M2Y8AsgTpgAmY7PhCfg==")},
-                    {"SHA256_Null", new (null, SHA256.Create(), false, _message)},
+                    {"SHA256_Null", new (null, SHA256.Create(), false, _messageValidateNull)},
             };
 
             foreach (var testCase in _testCasesinputString)
@@ -118,7 +118,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                 {"SHA384_1", new (_inputByte, SHA384.Create(), true, "F4C32EFF1D108679DD2149C2D48BABF350DB0BE0E0ED08CCC80FC5B037DF52F550FD1EB76D3AE3024D1957271AC8D6A1")},
                 {"SHA512_1", new (_inputByte, SHA512.Create(), true, "AEACA907A9BCE24DBF9762049B6AFDDD6AC124B2720D2A91C3317500C8691442A98230F674BC58B5DA4553A510E3ECED7141DADC5EB8226836F524CEE0FEAC66")},
                 {"MD5_Empty", new (Array.Empty<byte>(), MD5.Create(), true, "D41D8CD98F00B204E9800998ECF8427E")},
-                {"SHA256_Null", new (null, SHA256.Create(), false, _message)},
+                {"SHA256_Null", new (null, SHA256.Create(), false, _messageValidateNull)},
             };
 
             foreach (var testCase in _testCasesInputByte)
@@ -151,7 +151,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                     {"SHA384_1", new (_inputByte,SHA384.Create(), true, "9MMu/x0QhnndIUnC1Iur81DbC+Dg7QjMyA/FsDffUvVQ/R63bTrjAk0ZVycayNah")},
                     {"SHA512_1", new (_inputByte,SHA512.Create(), true, "rqypB6m84k2/l2IEm2r93WrBJLJyDSqRwzF1AMhpFEKpgjD2dLxYtdpFU6UQ4+ztcUHa3F64Img29STO4P6sZg==")},
                     {"MD5_Empty", new (Array.Empty<byte>(), MD5.Create(), true, "1B2M2Y8AsgTpgAmY7PhCfg==")},
-                    {"SHA256_Null", new (null, SHA256.Create(), false,_message)},
+                    {"SHA256_Null", new (null, SHA256.Create(), false,_messageValidateNull)},
             };
 
             foreach (var testCase in _testCasesInputByte)
@@ -186,7 +186,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                 {"SHA384_1", new (_inputStreamReader, SHA384.Create(), true, "38B060A751AC96384CD9327EB1B1E36A21FDB71114BE07434C0CC7BF63F6E1DA274EDEBFE76F65FBD51AD2F14898B95B")},
                 {"SHA512_1", new (_inputStreamReader, SHA512.Create(), true, "CF83E1357EEFB8BDF1542850D66D8007D620E4050B5715DC83F4A921D36CE9CE47D0D13C5D85F2B0FF8318D2877EEC2F63B931BD47417A81A538327AF927DA3E")},
                 {"MD5_Empty", new (new StreamReader(new MemoryStream()), MD5.Create(), true, "D41D8CD98F00B204E9800998ECF8427E")},
-                {"SHA256_Null", new (null, SHA256.Create(), false, _message)},
+                {"SHA256_Null", new (null, SHA256.Create(), false, _messageValidateNull)},
             };
 
             foreach (var testCase in _testCasesinputStreamReader)
@@ -221,7 +221,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                     {"SHA384_1", new (_inputStreamReader,SHA384.Create(), true, "9MMu/x0QhnndIUnC1Iur81DbC+Dg7QjMyA/FsDffUvVQ/R63bTrjAk0ZVycayNah")},
                     {"SHA512_1", new (_inputStreamReader,SHA512.Create(), true, "rqypB6m84k2/l2IEm2r93WrBJLJyDSqRwzF1AMhpFEKpgjD2dLxYtdpFU6UQ4+ztcUHa3F64Img29STO4P6sZg==")},
                     {"MD5_Empty", new (new StreamReader(new MemoryStream()), MD5.Create(), true, "1B2M2Y8AsgTpgAmY7PhCfg==")},
-                    {"SHA256_Null", new (null, SHA256.Create(), false,_message)},
+                    {"SHA256_Null", new (null, SHA256.Create(), false,_messageValidateNull)},
             };
 
             foreach (var testCase in _testCasesinputStreamReader)
@@ -257,7 +257,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                 {"SHA384_1", new (_inputSecureString, SHA384.Create(), true, "AD8C29E781A83761EAF212F42C8636AADF5DEBE8ADF4940B385C5FADCC247994569544F35E08DE366889BEF12A3C95D6")},
                 {"SHA512_1", new (_inputSecureString, SHA512.Create(), true, "4E6F429F1B72FAA9F5DD8A48E240B24DC4DF70E0DC68C8E3B4242AB3FFE4095B07DD9099FBF4E39148A00B580370DBC22250D67BA860CFDAAEA0CC3BD0E3E018")},
                 {"MD5_Empty", new (new SecureString(), MD5.Create(), true, "D41D8CD98F00B204E9800998ECF8427E")},
-                {"SHA256_Null", new (null, SHA256.Create(), false, _message)},
+                {"SHA256_Null", new (null, SHA256.Create(), false, _messageValidateNull)},
             };
 
             foreach (var testCase in _testCasesInputSecureString)
@@ -290,7 +290,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                     {"SHA384_1", new (_inputSecureString,SHA384.Create(), true, "rYwp54GoN2Hq8hL0LIY2qt9d6+it9JQLOFxfrcwkeZRWlUTzXgjeNmiJvvEqPJXW")},
                     {"SHA512_1", new (_inputSecureString,SHA512.Create(), true, "Tm9Cnxty+qn13YpI4kCyTcTfcODcaMjjtCQqs//kCVsH3ZCZ+/TjkUigC1gDcNvCIlDWe6hgz9quoMw70OPgGA==")},
                     {"MD5_Empty", new (new SecureString(), MD5.Create(), true, "1B2M2Y8AsgTpgAmY7PhCfg==")},
-                    {"SHA256_Null", new (null, SHA256.Create(), false,_message)},
+                    {"SHA256_Null", new (null, SHA256.Create(), false,_messageValidateNull)},
             };
 
             foreach (var testCase in _testCasesInputSecureString)
@@ -323,11 +323,12 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                 {"SHA384_1", new (_input, SHA384.Create(), true, "F4C32EFF1D108679DD2149C2D48BABF350DB0BE0E0ED08CCC80FC5B037DF52F550FD1EB76D3AE3024D1957271AC8D6A1")},
                 {"SHA512_1", new (_input, SHA512.Create(), true, "AEACA907A9BCE24DBF9762049B6AFDDD6AC124B2720D2A91C3317500C8691442A98230F674BC58B5DA4553A510E3ECED7141DADC5EB8226836F524CEE0FEAC66")},
                 {"MD5_Empty", new ("", MD5.Create(), true, "D41D8CD98F00B204E9800998ECF8427E")},
-                {"SHA256_Null", new (null, SHA256.Create(), false, _messageValidate)},
-                { "SHA256_Null_Null",new (null, SHA256.Create(), false, null) },
-                { "MD5_1_Null", new (_input, MD5.Create(), false, null) },
+                {"SHA256_Null", new (null, SHA256.Create(), false, null)},
+                {"MD5_1_Null", new (_input, MD5.Create(), false, null) },
+                {"MD5_1_InvalidHash", new (_input, MD5.Create(), false, "invalid Hash") },
+                {"SHA256_Null_Message", new (null, SHA256.Create(), false, _messageValidateNull)},
             };
-          
+
 
             foreach (var testCase in _testCasesinputString)
             {
@@ -342,6 +343,18 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                 else
                 {
                     Assert.IsTrue(result.IsFailure());
+
+                    if (testCase.Key == "MD5_1_InvalidHash")
+                    {
+                        Assert.AreEqual(_messageValidate, result.Message);
+                    }
+                    else if (testCase.Key == "SHA256_Null_Message")
+                    {
+                        StringAssert.Contains(result.Message, testCase.Value.expectedHash);
+                    }
+
+                    Assert.IsTrue(result.IsFailure());
+
                 }
             }
         }
@@ -357,9 +370,10 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                 {"SHA384_1", new (_inputByte, SHA384.Create(), true, "F4C32EFF1D108679DD2149C2D48BABF350DB0BE0E0ED08CCC80FC5B037DF52F550FD1EB76D3AE3024D1957271AC8D6A1")},
                 {"SHA512_1", new (_inputByte, SHA512.Create(), true, "AEACA907A9BCE24DBF9762049B6AFDDD6AC124B2720D2A91C3317500C8691442A98230F674BC58B5DA4553A510E3ECED7141DADC5EB8226836F524CEE0FEAC66")},
                 {"MD5_Empty", new (Array.Empty<byte>(), MD5.Create(), true, "D41D8CD98F00B204E9800998ECF8427E")},
-                {"SHA256_Null", new (null, SHA256.Create(), false, _messageValidate)},
-                { "SHA256_Null_Null",new (null, SHA256.Create(), false, null) },
-                { "MD5_1_Null", new (_inputByte, MD5.Create(), false, null) },
+                {"SHA256_Null", new (null, SHA256.Create(), false, null)},
+                {"MD5_1_Null", new (_inputByte, MD5.Create(), false, null) },
+                {"MD5_1_InvalidHash", new (_inputByte, MD5.Create(), false, "invalid Hash") },
+                {"SHA256_Null_Message", new (null, SHA256.Create(), false, _messageValidateNull)},
             };
 
             foreach (var testCase in _testCasesInputByte)
@@ -374,6 +388,108 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                 }
                 else
                 {
+                    Assert.IsTrue(result.IsFailure());
+
+                    if (testCase.Key == "MD5_1_InvalidHash")
+                    {
+                        Assert.AreEqual(_messageValidate, result.Message);
+                    }
+                    else if (testCase.Key == "SHA256_Null_Message")
+                    {
+                        StringAssert.Contains(result.Message,testCase.Value.expectedHash);        
+                    }
+
+                    Assert.IsTrue(result.IsFailure());
+
+                }
+            }
+        }
+
+        [TestMethod]
+        public void ValidaHash_InputStreamReader_ReturnsTrueIfValid()
+        {
+            _testCasesinputStreamReader = new Dictionary<string, (StreamReader inputStream, HashAlgorithm algorithm, bool estadoEsperado, string hashEsperado)>
+            {
+                {"MD5_1", new (_inputStreamReader, MD5.Create(), true, "320DEE96D097DDA6F108C62983DEF31F")},
+                {"SHA256_1", new (_inputStreamReader, SHA256.Create(), true, "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855")},
+                {"SHA1_1", new (_inputStreamReader, SHA1.Create(), true, "DA39A3EE5E6B4B0D3255BFEF95601890AFD80709")},
+                {"SHA384_1", new (_inputStreamReader, SHA384.Create(), true, "38B060A751AC96384CD9327EB1B1E36A21FDB71114BE07434C0CC7BF63F6E1DA274EDEBFE76F65FBD51AD2F14898B95B")},
+                {"SHA512_1", new (_inputStreamReader, SHA512.Create(), true, "CF83E1357EEFB8BDF1542850D66D8007D620E4050B5715DC83F4A921D36CE9CE47D0D13C5D85F2B0FF8318D2877EEC2F63B931BD47417A81A538327AF927DA3E")},
+                {"MD5_Empty", new (new StreamReader(new MemoryStream()), MD5.Create(), true, "D41D8CD98F00B204E9800998ECF8427E")},
+                {"SHA256_Null", new (null, SHA256.Create(), false, null)},
+                {"MD5_1_Null", new (_inputStreamReader, MD5.Create(), false, null) },
+                {"MD5_1_InvalidHash", new (_inputStreamReader, MD5.Create(), false, "invalid Hash") },
+                {"SHA256_Null_Message", new (null, SHA256.Create(), false, _messageValidateNull)},
+            };
+
+            foreach (var testCase in _testCasesinputStreamReader)
+            {
+                var handlerInstance = new HashHandlerResultPattern(testCase.Value.algorithm, _resultFactory);
+
+                var result = handlerInstance.HashValidate(testCase.Value.inputStream, testCase.Value.expectedHash);
+
+                if (testCase.Value.expectedState)
+                {
+                    Assert.IsTrue(result.IsSuccess());
+                }
+                else
+                {
+                    Assert.IsTrue(result.IsFailure());
+
+                    if (testCase.Key == "MD5_1_InvalidHash")
+                    {
+                        Assert.AreEqual(_messageValidate, result.Message);
+                    }
+                    else if (testCase.Key == "SHA256_Null_Message")
+                    {
+                        StringAssert.Contains(result.Message, testCase.Value.expectedHash);
+                    }
+
+                    Assert.IsTrue(result.IsFailure());
+
+                }
+            }
+        }
+
+        [TestMethod]
+        public void ValidateHash_InputSecureString_ReturnsTrueIfValid()
+        {
+            _testCasesInputSecureString = new Dictionary<string, (SecureString inputSecureString, HashAlgorithm algorithm, bool estadoEsperado, string hashEsperado)>
+            {
+                {"MD5_1", new (_inputSecureString, MD5.Create(), true, "834F517D7AE9BEC10C8C040ED0AF53B9")},
+                {"SHA256_1", new (_inputSecureString, SHA256.Create(), true, "3383C881BBA7AB67D75DF88C0CC3532F5A04CA60ADF0F557574F37DC9300F7BC")},
+                {"SHA1_1", new (_inputSecureString, SHA1.Create(), true, "709A4B5A58B37D8DBE7AAC83EACCF7E9356A1F29")},
+                {"SHA384_1", new (_inputSecureString, SHA384.Create(), true, "AD8C29E781A83761EAF212F42C8636AADF5DEBE8ADF4940B385C5FADCC247994569544F35E08DE366889BEF12A3C95D6")},
+                {"SHA512_1", new (_inputSecureString, SHA512.Create(), true, "4E6F429F1B72FAA9F5DD8A48E240B24DC4DF70E0DC68C8E3B4242AB3FFE4095B07DD9099FBF4E39148A00B580370DBC22250D67BA860CFDAAEA0CC3BD0E3E018")},
+                {"MD5_Empty", new (new SecureString(), MD5.Create(), true, "D41D8CD98F00B204E9800998ECF8427E")},
+                {"SHA256_Null", new (null, SHA256.Create(), false, null)},
+                {"MD5_1_Null", new (_inputSecureString, MD5.Create(), false, null) },
+                {"MD5_1_InvalidHash", new (_inputSecureString, MD5.Create(), false, "invalid Hash") },
+                {"SHA256_Null_Message", new (null, SHA256.Create(), false, _messageValidateNull)},
+            };
+
+            foreach (var testCase in _testCasesInputSecureString)
+            {
+                var handlerInstance = new HashHandlerResultPattern(testCase.Value.algorithm, _resultFactory);
+
+                var result = handlerInstance.HashValidate(testCase.Value.inputSecureString, testCase.Value.expectedHash);
+
+                if (testCase.Value.expectedState)
+                {
+                    Assert.IsTrue(result.IsSuccess());
+                }
+                else
+                {
+                    Assert.IsTrue(result.IsFailure());
+
+                    if (testCase.Key == "MD5_1_InvalidHash")
+                    {
+                        Assert.AreEqual(_messageValidate, result.Message);
+                    }
+                    else if (testCase.Key == "SHA256_Null_Message")
+                    {
+                        StringAssert.Contains(result.Message, testCase.Value.expectedHash);
+                    }
                     Assert.IsTrue(result.IsFailure());
                 }
             }

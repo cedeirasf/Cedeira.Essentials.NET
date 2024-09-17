@@ -83,6 +83,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 
             return computedHash.Equals(hash);
         }
+
        
 
         public bool HashValidate(byte[] input, string hash)
