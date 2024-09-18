@@ -1,7 +1,7 @@
 ﻿using Cedeira.Essentials.NET.System.ResultPattern;
 using System.Security;
 
-namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Interface
+namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions
 {
     public interface IHashHandlerResultPattern 
     {

@@ -1,6 +1,6 @@
 ﻿using Cedeira.Essentials.NET.System.ResultPattern.Factories;
-using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Interface;
-using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Interface;
+using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Abstractions;
+using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions;
 using System.Security.Cryptography;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories

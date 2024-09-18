@@ -1,6 +1,6 @@
 ﻿using System.Security;
 
-namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Interface
+namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions
 {
     /// <summary>
     /// Define una interfaz para manejar el cálculo y la conversión de hashes en diferentes formatos.

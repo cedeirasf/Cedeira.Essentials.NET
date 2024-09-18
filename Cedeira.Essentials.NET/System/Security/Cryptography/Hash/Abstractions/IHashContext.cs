@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Interface
+namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions
 {
     /// <summary>
     /// Interfaz que define el contexto para la configuración de un algoritmo de hash.

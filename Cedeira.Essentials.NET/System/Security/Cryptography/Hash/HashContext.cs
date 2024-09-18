@@ -1,5 +1,5 @@
 ﻿using Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Hash;
-using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Interface;
+using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions;
 using System.Security.Cryptography;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash

@@ -1,5 +1,5 @@
 ﻿using Cedeira.Essentials.NET.Diagnostics.Invariants;
-using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Interface;
+using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;

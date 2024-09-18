@@ -3,7 +3,7 @@ using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Cedeira.Essentials.NET_unittests.System.Security
+namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
 {
     [TestClass]
     public class HashHandlerTest
@@ -38,7 +38,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
         [TestMethod]
         public void HashValidate_InputString_ReturnsThrowIfInvalidHash()
         {
-            _testCasesinputString = new Dictionary<string, (string inputName, HashAlgorithm algorithm, bool estadoEsperado, string expectedHash)>
+            _testCasesinputString = new Dictionary<string, (string inputName, HashAlgorithm algorithm, bool expectedState, string expectedHash)>
             {
                 {"MD5_1", new (_input, MD5.Create(), true, "320DEE96D097DDA6F108C62983DEF31F") },
                 {"SHA256_1", new (_input, SHA256.Create(), true, "167C675E41E07059088728924744805F06DFC328EEDF5F1939DD8143D6D78226")},
@@ -51,23 +51,28 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
 
             foreach (var testCase in _testCasesinputString)
             {
-                try
+                var handlerInstance = new HashHandler(testCase.Value.algorithm);
+
+                if (!testCase.Value.expectedState)
                 {
-                    var handlerInstance = new HashHandler(testCase.Value.algorithm);
+                    var ex = Assert.ThrowsException<CryptographicException>(() =>
+                    {
+                        handlerInstance.ThrowIfInvalidHash(testCase.Value.inputName, testCase.Value.expectedHash);
+                    });
+
+                    Assert.AreEqual(_exceptionMessage, ex.Message);
+                }
+                else
+                {
                     handlerInstance.ThrowIfInvalidHash(testCase.Value.inputName, testCase.Value.expectedHash);
                 }
-                catch (CryptographicException ex)
-                {
-                    Assert.IsTrue(ex.Message == _exceptionMessage);
-                }
-
             }
         }
 
         [TestMethod]
         public void HashValidate_InputByte_ReturnsThrowIfInvalidHash()
         {
-            _testCasesInputByte = new Dictionary<string, (byte[] inputByte, HashAlgorithm algorithm, bool estadoEsperado, string hashEsperado)>
+            _testCasesInputByte = new Dictionary<string, (byte[] inputByte, HashAlgorithm algorithm, bool expectedState, string hashEsperado)>
             {
                 {"MD5_1", new (_inputByte, MD5.Create(), true, "320DEE96D097DDA6F108C62983DEF31F")},
                 {"SHA256_1", new (_inputByte, SHA256.Create(), true, "167C675E41E07059088728924744805F06DFC328EEDF5F1939DD8143D6D78226")},
@@ -80,14 +85,20 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
 
             foreach (var testCase in _testCasesInputByte)
             {
-                try
+                var handlerInstance = new HashHandler(testCase.Value.algorithm);
+
+                if (!testCase.Value.expectedState)
                 {
-                    var handlerInstance = new HashHandler(testCase.Value.algorithm);
-                    handlerInstance.ThrowIfInvalidHash(testCase.Value.inputByte, testCase.Value.expectedHash);
+                    var ex = Assert.ThrowsException<CryptographicException>(() =>
+                    {
+                        handlerInstance.ThrowIfInvalidHash(testCase.Value.inputByte, testCase.Value.expectedHash);
+                    });
+
+                    Assert.AreEqual(_exceptionMessage, ex.Message);
                 }
-                catch (CryptographicException ex)
+                else
                 {
-                    Assert.IsTrue(ex.Message == _exceptionMessage);
+                    handlerInstance.ThrowIfInvalidHash(testCase.Value.inputByte, testCase.Value.expectedHash);
                 }
 
             }
@@ -96,7 +107,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
         [TestMethod]
         public void ValidaHash_InputStreamReader_ReturnsThrowIfInvalidHash()
         {
-            _testCasesinputStreamReader = new Dictionary<string, (StreamReader inputStream, HashAlgorithm algorithm, bool estadoEsperado, string hashEsperado)>
+            _testCasesinputStreamReader = new Dictionary<string, (StreamReader inputStream, HashAlgorithm algorithm, bool expectedState, string hashEsperado)>
             {
                 {"MD5_1", new (_inputStreamReader, MD5.Create(), true, "320DEE96D097DDA6F108C62983DEF31F")},
                 {"SHA1_1", new (_inputStreamReader, SHA1.Create(), true, "6E17FFC27E415630EAA5E5297DA569573267CD11")},
@@ -105,30 +116,35 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                 {"SHA512_1", new (_inputStreamReader, SHA512.Create(), true, "AEACA907A9BCE24DBF9762049B6AFDDD6AC124B2720D2A91C3317500C8691442A98230F674BC58B5DA4553A510E3ECED7141DADC5EB8226836F524CEE0FEAC66")},
                 {"MD5_Empty", new (new StreamReader(new MemoryStream()), MD5.Create(), true, "D41D8CD98F00B204E9800998ECF8427E")},
                 {"MD5_1_InvalidHash", new (_inputStreamReader, MD5.Create(), false, "invalid Hash") },
-
             };
 
             foreach (var testCase in _testCasesinputStreamReader)
             {
-                try
+                var handlerInstance = new HashHandler(testCase.Value.algorithm);
+
+                if (!testCase.Value.expectedState)
                 {
-                    var handlerInstance = new HashHandler(testCase.Value.algorithm);
+                    var ex = Assert.ThrowsException<CryptographicException>(() =>
+                    {
+                        handlerInstance.ThrowIfInvalidHash(testCase.Value.inputStream, testCase.Value.expectedHash);
+                    });
+
+                    Assert.AreEqual(_exceptionMessage, ex.Message);
+                }
+                else
+                {
                     handlerInstance.ThrowIfInvalidHash(testCase.Value.inputStream, testCase.Value.expectedHash);
+
                     testCase.Value.inputStream.BaseStream.Position = 0;
                     testCase.Value.inputStream.DiscardBufferedData();
                 }
-                catch (CryptographicException ex)
-                {
-                    Assert.IsTrue(ex.Message == _exceptionMessage);
-                }
-
             }
         }
 
         [TestMethod]
         public void ValidateHash_InputSecureString_ReturnsThrowIfInvalidHash()
         {
-            _testCasesInputSecureString = new Dictionary<string, (SecureString inputSecureString, HashAlgorithm algorithm, bool estadoEsperado, string hashEsperado)>
+            _testCasesInputSecureString = new Dictionary<string, (SecureString inputSecureString, HashAlgorithm algorithm, bool expectedState, string hashEsperado)>
             {
                 {"MD5_1", new (_inputSecureString, MD5.Create(), true, "834F517D7AE9BEC10C8C040ED0AF53B9")},
                 {"SHA256_1", new (_inputSecureString, SHA256.Create(), true, "3383C881BBA7AB67D75DF88C0CC3532F5A04CA60ADF0F557574F37DC9300F7BC")},
@@ -144,9 +160,19 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
             {
                 var handlerInstance = new HashHandler(testCase.Value.algorithm);
 
-                var result = handlerInstance.HashValidate(testCase.Value.inputSecureString, testCase.Value.expectedHash);
+                if (!testCase.Value.expectedState)
+                {
+                    var ex = Assert.ThrowsException<CryptographicException>(() =>
+                    {
+                        handlerInstance.ThrowIfInvalidHash(testCase.Value.inputSecureString, testCase.Value.expectedHash);
+                    });
 
-
+                    Assert.AreEqual(_exceptionMessage, ex.Message);
+                }
+                else
+                {
+                    handlerInstance.ThrowIfInvalidHash(testCase.Value.inputSecureString, testCase.Value.expectedHash);
+                }
             }
         }
     }

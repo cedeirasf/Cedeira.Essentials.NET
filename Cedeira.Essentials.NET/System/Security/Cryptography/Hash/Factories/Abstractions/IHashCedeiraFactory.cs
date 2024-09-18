@@ -1,7 +1,7 @@
 ﻿using Cedeira.Essentials.NET.System.ResultPattern.Factories;
-using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Interface;
+using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions;
 
-namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Interface
+namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Abstractions
 {
     /// <summary>
     /// Define una interfaz de fábrica para instanciar objetos de resultado 

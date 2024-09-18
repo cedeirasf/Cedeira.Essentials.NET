@@ -4,7 +4,7 @@ using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Cedeira.Essentials.NET_unittests.System.Security
+namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
 {
     [TestClass]
     public class HashHandlerResultPatternTest
@@ -170,7 +170,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                     Assert.IsTrue(result.IsFailure());
                     StringAssert.Contains(result.Message, testCase.Value.expectedHash);
                 }
-
             }
         }
 
@@ -199,6 +198,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                 {
                     Assert.IsTrue(result.IsSuccess());
                     Assert.AreEqual(testCase.Value.expectedHash, result.SuccessValue);
+
                     testCase.Value.inputStream.BaseStream.Position = 0;
                     testCase.Value.inputStream.DiscardBufferedData();
                 }
@@ -230,11 +230,11 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
 
                 var result = handlerInstance.CalculateHash(testCase.Value.inputStream);
 
-
                 if (testCase.Value.expectedState)
                 {
                     Assert.IsTrue(result.IsSuccess());
                     Assert.AreEqual(testCase.Value.expectedHash, result.SuccessValue);
+
                     testCase.Value.inputStream.BaseStream.Position = 0;
                     testCase.Value.inputStream.DiscardBufferedData();
                 }
@@ -329,7 +329,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                 {"SHA256_Null_Message", new (null, SHA256.Create(), false, _messageValidateNull)},
             };
 
-
             foreach (var testCase in _testCasesinputString)
             {
                 var handlerInstance = new HashHandlerResultPattern(testCase.Value.algorithm, _resultFactory);
@@ -354,7 +353,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                     }
 
                     Assert.IsTrue(result.IsFailure());
-
                 }
             }
         }
@@ -396,11 +394,10 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                     }
                     else if (testCase.Key == "SHA256_Null_Message")
                     {
-                        StringAssert.Contains(result.Message,testCase.Value.expectedHash);        
+                        StringAssert.Contains(result.Message, testCase.Value.expectedHash);
                     }
 
                     Assert.IsTrue(result.IsFailure());
-
                 }
             }
         }
@@ -448,7 +445,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security
                     }
 
                     Assert.IsTrue(result.IsFailure());
-
                 }
             }
         }
