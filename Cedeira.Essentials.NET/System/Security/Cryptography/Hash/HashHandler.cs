@@ -33,7 +33,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
             return _hashFormatter(hashBytes);
         }
 
-
         public string CalculateHash(byte[] input)
         {
             ValidateNull(input);
@@ -74,7 +73,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
             }
         }
 
-
         public bool HashValidate(string input, string hash)
         {
             HashValidateNull(input, hash);
@@ -83,8 +81,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 
             return computedHash.Equals(hash);
         }
-
-       
 
         public bool HashValidate(byte[] input, string hash)
         {

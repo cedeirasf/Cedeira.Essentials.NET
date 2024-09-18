@@ -52,7 +52,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
        
         public InvariantValidator<T> IsNotNull()
         {
-            return this.IsNotNull($"Value can not be null.");
+            return this.IsNotNull("Value can not be null.");
         }
 
         /// <summary>
