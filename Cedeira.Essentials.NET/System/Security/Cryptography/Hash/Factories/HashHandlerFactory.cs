@@ -10,30 +10,41 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
     /// </summary>
     public class HashHandlerFactory : IHashCedeiraFactory 
     {
-        //private readonly IHashHandlerResultPattern<T> _resultPatternPattern;       
-        //private readonly IHashContext<>   
-
-        //public IHashHandler<T> CreateHash() 
-        //{
-        //    HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashContext.AlgorithmName.Name);
-        //    return new HashHandler<T>(hashAlgorithm, hashContext.HashFormatter);
-        //}
-
-        //public IHashHandlerResultPattern<T> CreateHashResultPattern()
-        //{
-        //    HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashContext.AlgorithmName.Name);
-        //    return new HashHandlerResultPattern<T>(hashAlgorithm, resultfactory, hashContext.HashFormatter);
-        //}
-
-        public IHashHandler CreateHash()
+        private readonly IResultFactory  _resultFactory;
+        public HashHandlerFactory()
         {
-            throw new NotImplementedException();
+            
         }
 
-        public IHashHandlerResultPattern CreateHashResultPattern()
+        public HashHandlerFactory(IResultFactory resultFactory)
         {
-            throw new NotImplementedException();
+            _resultFactory = resultFactory;
         }
+
+        public IHashHandler CreateHash(IHashContext hashcontext)
+        {
+            HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashcontext.AlgorithmName.Name);
+            return new HashHandler(hashAlgorithm);
+        }
+
+        public IHashHandler CreateHashWithFormat(IHashContext hashcontext)
+        {
+            HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashcontext.AlgorithmName.Name);
+            return new HashHandler(hashAlgorithm, hashcontext.HashFormatter);
+        }
+
+        public IHashHandlerResultPattern CreateHashResultPattern(IHashContext hashcontext)
+        {
+            HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashcontext.AlgorithmName.Name);
+            return new HashHandlerResultPattern(hashAlgorithm, _resultFactory);
+        }
+
+        public IHashHandlerResultPattern CreateHashResultPatternWithFormat(IHashContext hashcontext)
+        {
+            HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashcontext.AlgorithmName.Name);
+            return new HashHandlerResultPattern(hashAlgorithm, _resultFactory, hashcontext.HashFormatter);
+        }
+
     }
 
 }

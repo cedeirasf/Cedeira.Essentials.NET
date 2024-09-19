@@ -1,5 +1,6 @@
 ﻿using Cedeira.Essentials.NET.System.ResultPattern.Factories;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions;
+using System.Security.Cryptography;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Abstractions
 {
@@ -13,7 +14,9 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Abs
         /// </summary>
         /// <param name="hashContext"></param>
         /// <returns></returns>
-        IHashHandler CreateHash();
-        IHashHandlerResultPattern CreateHashResultPattern();
+        IHashHandler CreateHash(IHashContext hashcontext);
+        IHashHandler CreateHashWithFormat(IHashContext hashcontext);
+        IHashHandlerResultPattern CreateHashResultPattern(IHashContext hashcontext);
+        IHashHandlerResultPattern CreateHashResultPatternWithFormat(IHashContext hashcontext);
     }
 }

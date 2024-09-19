@@ -9,7 +9,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
     public class HashHandlerResultPattern : IHashHandlerResultPattern
     {
         private readonly IResultFactory _resultFactory;
-        private readonly HashHandler _hashHandler;
+        private readonly IHashHandler _hashHandler;
 
         public HashHandlerResultPattern(HashAlgorithm hashAlgorithm, IResultFactory resultFactory)
         {

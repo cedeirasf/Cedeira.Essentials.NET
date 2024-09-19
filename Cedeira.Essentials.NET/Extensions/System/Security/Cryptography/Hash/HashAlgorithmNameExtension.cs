@@ -17,9 +17,6 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Hash
                 HashAlgorithmName.MD5,
                 HashAlgorithmName.SHA384,
                 HashAlgorithmName.SHA512,
-                HashAlgorithmName.SHA3_256,
-                HashAlgorithmName.SHA3_384,
-                HashAlgorithmName.SHA3_512
         };
 
         /// <summary>
