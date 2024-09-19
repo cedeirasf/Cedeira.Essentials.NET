@@ -4,18 +4,24 @@ using System.Security.Cryptography;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 {
-    public class HashContext : IHashContext
+    internal class HashContext : IHashContext
     {
-        public HashAlgorithmName AlgorithmName { get; private set; }
-        public Func<byte[], string> HashFormatter { get; private set; }
+        public IHashContextConfig HashConfig { get; private set; }
 
-        public HashContext(HashAlgorithmName algorithmName, Func<byte[], string> hashFormatter)
+        protected HashContext() 
+        {
+            HashConfig = HashContextConfig.Create(null, null);
+        }
+
+        public static HashContext Create(HashAlgorithmName algorithmName, Func<byte[], string>? hashFormatter)
         {
             HashAlgorithmNameExtension.SetAlgorithm(algorithmName);
 
-            this.AlgorithmName = algorithmName;
-            this.HashFormatter = hashFormatter;
+            return new HashContext
+            {
+                HashConfig = HashContextConfig.Create(algorithmName, hashFormatter)
+            };
         }
     }
-
 }
+

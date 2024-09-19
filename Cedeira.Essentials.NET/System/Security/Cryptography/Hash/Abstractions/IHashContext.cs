@@ -5,8 +5,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions
 {
     public interface IHashContext
     {
-        HashAlgorithmName AlgorithmName { get; }
-        Func<byte[], string> HashFormatter { get; }
-
+        IHashContextConfig HashConfig { get; }
     }
 }

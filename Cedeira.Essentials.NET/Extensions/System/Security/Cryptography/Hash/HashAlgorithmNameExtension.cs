@@ -10,7 +10,7 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Hash
         /// <summary>
         /// Conjunto de algoritmos de hash válidos que pueden ser utilizados.
         /// </summary>
-        public static readonly HashSet<HashAlgorithmName> ValidAlgorithms = new()
+        public static readonly HashSet<HashAlgorithmName>? ValidAlgorithms = new()
         {
                 HashAlgorithmName.SHA256,
                 HashAlgorithmName.SHA1,
