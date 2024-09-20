@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 {
-    internal class HashContext : IHashContext
+    public class HashContext : IHashContext
     {
         public IHashContextConfig HashConfig { get; private set; }
 
