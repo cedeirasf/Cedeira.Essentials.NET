@@ -8,7 +8,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
     /// <summary>
     /// Implementacion de la fabrica para instanciar objetos
     /// </summary>
-    public class HashHandlerFactory : IHashCedeiraFactory 
+    public class HashHandlerFactory : IHashHandlerFactory 
     {
         private readonly IResultFactory  _resultFactory;
         public HashHandlerFactory()

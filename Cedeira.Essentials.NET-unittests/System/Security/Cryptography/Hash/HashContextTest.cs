@@ -10,8 +10,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
     public class HashContextTest
     {
         private Dictionary<string, (HashAlgorithmName algorithmName, Func<byte[], string>? hashformatter, bool expectedState)> _TestHashContext;
-
-
         private IHashContext _hashContext;
         private HashAlgorithmName _hashAlgorithmName;
         private Func<byte[], string>? _expectedFormatter;
@@ -23,9 +21,10 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
         public void Setup()
         {
             _hashAlgorithmName = HashAlgorithmName.SHA256;
-            _exceptionMessage = $"The algorithm '{HashAlgorithmName.SHA3_512.Name}' is not recognized.";
             _expectedFormatter = bytes => BitConverter.ToString(bytes);
             _hashContext = HashContext.Create(_hashAlgorithmName, _expectedFormatter);
+
+            _exceptionMessage = $"The algorithm '{HashAlgorithmName.SHA3_512.Name}' is not recognized.";
             _service = new ServiceCollection();
         }
 
@@ -42,10 +41,10 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
         {
             _TestHashContext = new Dictionary<string, (HashAlgorithmName algorithmName, Func<byte[], string>? hashFormatter, bool expectedState)>
             {
-                {"ok_1",new ( HashAlgorithmName.SHA256,null,true)},
-                {"ok_2",new ( HashAlgorithmName.MD5, bytes => Convert.ToBase64String(bytes),true)},
-                {"ok_3",new ( HashAlgorithmName.SHA256,null,true)},
-                {"ok_4",new ( HashAlgorithmName.SHA3_512, bytes => BitConverter.ToString(bytes),false)},
+                {"1_hashformatter_null",new ( HashAlgorithmName.SHA256,null,true)},
+                {"2_hashformatter_base64",new ( HashAlgorithmName.MD5, bytes => Convert.ToBase64String(bytes),true)},
+                {"3_otherAlgorithmName",new ( HashAlgorithmName.SHA256,null,true)},
+                {"4_NonHandledAlghorithmName",new ( HashAlgorithmName.SHA3_512, bytes => BitConverter.ToString(bytes),false)},
             };
 
             foreach (var testCase in _TestHashContext)
@@ -61,24 +60,21 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
                 }
                 else
                 {
-
                     _service.AddSingleton<IHashContext>(HashContext.Create(testCase.Value.algorithmName, testCase.Value.hashformatter));
+
                     _service.AddSingleton<IOptions<IHashContext>>(sp => new OptionsWrapper<IHashContext>(sp.GetRequiredService<IHashContext>()));
 
                     var serviceProvider = _service.BuildServiceProvider();
 
                     var hashContext = serviceProvider.GetService<IHashContext>();
+
                     var optionsHashContext = serviceProvider.GetService<IOptions<IHashContext>>();
 
                     Assert.IsNotNull(hashContext);
                     Assert.IsNotNull(optionsHashContext);
                     Assert.AreEqual(hashContext, optionsHashContext.Value);
                 }
-
-
             }
-
         }
-
     }
 }

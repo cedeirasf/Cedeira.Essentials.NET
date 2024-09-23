@@ -7,7 +7,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Abs
     /// <summary>
     /// Define una interfaz de fábrica para instanciar objetos de resultado 
     /// </summary>
-    public interface IHashCedeiraFactory
+    public interface IHashHandlerFactory
     {
         /// <summary>
         /// Define una interfaz de fábrica para instanciar objetos de tipo HashCedeira
