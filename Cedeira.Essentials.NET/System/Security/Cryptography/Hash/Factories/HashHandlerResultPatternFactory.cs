@@ -14,18 +14,16 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
             _resultFactory = resultFactory;
         }
 
-        public IHashHandlerResultPattern CreateHashResultPattern(IHashContext hashcontext)
+        public IHashHandlerResultPattern CreateHash(IHashContext hashcontext)
         {
             HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashcontext.HashConfig.AlgorithmName.Value.Name);
             return new HashHandlerResultPattern(hashAlgorithm, _resultFactory);
         }
 
-        public IHashHandlerResultPattern CreateHashResultPatternWithFormat(IHashContext hashcontext)
+        public IHashHandlerResultPattern CreateHashWithOutPutFormat(IHashContext hashcontext)
         {
             HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashcontext.HashConfig.AlgorithmName.Value.Name);
             return new HashHandlerResultPattern(hashAlgorithm, _resultFactory, hashcontext.HashConfig.HashFormatter);
         }
-
     }
-
 }

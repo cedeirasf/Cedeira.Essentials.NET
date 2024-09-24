@@ -4,7 +4,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Abs
 {
     public interface IHashHandlerResultPatternFactory
     {
-        IHashHandlerResultPattern CreateHashResultPattern(IHashContext hashcontext);
-        IHashHandlerResultPattern CreateHashResultPatternWithFormat(IHashContext hashcontext);
+        IHashHandlerResultPattern CreateHash(IHashContext hashcontext);
+        IHashHandlerResultPattern CreateHashWithOutPutFormat(IHashContext hashcontext);
     }
 }

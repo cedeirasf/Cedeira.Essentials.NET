@@ -41,8 +41,8 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             _TestHashContext = new Dictionary<string, (HashAlgorithmName algorithmName, Func<byte[], string>? hashFormatter, bool expectedState)>
             {
                 {"1_hashformatter_null",new ( HashAlgorithmName.SHA256,null,true)},
-                {"2_hashformatter_base64",new ( HashAlgorithmName.MD5, bytes => Convert.ToBase64String(bytes),true)},
-                {"3_otherAlgorithmName",new ( HashAlgorithmName.SHA256,null,true)},
+                {"2_otherAlgorithmName",new ( HashAlgorithmName.SHA1,null,true)},
+                {"3_hashformatter_base64",new ( HashAlgorithmName.MD5, bytes => Convert.ToBase64String(bytes),true)},
                 {"4_NonHandledAlghorithmName",new ( HashAlgorithmName.SHA3_512, bytes => BitConverter.ToString(bytes),false)},
             };
 
