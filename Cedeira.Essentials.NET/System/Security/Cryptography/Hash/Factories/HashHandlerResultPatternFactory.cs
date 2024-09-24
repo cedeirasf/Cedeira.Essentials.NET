@@ -20,7 +20,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
             return new HashHandlerResultPattern(hashAlgorithm, _resultFactory);
         }
 
-        public IHashHandlerResultPattern CreateHashWithOutPutFormat(IHashContext hashcontext)
+        public IHashHandlerResultPattern CreateHashWithOutputFormat(IHashContext hashcontext)
         {
             HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashcontext.HashConfig.AlgorithmName.Value.Name);
             return new HashHandlerResultPattern(hashAlgorithm, _resultFactory, hashcontext.HashConfig.HashFormatter);

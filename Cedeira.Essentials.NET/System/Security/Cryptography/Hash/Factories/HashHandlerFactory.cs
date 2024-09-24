@@ -12,7 +12,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
             return new HashHandler(hashAlgorithm);
         }
 
-        public IHashHandler CreateHashWithOutPutFormat(IHashContext hashcontext)
+        public IHashHandler CreateHashWithOutputFormat(IHashContext hashcontext)
         {
             HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashcontext.HashConfig.AlgorithmName.Value.Name);
             return new HashHandler(hashAlgorithm, hashcontext.HashConfig.HashFormatter);

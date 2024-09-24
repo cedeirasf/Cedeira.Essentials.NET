@@ -72,7 +72,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
             {
                 _hashContext = HashContext.Create(test.Value.algorithmName, test.Value.hashformatter);
                 _service.AddSingleton(_hashContext);
-                _service.AddSingleton(sp => _hashHandlerResultPatternfactory.CreateHashWithOutPutFormat(sp.GetRequiredService<IHashContext>()));
+                _service.AddSingleton(sp => _hashHandlerResultPatternfactory.CreateHashWithOutputFormat(sp.GetRequiredService<IHashContext>()));
 
                 var serviceProvider = _service.BuildServiceProvider();
 
