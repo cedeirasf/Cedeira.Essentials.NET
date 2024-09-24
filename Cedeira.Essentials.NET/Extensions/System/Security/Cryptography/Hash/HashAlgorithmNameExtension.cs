@@ -25,7 +25,7 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Hash
         /// <param name="algorithmName">El nombre del algoritmo de hash a validar.</param>
         /// <returns>Un valor booleano que indica si se estableció un algoritmo válido o si se utilizó el valor por defecto.</returns>
         /// <exception cref="ArgumentException">Se lanza si el algoritmo proporcionado no es válido.</exception>
-        public static bool SetAlgorithm(this HashAlgorithmName algorithmName)
+        public static bool ValidAlgorithm(this HashAlgorithmName algorithmName)
         {
             if (!ValidAlgorithms.Contains(algorithmName))
                 throw new ArgumentException($"The algorithm '{algorithmName.Name}' is not recognized.");

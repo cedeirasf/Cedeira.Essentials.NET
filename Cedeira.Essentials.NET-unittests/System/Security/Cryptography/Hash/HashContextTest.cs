@@ -16,7 +16,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
         private ServiceCollection _service;
         private string _exceptionMessage;
 
-
         [TestInitialize]
         public void Setup()
         {

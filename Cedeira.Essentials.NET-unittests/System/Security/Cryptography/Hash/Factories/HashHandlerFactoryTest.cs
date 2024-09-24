@@ -6,12 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
+namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Factories
 {
     [TestClass]
     public class HashHandlerFactoryTest
     {
-        private Dictionary<string, (string inputName,HashAlgorithmName algorithmName, Func<byte[], string>? hashformatter, bool expectedState, string expectedHash)> _TestHashFactoryInputString;
+        private Dictionary<string, (string inputName, HashAlgorithmName algorithmName, Func<byte[], string>? hashformatter, bool expectedState, string expectedHash)> _TestHashFactoryInputString;
         private Dictionary<string, (byte[] inputByte, HashAlgorithmName algorithmName, Func<byte[], string>? hashformatter, bool expectedState, string expectedHash)> _TestHashFactoryInputByte;
         private IHashHandlerFactory _hashHandlerfactory;
         private IHashContext _hashContext;
@@ -25,7 +25,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
         {
             _expectedFormatter = bytes => BitConverter.ToString(bytes);
             _input = "Testeo123";
-            _inputByte = Encoding.UTF8.GetBytes(_input);        
+            _inputByte = Encoding.UTF8.GetBytes(_input);
             _hashHandlerfactory = new HashHandlerFactory();
             _service = new ServiceCollection();
         }
@@ -33,7 +33,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
         [TestMethod]
         public void HasHandler_Create_SetWithIhashContext_InputString()
         {
-            _TestHashFactoryInputString = new Dictionary<string, (string inputName,HashAlgorithmName algorithmName, Func<byte[], string>? hashformatter, bool expectedState, string expectedHash)>
+            _TestHashFactoryInputString = new Dictionary<string, (string inputName, HashAlgorithmName algorithmName, Func<byte[], string>? hashformatter, bool expectedState, string expectedHash)>
             {
                  {"MD5_1", new ( _input, HashAlgorithmName.MD5,_expectedFormatter, true, "320DEE96D097DDA6F108C62983DEF31F") },
                  {"SHA512_2_null_Format", new ( _input, HashAlgorithmName.SHA512,null, true, "AEACA907A9BCE24DBF9762049B6AFDDD6AC124B2720D2A91C3317500C8691442A98230F674BC58B5DA4553A510E3ECED7141DADC5EB8226836F524CEE0FEAC66")},
@@ -41,7 +41,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
 
             foreach (var test in _TestHashFactoryInputString)
             {
-                _service.AddSingleton(_hashContext = HashContext.Create(test.Value.algorithmName,test.Value.hashformatter));
+                _service.AddSingleton(_hashContext = HashContext.Create(test.Value.algorithmName, test.Value.hashformatter));
                 _service.AddSingleton(sp => _hashHandlerfactory.CreateHash(sp.GetRequiredService<IHashContext>()));
 
                 var serviceProvider = _service.BuildServiceProvider();
@@ -55,7 +55,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
                 Assert.AreEqual(hash, test.Value.expectedHash);
             }
         }
-        
+
         [TestMethod]
         public void HasHandler_Create_SetWithIhashContext_InputByte_ReturnBase64String()
         {

@@ -15,7 +15,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 
         public static HashContext Create(HashAlgorithmName algorithmName, Func<byte[], string>? hashFormatter)
         {
-            HashAlgorithmNameExtension.SetAlgorithm(algorithmName);
+            HashAlgorithmNameExtension.ValidAlgorithm(algorithmName);
 
             return new HashContext
             {
