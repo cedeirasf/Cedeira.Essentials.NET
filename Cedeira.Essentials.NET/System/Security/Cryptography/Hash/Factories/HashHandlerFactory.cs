@@ -6,16 +6,22 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
 {
     public class HashHandlerFactory : IHashHandlerFactory
     {
-        public IHashHandler CreateHash(IHashContext hashcontext)
+        private readonly IHashContext _hashContext;
+
+        public HashHandlerFactory(IHashContext hashContext)
         {
-            HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashcontext.HashConfig.AlgorithmName.Value.Name);
-            return new HashHandler(hashAlgorithm);
+            _hashContext = hashContext; 
         }
 
-        public IHashHandler CreateHashWithOutputFormat(IHashContext hashcontext)
+        public IHashHandler CreateHash()
         {
-            HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashcontext.HashConfig.AlgorithmName.Value.Name);
-            return new HashHandler(hashAlgorithm, hashcontext.HashConfig.HashFormatter);
+            return new HashHandler(_hashContext.HashAlgorithm);
         }
+
+        public IHashHandler CreateHashWithOutputFormat()
+        {
+            return new HashHandler(_hashContext.HashAlgorithm, _hashContext.HashFormatter);
+        }
+
     }
 }

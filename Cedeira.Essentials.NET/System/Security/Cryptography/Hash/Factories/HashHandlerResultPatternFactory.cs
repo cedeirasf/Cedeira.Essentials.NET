@@ -2,6 +2,7 @@
 using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Abstractions;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions;
 using System.Security.Cryptography;
+using Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Hash;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
 {
@@ -16,14 +17,14 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
 
         public IHashHandlerResultPattern CreateHash(IHashContext hashcontext)
         {
-            HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashcontext.HashConfig.AlgorithmName.Value.Name);
+            HashAlgorithm hashAlgorithm = HashAlgorithmCreator.CreateHash(hashcontext.HashAlgorithm);
             return new HashHandlerResultPattern(hashAlgorithm, _resultFactory);
         }
 
         public IHashHandlerResultPattern CreateHashWithOutputFormat(IHashContext hashcontext)
         {
-            HashAlgorithm hashAlgorithm = HashAlgorithm.Create(hashcontext.HashConfig.AlgorithmName.Value.Name);
-            return new HashHandlerResultPattern(hashAlgorithm, _resultFactory, hashcontext.HashConfig.HashFormatter);
+            HashAlgorithm hashAlgorithm = HashAlgorithmCreator.CreateHash(hashcontext.HashAlgorithm);
+            return new HashHandlerResultPattern(hashAlgorithm, _resultFactory, hashcontext.HashFormatter);
         }
     }
 }

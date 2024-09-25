@@ -6,21 +6,28 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 {
     public class HashContext : IHashContext
     {
-        public IHashContextConfig HashConfig { get; private set; }
+        public HashAlgorithm HashAlgorithm { get; private set; }
+        public Func<byte[], string>? HashFormatter { get; private set; }
 
-        protected HashContext() 
+        protected HashContext(HashAlgorithm algorithmName, Func<byte[], string>? hashFormatter) 
         {
-            HashConfig = HashContextConfig.Create(null, null);
+            HashAlgorithm = algorithmName;
+            HashFormatter = hashFormatter;
         }
 
-        public static HashContext Create(HashAlgorithmName algorithmName, Func<byte[], string>? hashFormatter)
+        public static HashContext Create(string algorithmName, Func<byte[], string>? hashFormatter)
         {
-            HashAlgorithmNameExtension.ValidAlgorithm(algorithmName);
+            var hashAlgorithm = CryptoConfig.CreateFromName(algorithmName) as HashAlgorithm;
 
-            return new HashContext
-            {
-                HashConfig = HashContextConfig.Create(algorithmName, hashFormatter)
-            };
+            if (hashAlgorithm is null)
+                throw new ArgumentException($"Invalid algorithm name: {algorithmName}", nameof(algorithmName));
+
+            return new HashContext(hashAlgorithm, hashFormatter);
+        }
+
+        public static HashContext Create(HashAlgorithm hashAlgorithm, Func<byte[], string>? hashFormatter)
+        {
+            return new HashContext(hashAlgorithm, hashFormatter);
         }
     }
 }
