@@ -1,5 +1,4 @@
-﻿using Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Hash;
-using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions;
+﻿using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions;
 using System.Security.Cryptography;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
@@ -20,13 +19,16 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
             var hashAlgorithm = CryptoConfig.CreateFromName(algorithmName) as HashAlgorithm;
 
             if (hashAlgorithm is null)
-                throw new ArgumentException($"Invalid algorithm name: {algorithmName}", nameof(algorithmName));
+                throw new ArgumentException($"Invalid algorithm name: {algorithmName}");
 
             return new HashContext(hashAlgorithm, hashFormatter);
         }
 
         public static HashContext Create(HashAlgorithm hashAlgorithm, Func<byte[], string>? hashFormatter)
         {
+            if (hashAlgorithm is null)
+                throw new ArgumentNullException("hashAlgorithm");     
+
             return new HashContext(hashAlgorithm, hashFormatter);
         }
     }

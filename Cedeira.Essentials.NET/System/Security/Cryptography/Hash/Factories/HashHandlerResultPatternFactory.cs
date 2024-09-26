@@ -1,30 +1,29 @@
 ﻿using Cedeira.Essentials.NET.System.ResultPattern.Factories;
-using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Abstractions;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions;
+using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Abstractions;
 using System.Security.Cryptography;
-using Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Hash;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
 {
     public class HashHandlerResultPatternFactory : IHashHandlerResultPatternFactory 
     {
         private readonly IResultFactory  _resultFactory;
+        private readonly IHashContext _hashContext;
 
-        public HashHandlerResultPatternFactory(IResultFactory resultFactory)
+        public HashHandlerResultPatternFactory(IHashContext hashContext, IResultFactory resultFactory)
         {
             _resultFactory = resultFactory;
+            _hashContext = hashContext; 
         }
 
-        public IHashHandlerResultPattern CreateHash(IHashContext hashcontext)
+        public IHashHandlerResultPattern CreateHash()
         {
-            HashAlgorithm hashAlgorithm = HashAlgorithmCreator.CreateHash(hashcontext.HashAlgorithm);
-            return new HashHandlerResultPattern(hashAlgorithm, _resultFactory);
+            return new HashHandlerResultPattern(_hashContext.HashAlgorithm, _resultFactory);
         }
 
-        public IHashHandlerResultPattern CreateHashWithOutputFormat(IHashContext hashcontext)
+        public IHashHandlerResultPattern CreateHashWithOutputFormat()
         {
-            HashAlgorithm hashAlgorithm = HashAlgorithmCreator.CreateHash(hashcontext.HashAlgorithm);
-            return new HashHandlerResultPattern(hashAlgorithm, _resultFactory, hashcontext.HashFormatter);
+            return new HashHandlerResultPattern(_hashContext.HashAlgorithm, _resultFactory,_hashContext.HashFormatter);
         }
     }
 }
