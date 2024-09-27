@@ -2,25 +2,55 @@
 using Cedeira.Essentials.NET.System.Security.Cryptography.Hash;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories;
-using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Factories
 {
+
+    /// <summary>
+    /// Represents a test class for the HashHandlerResulltPatternFactory functionality.
+    /// </summary>
     [TestClass]
     public class HashHandlerResultPatternFactoryTest 
     {
-        private IHashContext _hashContext;
-        private IResultFactory _resultFactory;
+        /// <summary>
+        /// A dictionary to store test cases with string inputs, algorithm names, hash formatters, expected states, and expected hashes.
+        /// </summary>
         private Dictionary<string, (string inputName, string algorithmName, Func<byte[], string>? hashformatter, bool expectedState, string expectedHash)> _TestHashResultPatternFactoryInputString;
+
+        /// <summary>
+        /// A dictionary to store test cases with byte array inputs, algorithm names, hash formatters, expected states, and expected hashes.
         private Dictionary<string, (byte[] inputByte, string algorithmName, Func<byte[], string>? hashformatter, bool expectedState, string expectedHash)> _TestHashResultPatternFactoryInputByte;
+
+        /// <summary>
+        /// The result factory used for creating result objects.
+        /// </summary>
+        private IResultFactory _resultFactory;
+
+        /// <summary>
+        /// The expected hash formatter function.
+        /// </summary>
         private Func<byte[], string>? _expectedFormatter;
+
+        /// <summary>
+        /// The service collection used for dependency injection.
+        /// </summary>
         private ServiceCollection _service;
+
+        /// <summary>
+        /// The input string used for testing.
+        /// </summary>
         private string _input;
+
+        /// <summary>
+        /// The byte array representation of the input string used for testing.
+        /// </summary>
         private byte[] _inputByte;
 
+        /// <summary>
+        /// Initializes the test setup with default values.
+        /// </summary>
         [TestInitialize]
         public void SetUp()
         {
@@ -31,8 +61,11 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
             _service = new ServiceCollection();
         }
 
+        /// <summary>
+        /// Tests that the HashHandlerResultPattern is created and set with IHashContext for string inputs.
+        /// </summary>
         [TestMethod]
-        public void HasHandler_Create_SetWithIhashContext_InputString()
+        public void HasHandlerResultPattern_Create_SetWithIhashContext_InputString()
         {
             _TestHashResultPatternFactoryInputString = new Dictionary<string, (string inputName, string algorithmName, Func<byte[], string>? hashformatter, bool expectedState, string expectedHash)>
             {
@@ -42,7 +75,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
 
             foreach (var test in _TestHashResultPatternFactoryInputString)
             {
-                _service.AddSingleton(_hashContext = HashContext.Create(test.Value.algorithmName, test.Value.hashformatter));
+                _service.AddSingleton((IHashContext)HashContext.Create(test.Value.algorithmName, test.Value.hashformatter));
                 _service.AddSingleton(sp => new HashHandlerResultPatternFactory(sp.GetRequiredService<IHashContext>(), _resultFactory).CreateHash());
 
                 var serviceProvider = _service.BuildServiceProvider();
@@ -57,8 +90,11 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
             }
         }
 
+        /// <summary>
+        /// Tests that the HashHandlerResultPattern is created and set with IHashContext for byte array inputs, returning a Base64 string.
+        /// </summary>
         [TestMethod]
-        public void HasHandler_Create_SetWithIhashContext_InputByte_ReturnBase64String()
+        public void HasHandlerResultPattern_Create_SetWithIhashContext_InputByte_ReturnBase64String()
         {
             _TestHashResultPatternFactoryInputByte = new Dictionary<string, (byte[] inputByte, string algorithmName, Func<byte[], string>? hashformatter, bool expectedState, string expectedHash)>
             {
@@ -68,7 +104,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
 
             foreach (var test in _TestHashResultPatternFactoryInputByte)
             {
-                _service.AddSingleton(_hashContext = HashContext.Create(test.Value.algorithmName, test.Value.hashformatter));
+                _service.AddSingleton((IHashContext)HashContext.Create(test.Value.algorithmName, test.Value.hashformatter));
                 _service.AddSingleton(sp => new HashHandlerResultPatternFactory(sp.GetRequiredService<IHashContext>(), _resultFactory).CreateHashWithOutputFormat());
 
                 var serviceProvider = _service.BuildServiceProvider();

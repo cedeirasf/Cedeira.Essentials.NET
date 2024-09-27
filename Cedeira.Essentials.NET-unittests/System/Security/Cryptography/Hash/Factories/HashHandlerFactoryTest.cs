@@ -8,17 +8,44 @@ using System.Text;
 
 namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Factories
 {
+    /// <summary>
+    /// Represents a test class for the HashHandlerFactory functionality.
+    /// </summary>
     [TestClass]
     public class HashHandlerFactoryTest
     {
+        /// <summary>
+        /// A dictionary to store test cases with string inputs, algorithm names, hash formatters, expected states, and expected hashes.
+        /// </summary>
         private Dictionary<string, (string inputName, string algorithmName, Func<byte[], string>? hashformatter, bool expectedState, string expectedHash)> _TestHashFactoryInputString;
+
+        /// <summary>
+        /// A dictionary to store test cases with byte array inputs, algorithm names, hash formatters, expected states, and expected hashes.
         private Dictionary<string, (byte[] inputByte, string algorithmName, Func<byte[], string>? hashformatter, bool expectedState, string expectedHash)> _TestHashFactoryInputByte;
-        private IHashContext _hashContext;
+
+        /// <summary>
+        /// The expected hash formatter function.
+        /// </summary>
         private Func<byte[], string>? _expectedFormatter;
+
+        /// <summary>
+        /// The service collection used for dependency injection.
+        /// </summary>
         private ServiceCollection _service;
+
+        /// <summary>
+        /// The input string used for testing.
+        /// </summary>
         private string _input;
+
+        /// <summary>
+        /// The byte array representation of the input string used for testing.
+        /// </summary>
         private byte[] _inputByte;
 
+        /// <summary>
+        /// Initializes the test setup with default values.
+        /// </summary>
         [TestInitialize]
         public void SetUp()
         {
@@ -28,9 +55,14 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
             _service = new ServiceCollection();
         }
 
+        /// <summary>
+        /// Tests that the HashHandler is created and set with IHashContext for string inputs.
+        /// </summary>
         [TestMethod]
         public void HasHandler_Create_SetWithIhashContext_InputString()
         {
+            
+
             _TestHashFactoryInputString = new Dictionary<string, (string inputName, string algorithmName, Func<byte[], string>? hashformatter, bool expectedState, string expectedHash)>
             {
                  {"MD5_1", new ( _input, "MD5",_expectedFormatter, true, "320DEE96D097DDA6F108C62983DEF31F") },
@@ -39,7 +71,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
 
             foreach (var test in _TestHashFactoryInputString)
             {
-                _service.AddSingleton(_hashContext = HashContext.Create(test.Value.algorithmName, test.Value.hashformatter));
+                _service.AddSingleton((IHashContext)HashContext.Create(test.Value.algorithmName, test.Value.hashformatter));
                 _service.AddSingleton(sp => new HashHandlerFactory(sp.GetRequiredService<IHashContext>()).CreateHash());
 
                 var serviceProvider = _service.BuildServiceProvider();
@@ -54,6 +86,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
             }
         }
 
+        /// <summary>
+        /// Tests that the HashHandler is created and set with IHashContext for byte array inputs, returning a Base64 string.
+        /// </summary>
         [TestMethod]
         public void HasHandler_Create_SetWithIhashContext_InputByte_ReturnBase64String()
         {
@@ -65,7 +100,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
 
             foreach (var test in _TestHashFactoryInputByte)
             {
-                _service.AddSingleton(_hashContext = HashContext.Create(test.Value.algorithmName, test.Value.hashformatter));
+                _service.AddSingleton((IHashContext)HashContext.Create(test.Value.algorithmName, test.Value.hashformatter));
                 _service.AddSingleton(sp => new HashHandlerFactory(sp.GetRequiredService<IHashContext>()).CreateHashWithOutputFormat());
 
                 var serviceProvider = _service.BuildServiceProvider();

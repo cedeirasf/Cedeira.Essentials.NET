@@ -6,22 +6,75 @@ using System.Text;
 
 namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
 {
+    /// <summary>
+    /// Represents a test class for the HashHandlerResultPattern functionality.
+    /// </summary>
     [TestClass]
     public class HashHandlerResultPatternTest
     {
+        /// <summary>
+        /// A dictionary to store test cases with string inputs, hash algorithms, expected states, and expected hashes.
+        /// </summary>
         private Dictionary<string, (string inputName, HashAlgorithm algorithm, bool expectedState, string expectedHash)> _testCasesinputString;
-        private Dictionary<string, (byte[] inputByte, HashAlgorithm algorithm, bool expectedState, string expectedHash)> _testCasesInputByte;
+
+        /// <summary>
+        /// A dictionary to store test cases with byte array inputs, hash algorithms, expected states, and expected hashes.
+        /// </summary>
+        private Dictionary<string, (byte[] inputByte, HashAlgorithm algorithm, bool expectedState, string expectedHash)> _testCasesInputByte; 
+
+        /// <summary>
+        /// A dictionary to store test cases with StreamReader inputs, hash algorithms, expected states, and expected hashes.
+        /// </summary>
         private Dictionary<string, (StreamReader inputStream, HashAlgorithm algorithm, bool expectedState, string expectedHash)> _testCasesinputStreamReader;
+
+        /// <summary>
+        /// A dictionary to store test cases with SecureString inputs, hash algorithms, expected states, and expected hashes.
+        /// </summary>
         private Dictionary<string, (SecureString inputSecureString, HashAlgorithm algorithm, bool expectedState, string expectedHash)> _testCasesInputSecureString;
+
+        /// <summary>
+        /// The result factory used for creating result objects.
+        /// </summary>
         private IResultFactory _resultFactory;
+
+        /// <summary>
+        /// The function used to format hash bytes into a Base64 string.
+        /// </summary>
         private Func<byte[], string> _hashformatterBase64;
+
+        /// <summary>
+        /// The input string used for testing.
+        /// </summary>
         private string _input;
+
+        /// <summary>
+        /// The byte array representation of the input string used for testing.
+        /// </summary>
         private byte[] _inputByte;
+
+        /// <summary>
+        /// The validation message for null inputs.
+        /// </summary>
         private string _messageValidateNull;
+
+        /// <summary>
+        /// The validation message for hash mismatches.
+        /// </summary>
         private string _messageValidate;
+
+        /// <summary>
+        /// The StreamReader representation of the input string used for testing.
+        /// </summary>
         private StreamReader _inputStreamReader;
+
+        /// <summary>
+        /// The SecureString representation of the input string used for testing.
+        /// </summary>
         private SecureString _inputSecureString;
 
+        /// <summary>
+        /// Initializes the test setup with default values.
+        /// </summary>
         [TestInitialize]
         public void Setup()
         {
@@ -41,6 +94,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             _inputSecureString.MakeReadOnly();
         }
 
+        /// <summary>
+        /// Tests that the CalculateHash method returns the expected hash for string inputs.
+        /// </summary>
         [TestMethod]
         public void CalculateHash_InputString_ReturnsExpectedHash()
         {
@@ -74,6 +130,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             }
         }
 
+        /// <summary>
+        /// Tests that the CalculateHash method returns the expected hash for string inputs in base64 format.
+        /// </summary>
         [TestMethod]
         public void CalculateHash_InputString_ReturnsExpectedHashBase64()
         {
@@ -107,6 +166,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             }
         }
 
+        /// <summary>
+        /// Tests that the CalculateHash method returns the expected hash for bytes array inputs.
+        /// </summary>
         [TestMethod]
         public void CalculateHash_InputByte_ReturnsExpectedHash()
         {
@@ -140,6 +202,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             }
         }
 
+        /// <summary>
+        /// Tests that the CalculateHash method returns the expected hash for bytes array inputs in base64 format.
+        /// </summary>
         [TestMethod]
         public void CalculateHash_InputByte_ReturnsExpectedHashBase64()
         {
@@ -173,7 +238,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             }
         }
 
-
+        /// <summary>
+        /// Tests that the CalculateHash method returns the expected hash for StreamReader input.
+        /// </summary>
         [TestMethod]
         public void CalculateHash_InputStreamReader_ReturnsExpectedHash()
         {
@@ -210,6 +277,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             }
         }
 
+        /// <summary>
+        /// Tests that the CalculateHash method returns the expected hash for StreamReader input in base64 format.
+        /// </summary>
         [TestMethod]
         public void CalculateHash_InputStreamReader_ReturnsExpectedHashBase64()
         {
@@ -246,6 +316,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             }
         }
 
+        /// <summary>
+        /// Tests that the CalculateHash method returns the expected hash for SecureString input.
+        /// </summary>
         [TestMethod]
         public void CalculateHash_InputSecureString_ReturnsExpectedHash()
         {
@@ -279,6 +352,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             }
         }
 
+        /// <summary>
+        /// Tests that the CalculateHash method returns the expected hash for SecureString input in base64 format.
+        /// </summary>
         [TestMethod]
         public void CalculateHash_InputSecureString_ReturnsExpectedHashBase64()
         {
@@ -312,6 +388,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             }
         }
 
+        /// <summary>
+        /// Tests that the HashValidate method returns if the hash is Valid for string inputs .
+        /// </summary>
         [TestMethod]
         public void HashValidate_InputString_ReturnsTrueIfValid()
         {
@@ -357,6 +436,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             }
         }
 
+        /// <summary>
+        /// Tests that the HashValidate method returns if the hash is valid for array Bytes inputs .
+        /// </summary>
         [TestMethod]
         public void HashValidate_InputByte_ReturnsTrueIfValid()
         {
@@ -402,6 +484,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             }
         }
 
+        /// <summary>
+        /// Tests that the HashValidate method returns if the hash is valid for StreamReader inputs .
+        /// </summary>
         [TestMethod]
         public void ValidaHash_InputStreamReader_ReturnsTrueIfValid()
         {
@@ -449,6 +534,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             }
         }
 
+        /// <summary>
+        /// Tests that the HashValidate method returns if the hash is valid for SecureString inputs .
+        /// </summary>
         [TestMethod]
         public void ValidateHash_InputSecureString_ReturnsTrueIfValid()
         {
