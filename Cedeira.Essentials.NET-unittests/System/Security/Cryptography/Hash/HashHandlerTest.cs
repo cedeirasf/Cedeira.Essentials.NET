@@ -5,20 +5,61 @@ using System.Text;
 
 namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
 {
+    /// <summary>
+    /// Represents a test class for the HashHandler functionality.
+    /// </summary>
     [TestClass]
     public class HashHandlerTest
     {
+        /// <summary>
+        /// A dictionary to store test cases with string inputs, hash algorithms, expected states, and expected hashes.
+        /// </summary>
         private Dictionary<string, (string inputName, HashAlgorithm algorithm, bool expectedState, string expectedHash)> _testCasesinputString;
+
+        /// <summary>
+        /// A dictionary to store test cases with byte array inputs, hash algorithms, expected states, and expected hashes.
+        /// </summary>
         private Dictionary<string, (byte[] inputByte, HashAlgorithm algorithm, bool expectedState, string expectedHash)> _testCasesInputByte;
+
+        /// <summary>
+        /// A dictionary to store test cases with StreamReader inputs, hash algorithms, expected states, and expected hashes.
+        /// </summary>
         private Dictionary<string, (StreamReader inputStream, HashAlgorithm algorithm, bool expectedState, string expectedHash)> _testCasesinputStreamReader;
+
+        /// <summary>
+        /// A dictionary to store test cases with SecureString inputs, hash algorithms, expected states, and expected hashes.
+        /// </summary>
         private Dictionary<string, (SecureString inputSecureString, HashAlgorithm algorithm, bool expectedState, string expectedHash)> _testCasesInputSecureString;
+
+        /// <summary>
+        /// The input string used for testing.
+        /// </summary>
         private string _input;
-        private string _exceptionMessage;
+
+        /// <summary>
+        /// The validation message for null inputs.
+        /// </summary>
         private byte[] _inputByte;
+
+        /// <summary>
+        /// The StreamReader representation of the input string used for testing.
+        /// </summary>
         private StreamReader _inputStreamReader;
+
+        /// <summary>
+        /// The SecureString representation of the input string used for testing.
+        /// </summary>
         private SecureString _inputSecureString;
 
+        /// <summary>
+        /// The validation message for an invalid hash.
+        /// </summary>
+        private string _exceptionMessage;
 
+
+        /// <summary>
+        /// Initializes the test setup with default values.
+        /// </summary>
         [TestInitialize]
         public void Setup()
         {
@@ -35,8 +76,11 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             _inputSecureString.MakeReadOnly();
         }
 
+        /// <summary>
+        /// Tests that the ThrowIfInvalidHash method return a CryptographicException for string inputs.
+        /// </summary>
         [TestMethod]
-        public void HashValidate_InputString_ReturnsThrowIfInvalidHash()
+        public void ValidateHash_InputString_ReturnsThrowIfInvalidHash()
         {
             _testCasesinputString = new Dictionary<string, (string inputName, HashAlgorithm algorithm, bool expectedState, string expectedHash)>
             {
@@ -69,6 +113,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             }
         }
 
+        /// <summary>
+        /// Tests that the ThrowIfInvalidHash method return a CryptographicException for array bytes inputs.
+        /// </summary>
         [TestMethod]
         public void HashValidate_InputByte_ReturnsThrowIfInvalidHash()
         {
@@ -104,6 +151,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             }
         }
 
+        /// <summary>
+        /// Tests that the ThrowIfInvalidHash method return a CryptographicException for StreamReader inputs.
+        /// </summary>
         [TestMethod]
         public void ValidaHash_InputStreamReader_ReturnsThrowIfInvalidHash()
         {
@@ -141,6 +191,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             }
         }
 
+        /// <summary>
+        /// Tests that the ThrowIfInvalidHash method return a CryptographicException for SecureString inputs.
+        /// </summary>
         [TestMethod]
         public void ValidateHash_InputSecureString_ReturnsThrowIfInvalidHash()
         {

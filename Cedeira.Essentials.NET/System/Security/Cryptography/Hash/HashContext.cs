@@ -1,44 +1,65 @@
-﻿using Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Hash;
-using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions;
+﻿using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions;
 using System.Security.Cryptography;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 {
     /// <summary>
-    /// Implementación de la interfaz <see cref="IHashContext"/> que representa el contexto de configuración para un algoritmo de hash.
+    /// Represents a context for configuring a hash algorithm and output formatting for hash operations.
     /// </summary>
-    public class HashContext<THash> : IHashContext<THash> where THash : IEquatable<THash>
+    public class HashContext : IHashContext
     {
         /// <summary>
-        /// Obtiene el nombre del algoritmo de hash configurado.
+        /// Gets the configured hash algorithm.
         /// </summary>
-        public HashAlgorithmName AlgorithmName { get; private set; }
-        public Func<byte[], THash> HashFormatter { get; private set; }
-
-        public HashContext()
-        {
-                
-        }
-
-        public void SetAlgorithm(HashAlgorithmName algorithmName)
-        {
-        }
-
-        public void SetHashFormatter(Func<byte[], THash> hashFormatter) 
-        {
-        }
-
+        public HashAlgorithm HashAlgorithm { get; private set; }
 
         /// <summary>
-        /// Constructor que inicializa una nueva instancia de la clase <see cref="HashContext"/> con el algoritmo de hash especificado.
+        /// Gets the optional formatter function for converting the hash byte array to a string.
         /// </summary>
-        /// <param name="algorithmName">El nombre del algoritmo de hash que se utilizará.</param>
-        public HashContext(HashAlgorithmName algorithmName, Func<byte[], THash> hashFormatter)
+        public Func<byte[], string>? HashFormatter { get; private set; }
+
+        /// <summary>
+        /// Initializes a new instance of HashContext with the specified hash algorithm and optional formatter.
+        /// </summary>
+        /// <param name="algorithmName">The hash algorithm to use.</param>
+        /// <param name="hashFormatter">Optional formatter for converting the hash to a string.</param>
+        protected HashContext(HashAlgorithm algorithmName, Func<byte[], string>? hashFormatter) 
         {
-            HashAlgorithmNameExtension.SetAlgorithm(algorithmName);
-            this.AlgorithmName = algorithmName;
-            this.HashFormatter = hashFormatter;
+            HashAlgorithm = algorithmName;
+            HashFormatter = hashFormatter;
+        }
+
+        /// <summary>
+        /// Creates a new HashContext instance based on the algorithm name and optional formatter.
+        /// </summary>
+        /// <param name="algorithmName">The name of the hash algorithm to use.</param>
+        /// <param name="hashFormatter">Optional formatter for converting the hash to a string.</param>
+        /// <returns>A new instance of HashContext.</returns>
+        /// <exception cref="ArgumentException">Thrown if the algorithm name is invalid.</exception>
+        public static HashContext Create(string algorithmName, Func<byte[], string>? hashFormatter)
+        {
+            var hashAlgorithm = CryptoConfig.CreateFromName(algorithmName) as HashAlgorithm;
+
+            if (hashAlgorithm is null)
+                throw new ArgumentException($"Invalid algorithm name: {algorithmName}");
+
+            return new HashContext(hashAlgorithm, hashFormatter);
+        }
+
+        /// <summary>
+        /// Creates a new HashContext instance based on the provided hash algorithm and optional formatter.
+        /// </summary>
+        /// <param name="hashAlgorithm">The hash algorithm to use.</param>
+        /// <param name="hashFormatter">Optional formatter for converting the hash to a string.</param>
+        /// <returns>A new instance of HashContext.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the hash algorithm is null.</exception>
+        public static HashContext Create(HashAlgorithm hashAlgorithm, Func<byte[], string>? hashFormatter)
+        {
+            if (hashAlgorithm is null)
+                throw new ArgumentNullException("hashAlgorithm");     
+
+            return new HashContext(hashAlgorithm, hashFormatter);
         }
     }
-
 }
+

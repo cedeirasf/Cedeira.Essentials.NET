@@ -4,15 +4,19 @@ using System.Threading.Tasks;
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions
 {
     /// <summary>
-    /// Interfaz que define el contexto para la configuración de un algoritmo de hash.
+    /// Provides an interface for defining the context used in hashing operations, 
+    /// including the hash algorithm and the formatter to convert the byte array result into a string.
     /// </summary>
-    public interface IHashContext<T> where T : IEquatable<T>    
+    public interface IHashContext
     {
         /// <summary>
-        /// Obtiene el nombre del algoritmo de hash que se utilizará.
+        /// Gets the hash algorithm used for computing the hash.
         /// </summary>
-        HashAlgorithmName AlgorithmName { get; }
-        Func<byte[], T> HashFormatter { get; }
+        HashAlgorithm HashAlgorithm { get; }
 
+        /// <summary>
+        /// Gets the formatter function that converts the resulting hash byte array into a string.
+        /// </summary>
+        Func<byte[], string> HashFormatter { get; }
     }
 }

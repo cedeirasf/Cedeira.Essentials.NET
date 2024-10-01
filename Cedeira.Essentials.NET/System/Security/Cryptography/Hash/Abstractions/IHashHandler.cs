@@ -3,69 +3,96 @@
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions
 {
     /// <summary>
-    /// Define una interfaz para manejar el cálculo y la conversión de hashes en diferentes formatos.
+    /// Defines an interface for handling the calculation and validation of hashes in various formats.
     /// </summary>
     public interface IHashHandler
     {
-
         /// <summary>
-        /// Calcula el hash de una cadena de texto.
+        /// Calculates the hash of a string.
         /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         string CalculateHash(string input);
 
         /// <summary>
-        /// Calcula el hash de un arreglo de bytes.
+        /// Calculates the hash of a byte array.
         /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         string CalculateHash(byte[] input);
 
         /// <summary>
-        /// Calcula el hash de un StreamReader.
+        /// Calculates the hash of a StreamReader
         /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         string CalculateHash(StreamReader input);
 
         /// <summary>
-        /// Calcula el hash de un SecureString.
+        /// Calculates the hash of a SecureString
         /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         string CalculateHash(SecureString input);
 
         /// <summary>
-        /// Valida si el hash de una cadena de texto coincide con el hash proporcionado.
+        /// Validates whether the hash of a string matches the provided hash.
         /// </summary>
+        /// <param name="input"></param>
+        /// <param name="hash"></param>
+        /// <returns></returns>
         bool HashValidate(string input, string hash);
 
         /// <summary>
-        /// Valida si el hash de un arreglo de bytes coincide con el hash proporcionado.
+        /// Validates whether the hash of a byte array matches the provided hash.
         /// </summary>
+        /// <param name="input"></param>
+        /// <param name="hash"></param>
+        /// <returns></returns>
         bool HashValidate(byte[] input, string hash);
 
         /// <summary>
-        /// Valida si el hash de un SecureString coincide con el hash proporcionado.
+        /// Validates whether the hash of a SecureString matches the provided hash.
         /// </summary>
+        /// <param name="input"></param>
+        /// <param name="hash"></param>
+        /// <returns></returns>
         bool HashValidate(SecureString input, string hash);
 
         /// <summary>
-        /// Valida si el hash de un StreamReader coincide con el hash proporcionado.
+        /// Validates whether the hash of a StreamReader matches the provided hash.
         /// </summary>
+        /// <param name="input"></param>
+        /// <param name="hash"></param>
+        /// <returns></returns>
         bool HashValidate(StreamReader input, string hash);
 
         /// <summary>
-        /// Lanza una excepción si el hash de una cadena de texto no coincide con el hash proporcionado.
+        /// Throws an exception if the hash of a string does not match the provided hash.
         /// </summary>
+        /// <param name="input"></param>
+        /// <param name="hash"></param>
         void ThrowIfInvalidHash(string input, string hash);
 
         /// <summary>
-        /// Lanza una excepción si el hash de un arreglo de bytes no coincide con el hash proporcionado.
+        /// hrows an exception if the hash of a byte array does not match the provided hash
         /// </summary>
+        /// <param name="input"></param>
+        /// <param name="hash"></param>
         void ThrowIfInvalidHash(byte[] input, string hash);
 
         /// <summary>
-        /// Lanza una excepción si el hash de un SecureString no coincide con el hash proporcionado.
+        /// Throws an exception if the hash of a SecureString does not match the provided hash.
         /// </summary>
+        /// <param name="input"></param>
+        /// <param name="hash"></param>
         void ThrowIfInvalidHash(SecureString input, string hash);
 
         /// <summary>
-        /// Lanza una excepción si el hash de un StreamReader no coincide con el hash proporcionado.
+        /// Throws an exception if the hash of a StreamReader does not match the provided hash.
         /// </summary>
+        /// <param name="input"></param>
+        /// <param name="hash"></param>
         void ThrowIfInvalidHash(StreamReader input, string hash);
 
     }
