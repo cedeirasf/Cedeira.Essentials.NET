@@ -16,4 +16,8 @@
 	<PackageReleaseNotes>Notas de la versión</PackageReleaseNotes>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="System\Security\Cryptography\Encryption\Factories\" />
+  </ItemGroup>
+
 </Project>
