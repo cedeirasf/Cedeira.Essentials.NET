@@ -2,6 +2,7 @@
 {
     public interface ISymetricEncryptationFactory
     {
+
         public ISymmetricEncryption Create();
     }
 }

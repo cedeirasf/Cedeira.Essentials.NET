@@ -1,6 +1,6 @@
 ﻿namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 {
-    public enum SymmetricAlgorithmType
+    public enum SymmetricAlgorithmTypeEnum
     {
         AES,
         DES,
