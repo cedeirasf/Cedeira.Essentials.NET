@@ -13,10 +13,10 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Abs
         /// <returns>An instance of IHashHandler.</returns>
         IHashHandler CreateHash();
 
-        /// <summary>
-        /// Creates an instance of IHashHandler with a specified output format.
-        /// </summary>
-        /// <returns>An instance of IHashHandler with the configured output format.</returns>
-        IHashHandler CreateHashWithOutputFormat();
+        ///// <summary>
+        ///// Creates an instance of IHashHandler with a specified output format.
+        ///// </summary>
+        ///// <returns>An instance of IHashHandler with the configured output format.</returns>
+        //IHashHandler CreateHashWithOutputFormat();
     }
 }

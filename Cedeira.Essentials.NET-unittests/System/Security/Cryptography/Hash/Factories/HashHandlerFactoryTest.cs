@@ -101,7 +101,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
             foreach (var test in _TestHashFactoryInputByte)
             {
                 _service.AddSingleton((IHashContext)HashContext.Create(test.Value.algorithmName, test.Value.hashformatter));
-                _service.AddSingleton(sp => new HashHandlerFactory(sp.GetRequiredService<IHashContext>()).CreateHashWithOutputFormat());
+                _service.AddSingleton(sp => new HashHandlerFactory(sp.GetRequiredService<IHashContext>()).CreateHash());
 
                 var serviceProvider = _service.BuildServiceProvider();
 

@@ -23,10 +23,39 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
         /// </summary>
         /// <param name="algorithmName">The hash algorithm to use.</param>
         /// <param name="hashFormatter">Optional formatter for converting the hash to a string.</param>
-        protected HashContext(HashAlgorithm algorithmName, Func<byte[], string>? hashFormatter) 
+        protected HashContext(HashAlgorithm algorithmName, Func<byte[], string> hashFormatter) 
         {
             HashAlgorithm = algorithmName;
             HashFormatter = hashFormatter;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of HashContext with the specified hash algorithm with a hexadecimal string format.
+        /// </summary>
+        /// <param name="algorithmName">The hash algorithm to use.</param>
+        /// <param name="hashFormatter">Optional formatter for converting the hash to a string.</param>
+        protected HashContext(HashAlgorithm algorithmName)
+        {
+            HashAlgorithm = algorithmName;
+            HashFormatter = Convert.ToHexString;
+        }
+
+        public static HashContext Create(string algorithmName)
+        {
+            var hashAlgorithm = CryptoConfig.CreateFromName(algorithmName) as HashAlgorithm;
+
+            if (hashAlgorithm is null)
+                throw new ArgumentException($"Invalid algorithm name: {algorithmName}");
+
+            return new HashContext(hashAlgorithm);
+        }
+
+        public static HashContext Create(HashAlgorithm algorithm)
+        {
+            if (algorithm  is null)
+                throw new ArgumentException($"Invalid algorithm.");
+
+            return new HashContext(algorithm);
         }
 
         /// <summary>
@@ -36,7 +65,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
         /// <param name="hashFormatter">Optional formatter for converting the hash to a string.</param>
         /// <returns>A new instance of HashContext.</returns>
         /// <exception cref="ArgumentException">Thrown if the algorithm name is invalid.</exception>
-        public static HashContext Create(string algorithmName, Func<byte[], string>? hashFormatter)
+        public static HashContext CreateWithFormat(string algorithmName, Func<byte[], string> hashFormatter)
         {
             var hashAlgorithm = CryptoConfig.CreateFromName(algorithmName) as HashAlgorithm;
 
@@ -53,13 +82,14 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
         /// <param name="hashFormatter">Optional formatter for converting the hash to a string.</param>
         /// <returns>A new instance of HashContext.</returns>
         /// <exception cref="ArgumentNullException">Thrown if the hash algorithm is null.</exception>
-        public static HashContext Create(HashAlgorithm hashAlgorithm, Func<byte[], string>? hashFormatter)
+        public static HashContext CreateWithFormat(HashAlgorithm hashAlgorithm, Func<byte[], string> hashFormatter)
         {
             if (hashAlgorithm is null)
                 throw new ArgumentNullException("hashAlgorithm");     
 
             return new HashContext(hashAlgorithm, hashFormatter);
         }
+
     }
 }
 
