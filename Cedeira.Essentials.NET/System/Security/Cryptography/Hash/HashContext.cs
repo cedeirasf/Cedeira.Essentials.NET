@@ -16,7 +16,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
         /// <summary>
         /// Gets the optional formatter function for converting the hash byte array to a string.
         /// </summary>
-        public Func<byte[], string>? HashFormatter { get; private set; }
+        public Func<byte[], string> HashFormatter { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of HashContext with the specified hash algorithm and formatter.
@@ -85,7 +85,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
         /// <param name="hashFormatter">A function that defines how to format the hash output.</param>
         /// <returns>A new instance of <see cref="HashContext"/> configured with the specified algorithm and formatter.</returns>
         /// <exception cref="ArgumentNullException">Thrown if the hash algorithm is null.</exception>
-        public static HashContext reateFromAlgorithmWithFormatter(HashAlgorithm hashAlgorithm, Func<byte[], string> hashFormatter)
+        public static HashContext CreateFromAlgorithmWithFormatter(HashAlgorithm hashAlgorithm, Func<byte[], string> hashFormatter)
         {
             if (hashAlgorithm is null)
                 throw new ArgumentNullException("hashAlgorithm");     

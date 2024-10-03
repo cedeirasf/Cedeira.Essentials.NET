@@ -61,7 +61,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
         [TestMethod]
         public void HasHandler_Create_SetWithIhashContext_InputString()
         {
-            
 
             _TestHashFactoryInputString = new Dictionary<string, (string inputName, string algorithmName, Func<byte[], string>? hashformatter, bool expectedState, string expectedHash)>
             {
@@ -71,7 +70,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
 
             foreach (var test in _TestHashFactoryInputString)
             {
-                _service.AddSingleton((IHashContext)HashContext.Create(test.Value.algorithmName, test.Value.hashformatter));
+                _service.AddSingleton((IHashContext)HashContext.CreatFromAlgorithmNameWithFormmatter(test.Value.algorithmName, test.Value.hashformatter));
                 _service.AddSingleton(sp => new HashHandlerFactory(sp.GetRequiredService<IHashContext>()).CreateHash());
 
                 var serviceProvider = _service.BuildServiceProvider();
@@ -100,7 +99,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
 
             foreach (var test in _TestHashFactoryInputByte)
             {
-                _service.AddSingleton((IHashContext)HashContext.Create(test.Value.algorithmName, test.Value.hashformatter));
+                _service.AddSingleton((IHashContext)HashContext.CreatFromAlgorithmNameWithFormmatter(test.Value.algorithmName, test.Value.hashformatter));
                 _service.AddSingleton(sp => new HashHandlerFactory(sp.GetRequiredService<IHashContext>()).CreateHash());
 
                 var serviceProvider = _service.BuildServiceProvider();

@@ -75,7 +75,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
 
             foreach (var test in _TestHashResultPatternFactoryInputString)
             {
-                _service.AddSingleton((IHashContext)HashContext.Create(test.Value.algorithmName, test.Value.hashformatter));
+                _service.AddSingleton((IHashContext)HashContext.CreatFromAlgorithmNameWithFormmatter(test.Value.algorithmName, test.Value.hashformatter));
                 _service.AddSingleton(sp => new HashHandlerResultPatternFactory(sp.GetRequiredService<IHashContext>(), _resultFactory).CreateHash());
 
                 var serviceProvider = _service.BuildServiceProvider();
@@ -104,8 +104,8 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
 
             foreach (var test in _TestHashResultPatternFactoryInputByte)
             {
-                _service.AddSingleton((IHashContext)HashContext.Create(test.Value.algorithmName, test.Value.hashformatter));
-                _service.AddSingleton(sp => new HashHandlerResultPatternFactory(sp.GetRequiredService<IHashContext>(), _resultFactory).CreateHashWithOutputFormat());
+                _service.AddSingleton((IHashContext)HashContext.CreatFromAlgorithmNameWithFormmatter(test.Value.algorithmName, test.Value.hashformatter));
+                _service.AddSingleton(sp => new HashHandlerResultPatternFactory(sp.GetRequiredService<IHashContext>(), _resultFactory).CreateHash());
 
                 var serviceProvider = _service.BuildServiceProvider();
 
