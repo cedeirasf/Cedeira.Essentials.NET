@@ -12,11 +12,5 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Abs
         /// </summary>
         /// <returns>An instance of IHashHandlerResultPattern.</returns>
         IHashHandlerResultPattern CreateHash();
-
-        /// <summary>
-        /// Creates an instance of IHashHandlerResultPattern with a specified output format.
-        /// </summary>
-        /// <returns>An instance of IHashHandlerResultPattern with the configured output format.</returns>
-        IHashHandlerResultPattern CreateHashWithOutputFormat();
     }
 }

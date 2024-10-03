@@ -38,13 +38,5 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
             return new HashHandlerResultPattern(_hashContext.HashAlgorithm, _resultFactory);
         }
 
-        /// <summary>
-        /// Creates an instance of IHashHandlerResultPattern using the hash algorithm and output formatter from the context.
-        /// </summary>
-        /// <returns>A new instance of IHashHandlerResultPattern with the configured output format.</returns>
-        public IHashHandlerResultPattern CreateHashWithOutputFormat()
-        {
-            return new HashHandlerResultPattern(_hashContext.HashAlgorithm, _resultFactory,_hashContext.HashFormatter);
-        }
     }
 }
