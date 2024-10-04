@@ -15,12 +15,12 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
         /// <summary>
         /// A dictionary to store test cases with algorithm names, hash formatters, and expected states.
         /// </summary>
-        private Dictionary<string, (string algorithmName, Func<byte[], string>? hashformatter, bool expectedState)> _TestHashContextAlgorithmNameWithFormat;
+        private Dictionary<string, (string algorithmName, Func<byte[], string> hashformatter, bool expectedState)> _TestHashContextAlgorithmNameWithFormat;
 
         /// <summary>
         /// A dictionary to store test cases with hash algorithms, hash formatters, and expected states.
         /// </summary>
-        private Dictionary<string, (HashAlgorithm algorithm, Func<byte[], string>? hashformatter, bool expectedState)> _TestHashContextAlgorithmWithFormat;
+        private Dictionary<string, (HashAlgorithm algorithm, Func<byte[], string> hashformatter, bool expectedState)> _TestHashContextAlgorithmWithFormat;
 
         /// <summary>
         /// A dictionary to store test cases with algorithm names and expected states.
@@ -37,12 +37,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
         /// </summary>
         private Dictionary<string, HashContext> _TestHashContextCreate;
 
-
-        /// <summary>
-        /// The expected hash formatter function.
-        /// </summary>
-        private Func<byte[], string>? _expectedFormatter;
-
         /// <summary>
         /// The service collection used for dependency injection.
         /// </summary>
@@ -54,9 +48,14 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
         private string _exceptionMessage;
 
         /// <summary>
-        /// The exception message for null values.
+        /// The exception message for algorithm null values.
         /// </summary>
-        private string _mullExceptionMessage;
+        private string _nullExceptionAlgorithmMessage;
+
+        /// <summary>
+        /// The exception message for for,matter null values.
+        /// </summary>
+        private string _nullExceptionFormatterMessage;
 
         /// <summary>
         /// Initializes the test setup with default values.
@@ -65,7 +64,8 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
         public void Setup()
         {
             _exceptionMessage = $"Invalid algorithm name: {HashAlgorithmName.SHA3_512}";
-            _mullExceptionMessage = "Value cannot be null. (Parameter 'hashAlgorithm')";
+            _nullExceptionAlgorithmMessage = "Value cannot be null. (Parameter 'hashAlgorithm')";
+            _nullExceptionFormatterMessage = "Value cannot be null. (Parameter 'hashFormatter')";
             _service = new ServiceCollection();
         }
 
@@ -91,29 +91,40 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
         }
 
         /// <summary>
-        /// Tests that the HashContext is correctly registered in the service collection and test some algotihms with a string algorithm name.
+        /// Tests that the HashContext is correctly registered in the service collection and test some algotihms with a string algorithm name and output format.
         /// </summary>
         [TestMethod]
         public void ServiceCollection_Register_HashContext_Correctly_With_AlgortihmName_And_Ouput_Formatter()
         {
-            _TestHashContextAlgorithmNameWithFormat = new Dictionary<string, (string algorithmName, Func<byte[], string>? hashFormatter, bool expectedState)>
+            _TestHashContextAlgorithmNameWithFormat = new Dictionary<string, (string algorithmName, Func<byte[], string> hashFormatter, bool expectedState)>
             {
-                {"1_hashformatter_null",new ( "SHA256",null,true)},
-                {"2_otherAlgorithmName",new ( "SHA1",null,true)},
-                {"3_hashformatter_base64",new ( "MD5", bytes => Convert.ToBase64String(bytes),true)},
-                {"4_NonHandledAlghorithmName",new ( "SHA3-512", bytes => BitConverter.ToString(bytes),false)},
+                {"1_hashformatter_null",new ( "SHA256",null,false)},
+                {"2_hashformatter_base64",new ( "MD5", bytes => Convert.ToBase64String(bytes),true)},
+                {"3_NonHandledAlghorithmName",new ( "SHA3-512", bytes => BitConverter.ToString(bytes),false)},
             };
 
             foreach (var testCase in _TestHashContextAlgorithmNameWithFormat)
             {
                 if (!testCase.Value.expectedState)
                 {
-                    var excep = Assert.ThrowsException<ArgumentException>(() =>
+                    if (testCase.Value.hashformatter is null)
                     {
-                        _service.AddSingleton<IHashContext>(HashContext.CreatFromAlgorithmNameWithFormmatter(testCase.Value.algorithmName, testCase.Value.hashformatter));
-                    });
+                        var excep = Assert.ThrowsException<ArgumentNullException>(() =>
+                        {
+                            _service.AddSingleton<IHashContext>(HashContext.CreatFromAlgorithmNameWithFormmatter(testCase.Value.algorithmName, testCase.Value.hashformatter));
+                        });
 
-                    Assert.AreEqual(excep.Message, _exceptionMessage);
+                        Assert.AreEqual(excep.Message, _nullExceptionFormatterMessage);
+                    }
+                    else
+                    {
+                        var excep = Assert.ThrowsException<ArgumentException>(() =>
+                        {
+                            _service.AddSingleton<IHashContext>(HashContext.CreatFromAlgorithmNameWithFormmatter(testCase.Value.algorithmName, testCase.Value.hashformatter));
+                        });
+
+                        Assert.AreEqual(excep.Message, _exceptionMessage);
+                    }
                 }
                 else
                 {
@@ -135,15 +146,15 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
         }
 
         /// <summary>
-        /// Tests that the HashContext is correctly registered in the service collection and test some Algotihms with a algorithm.
+        /// Tests that the HashContext is correctly registered in the service collection and test some algotihms with output format.
         /// </summary>
         [TestMethod]
         public void ServiceCollection_Registers_HashContext_Correctly_With_Algortihm_And_Ouput_Formatter()
         {
-            _TestHashContextAlgorithmWithFormat = new Dictionary<string, (HashAlgorithm algorithm, Func<byte[], string>? hashFormatter, bool expectedState)>
+            _TestHashContextAlgorithmWithFormat = new Dictionary<string, (HashAlgorithm algorithm, Func<byte[], string> hashFormatter, bool expectedState)>
             {
-                {"1_hashformatter_null",new ( SHA256.Create(),null,true)},
-                {"2_otherAlgorithmName",new ( SHA1.Create(),null,true)},
+                {"1_hashformatter_null",new ( SHA256.Create(),null,false)},
+                {"2_otherAlgorithmName",new ( SHA1.Create(),null,false)},
                 {"3_hashformatter_base64",new ( MD5.Create(), bytes => Convert.ToBase64String(bytes),true)},
                 {"4_NonHandledAlghorithmName",new ( null, bytes => BitConverter.ToString(bytes),false)},
             };
@@ -152,12 +163,24 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             {
                 if (!testCase.Value.expectedState)
                 {
-                    var excep = Assert.ThrowsException<ArgumentNullException>(() =>
+                    if (testCase.Value.hashformatter is null)
                     {
-                        _service.AddSingleton<IHashContext>(HashContext.CreateFromAlgorithmWithFormatter(testCase.Value.algorithm, testCase.Value.hashformatter));
-                    });
+                        var excep = Assert.ThrowsException<ArgumentNullException>(() =>
+                        {
+                            _service.AddSingleton<IHashContext>(HashContext.CreateFromAlgorithmWithFormatter(testCase.Value.algorithm, testCase.Value.hashformatter));
+                        });
 
-                    Assert.AreEqual(excep.Message, _mullExceptionMessage);
+                        Assert.AreEqual(excep.Message, _nullExceptionFormatterMessage);
+                    }
+                    else
+                    {
+                        var excep = Assert.ThrowsException<ArgumentNullException>(() =>
+                        {
+                            _service.AddSingleton<IHashContext>(HashContext.CreateFromAlgorithmWithFormatter(testCase.Value.algorithm, testCase.Value.hashformatter));
+                        });
+
+                        Assert.AreEqual(excep.Message, _nullExceptionAlgorithmMessage);
+                    }
                 }
                 else
                 {
@@ -190,16 +213,26 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
                 {"4_NonHandledAlghorithmName",new ( null,false)},
             };
 
-            foreach (var testCase in _TestHashContextAlgorithmNameWithFormat)
+            foreach (var testCase in _TestHashContextAlgorithmName)
             {
                 if (!testCase.Value.expectedState)
                 {
-                    var excep = Assert.ThrowsException<ArgumentException>(() =>
+                    if (testCase.Value.algorithmName is null)
                     {
-                        _service.AddSingleton<IHashContext>(HashContext.CreateFromAlgorithmName(testCase.Value.algorithmName));
-                    });
+                        var excep = Assert.ThrowsException<ArgumentNullException>(() =>
+                        {
+                            _service.AddSingleton<IHashContext>(HashContext.CreateFromAlgorithmName(testCase.Value.algorithmName));
+                        });
+                    }
+                    else
+                    {
+                        var excep = Assert.ThrowsException<ArgumentException>(() =>
+                        {
+                            _service.AddSingleton<IHashContext>(HashContext.CreateFromAlgorithmName(testCase.Value.algorithmName));
+                        });
 
-                    Assert.AreEqual(excep.Message, _exceptionMessage);
+                        Assert.AreEqual(excep.Message, _exceptionMessage);
+                    }
                 }
                 else
                 {
@@ -220,7 +253,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             }
         }
         /// <summary>
-        /// Tests that the HashContext is correctly registered in the service collection and test some Algotihms with a algorithm.
+        /// Tests that the HashContext is correctly registered in the service collection and test some algotihms.
         /// </summary>
         [TestMethod]
         public void ServiceCollection_Registers_HashContext_Correctly_With_Algortihm()
@@ -232,7 +265,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
                 {"4_NonHandledAlghorithmName",new (null,false)},
             };
 
-            foreach (var testCase in _TestHashContextAlgorithmWithFormat)
+            foreach (var testCase in _TestHashContextAlgorithm)
             {
                 if (!testCase.Value.expectedState)
                 {
@@ -241,7 +274,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
                         _service.AddSingleton<IHashContext>(HashContext.CreateFromAlgorithm(testCase.Value.algorithm));
                     });
 
-                    Assert.AreEqual(excep.Message, _mullExceptionMessage);
+                    Assert.AreEqual(excep.Message, _nullExceptionAlgorithmMessage);
                 }
                 else
                 {

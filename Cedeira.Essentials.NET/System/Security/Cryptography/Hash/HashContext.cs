@@ -60,6 +60,9 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
             if (hashAlgorithm is null)
                 throw new ArgumentException($"Invalid algorithm name: {algorithmName}");
 
+            if (hashFormatter is null)
+                throw new ArgumentNullException("hashFormatter");
+
             return new HashContext(hashAlgorithm, hashFormatter);
         }
 
@@ -70,12 +73,12 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
         /// <param name="algorithm">An instance of <see cref="HashAlgorithm"/> to use.</param>
         /// <returns>A new instance of <see cref="HashContext"/> configured with the specified algorithm.</returns>
         /// <exception cref="ArgumentException">Thrown if the algorithm instance is null.</exception>
-        public static HashContext CreateFromAlgorithm(HashAlgorithm algorithm)
+        public static HashContext CreateFromAlgorithm(HashAlgorithm hashAlgorithm)
         {
-            if (algorithm  is null)
-                throw new ArgumentException($"Invalid algorithm.");
+            if (hashAlgorithm is null)
+                throw new ArgumentNullException("hashAlgorithm");
 
-            return new HashContext(algorithm, Convert.ToHexString);
+            return new HashContext(hashAlgorithm, Convert.ToHexString);
         }
 
         /// <summary>
@@ -88,7 +91,10 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
         public static HashContext CreateFromAlgorithmWithFormatter(HashAlgorithm hashAlgorithm, Func<byte[], string> hashFormatter)
         {
             if (hashAlgorithm is null)
-                throw new ArgumentNullException("hashAlgorithm");     
+                throw new ArgumentNullException("hashAlgorithm");
+
+            if (hashFormatter is null)
+                throw new ArgumentNullException("hashFormatter");
 
             return new HashContext(hashAlgorithm, hashFormatter);
         }

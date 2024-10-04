@@ -28,6 +28,5 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
         {
             return new HashHandler(_hashContext.HashAlgorithm, _hashContext.HashFormatter);
         }
-
     }
 }

@@ -36,9 +36,9 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
         /// Initializes a new instance of the HashHandlerResultPattern class with the specified hash algorithm, result factory, and hash formatter.
         /// </summary>
         /// <param name="hashAlgorithm">The hash algorithm to use.</param>
-        /// <param name="resultFactory">The factory to create result objects.</param>
         /// <param name="hashFormatter">The function to format the hash bytes into a string.</param>
-        public HashHandlerResultPattern(HashAlgorithm hashAlgorithm, IResultFactory resultFactory, Func<byte[], string> hashFormatter)
+        /// <param name="resultFactory">The factory to create result objects.</param>
+        public HashHandlerResultPattern(HashAlgorithm hashAlgorithm, Func<byte[], string> hashFormatter,IResultFactory resultFactory)
         {
             _resultFactory = resultFactory;
             _hashHandler = new HashHandler(hashAlgorithm, hashFormatter);
