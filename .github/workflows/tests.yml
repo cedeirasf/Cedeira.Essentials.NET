@@ -13,18 +13,21 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Setup test environment
-        run: echo "commands to setup test environment, like a node environment with actions/setup-node@v3"
-
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      
       - name: Install dependencies
-        run: echo "commands to install dependencies, like 'npm ci'"
+        run: dotnet restore
 
-      - name: Run lint
-        run: echo "commands to check lint, like 'npm run lint'"
+      - name: Run unit tests
+        run: dotnet test
 
-      - name: Run unit tests with coverage
-        run: echo "commands to start coverage test, like 'npm run coverage'"
-
-      - name: Run e2e tests
-        run: echo "commands to start e2e test, like 'npm run test:e2e'"
+      - name: Publish test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: '**/TestResults/*.trx'
