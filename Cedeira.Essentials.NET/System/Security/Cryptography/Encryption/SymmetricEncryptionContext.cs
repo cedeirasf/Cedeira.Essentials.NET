@@ -13,17 +13,31 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
             SymmetricAlgorithm = symmetricAlgorithm;
         }
 
-        public static SymmetricEncryptionContext Create(SymmetricAlgorithmTypeEnum symmetricAlgorithmName, CipherMode CipherMode)
+        public static SymmetricEncryptionContext Create()
+        {
+            var symetricAlgorithmalgorithm = AlgorithmData.Where(x => x.Key == SymmetricAlgorithmTypeEnum.AES).Select(x => x.Value.CreateAlgorithm).First().Invoke();
+
+            symetricAlgorithmalgorithm.GenerateKey();
+            symetricAlgorithmalgorithm.GenerateIV();
+            symetricAlgorithmalgorithm.Padding = PaddingMode.PKCS7;
+            symetricAlgorithmalgorithm.Mode = CipherMode.CBC;
+
+            return new SymmetricEncryptionContext(symetricAlgorithmalgorithm);
+        }
+
+        public static SymmetricEncryptionContext CreateFromAlgorithmConfig(SymmetricAlgorithmTypeEnum symmetricAlgorithmName, CipherMode CipherMode, PaddingMode padingMode)
         {
             var symetricAlgorithmalgorithm = AlgorithmData.Where(x => x.Key == symmetricAlgorithmName).Select(x => x.Value.CreateAlgorithm).First().Invoke();
 
             symetricAlgorithmalgorithm.GenerateKey();
             symetricAlgorithmalgorithm.GenerateIV();
+            symetricAlgorithmalgorithm.Padding = padingMode;
             symetricAlgorithmalgorithm.Mode = CipherMode;
 
             return new SymmetricEncryptionContext(symetricAlgorithmalgorithm);
         }
-        public static SymmetricEncryptionContext Create(string key, string iV, SymmetricAlgorithmTypeEnum symmetricAlgorithmName, CipherMode cipherMode)
+
+        public static SymmetricEncryptionContext CreateFromFullAlgorithmConfig(string key, string iV, SymmetricAlgorithmTypeEnum symmetricAlgorithmName, CipherMode cipherMode, PaddingMode padingMode)
         {
             ValidateParameters(symmetricAlgorithmName, key,iV);
 
@@ -31,6 +45,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
             symetricAlgorithmalgorithm.Key = Encoding.UTF8.GetBytes(key);
             symetricAlgorithmalgorithm.IV = Encoding.UTF8.GetBytes(iV);
+            symetricAlgorithmalgorithm.Padding = padingMode;
             symetricAlgorithmalgorithm.Mode = cipherMode;
 
             return new SymmetricEncryptionContext(symetricAlgorithmalgorithm);
@@ -39,10 +54,11 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         private static readonly Dictionary<SymmetricAlgorithmTypeEnum, (Func<SymmetricAlgorithm> CreateAlgorithm, int[] KeyLengths, int IVLength)> AlgorithmData =
         new Dictionary<SymmetricAlgorithmTypeEnum, (Func<SymmetricAlgorithm>, int[], int )>
         {
-            { SymmetricAlgorithmTypeEnum.AES, (Aes.Create, new[] { 16, 24, 32 }, 16) },       // AES: 128, 192, 256 bits
-            { SymmetricAlgorithmTypeEnum.DES, (DES.Create, new[] { 8 }, 8)},                  // DES: 64 bits
-            { SymmetricAlgorithmTypeEnum.TripleDES, (TripleDES.Create, new[] { 16, 24 }, 8) } // TripleDES: 128, 192 bits
+            { SymmetricAlgorithmTypeEnum.AES, (Aes.Create, new[] { 16, 24, 32 }, 16) },       
+            { SymmetricAlgorithmTypeEnum.DES, (DES.Create, new[] { 8 }, 8)},                  
+            { SymmetricAlgorithmTypeEnum.TripleDES, (TripleDES.Create, new[] { 16, 24 }, 8) } 
         };
+
         private static void ValidateParameters(SymmetricAlgorithmTypeEnum symmetricAlgorithmName, string key, string iV)
         {
             ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
