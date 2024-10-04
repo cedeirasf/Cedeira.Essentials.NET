@@ -206,7 +206,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
                 {"SHA512_1", new (_inputSecureString, SHA512.Create(), true, "4E6F429F1B72FAA9F5DD8A48E240B24DC4DF70E0DC68C8E3B4242AB3FFE4095B07DD9099FBF4E39148A00B580370DBC22250D67BA860CFDAAEA0CC3BD0E3E018")},
                 {"MD5_Empty", new (new SecureString(), MD5.Create(), true, "D41D8CD98F00B204E9800998ECF8427E")},
                 {"MD5_1_InvalidHash", new (_inputSecureString, MD5.Create(), false, "invalid Hash") },
-
             };
 
             foreach (var testCase in _testCasesInputSecureString)

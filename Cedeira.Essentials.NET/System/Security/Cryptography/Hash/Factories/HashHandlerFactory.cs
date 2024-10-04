@@ -21,22 +21,12 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
         }
 
         /// <summary>
-        /// Creates an instance of IHashHandler using the hash algorithm from the context.
-        /// </summary>
-        /// <returns>A new instance of IHashHandler.</returns>
-        public IHashHandler CreateHash()
-        {
-            return new HashHandler(_hashContext.HashAlgorithm);
-        }
-
-        /// <summary>
         /// Creates an instance of IHashHandler using the hash algorithm and output formatter from the context.
         /// </summary>
         /// <returns>A new instance of IHashHandler with the configured output format.</returns>
-        public IHashHandler CreateHashWithOutputFormat()
+        public IHashHandler CreateHash()
         {
             return new HashHandler(_hashContext.HashAlgorithm, _hashContext.HashFormatter);
         }
-
     }
 }

@@ -149,7 +149,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
 
             foreach (var testCase in _testCasesinputString)
             {
-                var handlerInstance = new HashHandlerResultPattern(testCase.Value.algorithm, _resultFactory, _hashformatterBase64);
+                var handlerInstance = new HashHandlerResultPattern(testCase.Value.algorithm, _hashformatterBase64,  _resultFactory);
 
                 var result = handlerInstance.CalculateHash(testCase.Value.inputName);
 
@@ -221,7 +221,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
 
             foreach (var testCase in _testCasesInputByte)
             {
-                var handlerInstance = new HashHandlerResultPattern(testCase.Value.algorithm, _resultFactory, _hashformatterBase64);
+                var handlerInstance = new HashHandlerResultPattern(testCase.Value.algorithm, _hashformatterBase64, _resultFactory);
 
                 var result = handlerInstance.CalculateHash(testCase.Value.inputByte);
 
@@ -296,7 +296,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
 
             foreach (var testCase in _testCasesinputStreamReader)
             {
-                var handlerInstance = new HashHandlerResultPattern(testCase.Value.algorithm, _resultFactory, _hashformatterBase64);
+                var handlerInstance = new HashHandlerResultPattern(testCase.Value.algorithm, _hashformatterBase64, _resultFactory);
 
                 var result = handlerInstance.CalculateHash(testCase.Value.inputStream);
 
@@ -371,7 +371,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
 
             foreach (var testCase in _testCasesInputSecureString)
             {
-                var handlerInstance = new HashHandlerResultPattern(testCase.Value.algorithm, _resultFactory, _hashformatterBase64);
+                var handlerInstance = new HashHandlerResultPattern(testCase.Value.algorithm, _hashformatterBase64, _resultFactory);
 
                 var result = handlerInstance.CalculateHash(testCase.Value.inputSecureString);
 

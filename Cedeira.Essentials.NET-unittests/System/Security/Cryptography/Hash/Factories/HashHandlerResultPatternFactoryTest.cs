@@ -7,21 +7,20 @@ using System.Text;
 
 namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Factories
 {
-
     /// <summary>
     /// Represents a test class for the HashHandlerResulltPatternFactory functionality.
     /// </summary>
     [TestClass]
-    public class HashHandlerResultPatternFactoryTest 
+    public class HashHandlerResultPatternFactoryTest
     {
         /// <summary>
         /// A dictionary to store test cases with string inputs, algorithm names, hash formatters, expected states, and expected hashes.
         /// </summary>
-        private Dictionary<string, (string inputName, string algorithmName, Func<byte[], string>? hashformatter, bool expectedState, string expectedHash)> _TestHashResultPatternFactoryInputString;
+        private Dictionary<string, (string inputName, string algorithmName, Func<byte[], string> hashformatter, bool expectedState, string expectedHash)> _TestHashResultPatternFactoryInputString;
 
         /// <summary>
         /// A dictionary to store test cases with byte array inputs, algorithm names, hash formatters, expected states, and expected hashes.
-        private Dictionary<string, (byte[] inputByte, string algorithmName, Func<byte[], string>? hashformatter, bool expectedState, string expectedHash)> _TestHashResultPatternFactoryInputByte;
+        private Dictionary<string, (byte[] inputByte, string algorithmName, Func<byte[], string> hashformatter, bool expectedState, string expectedHash)> _TestHashResultPatternFactoryInputByte;
 
         /// <summary>
         /// The result factory used for creating result objects.
@@ -29,9 +28,14 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
         private IResultFactory _resultFactory;
 
         /// <summary>
-        /// The expected hash formatter function.
+        /// The expected hash hex formatter  function.
         /// </summary>
-        private Func<byte[], string>? _expectedFormatter;
+        private Func<byte[], string> _expectedFormatterHexString;
+
+        /// <summary>
+        /// The expected hash base64 formatter function.
+        /// </summary>
+        private Func<byte[], string> _expectedFormatterBase64;
 
         /// <summary>
         /// The service collection used for dependency injection.
@@ -54,7 +58,8 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
         [TestInitialize]
         public void SetUp()
         {
-            _expectedFormatter = bytes => BitConverter.ToString(bytes);
+            _expectedFormatterHexString = bytes => Convert.ToHexString(bytes);
+            _expectedFormatterBase64 = bytes => Convert.ToBase64String(bytes);
             _input = "Testeo123";
             _inputByte = Encoding.UTF8.GetBytes(_input);
             _resultFactory = new ResultFactory();
@@ -67,15 +72,15 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
         [TestMethod]
         public void HasHandlerResultPattern_Create_SetWithIhashContext_InputString()
         {
-            _TestHashResultPatternFactoryInputString = new Dictionary<string, (string inputName, string algorithmName, Func<byte[], string>? hashformatter, bool expectedState, string expectedHash)>
+            _TestHashResultPatternFactoryInputString = new Dictionary<string, (string inputName, string algorithmName, Func<byte[], string> hashformatter, bool expectedState, string expectedHash)>
             {
-                 {"MD5_1", new ( _input, "MD5",_expectedFormatter, true, "320DEE96D097DDA6F108C62983DEF31F") },
-                 {"SHA512_2_null_Format", new ( _input, "SHA512",null, true, "AEACA907A9BCE24DBF9762049B6AFDDD6AC124B2720D2A91C3317500C8691442A98230F674BC58B5DA4553A510E3ECED7141DADC5EB8226836F524CEE0FEAC66")},
+                 {"MD5_1", new ( _input, "MD5",_expectedFormatterHexString, true, "320DEE96D097DDA6F108C62983DEF31F") },
+                 {"SHA512_2", new ( _input, "SHA512",_expectedFormatterHexString, true, "AEACA907A9BCE24DBF9762049B6AFDDD6AC124B2720D2A91C3317500C8691442A98230F674BC58B5DA4553A510E3ECED7141DADC5EB8226836F524CEE0FEAC66")},
             };
 
             foreach (var test in _TestHashResultPatternFactoryInputString)
             {
-                _service.AddSingleton((IHashContext)HashContext.Create(test.Value.algorithmName, test.Value.hashformatter));
+                _service.AddSingleton((IHashContext)HashContext.CreatFromAlgorithmNameWithFormmatter(test.Value.algorithmName, test.Value.hashformatter));
                 _service.AddSingleton(sp => new HashHandlerResultPatternFactory(sp.GetRequiredService<IHashContext>(), _resultFactory).CreateHash());
 
                 var serviceProvider = _service.BuildServiceProvider();
@@ -96,16 +101,16 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
         [TestMethod]
         public void HasHandlerResultPattern_Create_SetWithIhashContext_InputByte_ReturnBase64String()
         {
-            _TestHashResultPatternFactoryInputByte = new Dictionary<string, (byte[] inputByte, string algorithmName, Func<byte[], string>? hashformatter, bool expectedState, string expectedHash)>
+            _TestHashResultPatternFactoryInputByte = new Dictionary<string, (byte[] inputByte, string algorithmName, Func<byte[], string> hashformatter, bool expectedState, string expectedHash)>
             {
-                 {"MD5_1", new ( _inputByte, "MD5",bytes =>Convert.ToBase64String(bytes), true, "Mg3ultCX3abxCMYpg97zHw==") },
-                 {"SHA512_2_null_Format", new ( _inputByte,"SHA512",bytes =>Convert.ToBase64String(bytes), true, "rqypB6m84k2/l2IEm2r93WrBJLJyDSqRwzF1AMhpFEKpgjD2dLxYtdpFU6UQ4+ztcUHa3F64Img29STO4P6sZg==")},
+                {"MD5_1", new ( _inputByte, "MD5",_expectedFormatterBase64, true, "Mg3ultCX3abxCMYpg97zHw==")},
+                {"SHA512_2_null_Format", new ( _inputByte,"SHA512",_expectedFormatterBase64, true, "rqypB6m84k2/l2IEm2r93WrBJLJyDSqRwzF1AMhpFEKpgjD2dLxYtdpFU6UQ4+ztcUHa3F64Img29STO4P6sZg==")},
             };
 
             foreach (var test in _TestHashResultPatternFactoryInputByte)
             {
-                _service.AddSingleton((IHashContext)HashContext.Create(test.Value.algorithmName, test.Value.hashformatter));
-                _service.AddSingleton(sp => new HashHandlerResultPatternFactory(sp.GetRequiredService<IHashContext>(), _resultFactory).CreateHashWithOutputFormat());
+                _service.AddSingleton((IHashContext)HashContext.CreatFromAlgorithmNameWithFormmatter(test.Value.algorithmName, test.Value.hashformatter));
+                _service.AddSingleton(sp => new HashHandlerResultPatternFactory(sp.GetRequiredService<IHashContext>(), _resultFactory).CreateHash());
 
                 var serviceProvider = _service.BuildServiceProvider();
 
