@@ -1,0 +1,22 @@
+name: Deploy Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy-release:
+    name: Deploy release
+    if: github.event.release.draft == false
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.release.target_commitish }}
+
+      - name: Deploy release
+        run: |
+          echo "Deploying release ${{ github.event.release.tag_name }}"
+          # Add your deployment script here
