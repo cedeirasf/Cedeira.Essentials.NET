@@ -1,9 +1,8 @@
 ﻿using System.Security;
-using System.Security.Cryptography;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions
 {
-    public interface ISymmetricEncryption
+    public interface ISymetricEncryptionResultPattern
     {
         public string Encrypt(string input);
         public byte[] Encrypt(byte[] input);
@@ -13,6 +12,5 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstrac
         public byte[] Decryptt(byte[] input);
         public SecureString Decrypt(SecureString input);
         public StreamReader Decrypt(StreamReader input);
-
     }
 }

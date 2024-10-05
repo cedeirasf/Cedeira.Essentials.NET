@@ -1,16 +1,16 @@
 ﻿using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
 using System.Runtime.InteropServices;
-using System.Security;
 using System.Security.Cryptography;
+using System.Security;
 using System.Text;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 {
-    public class SymetricEncryption : ISymmetricEncryption
+    public class SymetricEncryptionResultPattern : ISymetricEncryptionResultPattern
     {
         private readonly SymmetricAlgorithm _symetricAlgortihm;
 
-        public SymetricEncryption(SymmetricAlgorithm symetricAlgortihm)
+        public SymetricEncryptionResultPattern(SymmetricAlgorithm symetricAlgortihm)
         {
             _symetricAlgortihm = symetricAlgortihm;
         }
@@ -33,16 +33,15 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
                 unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(input);
                 int length = input.Length * 2;
                 byte[] plainBytes = new byte[length];
-
                 Marshal.Copy(unmanagedString, plainBytes, 0, length);
 
-                var encryptedBytes = Encryption(plainBytes);
+                byte[] encryptedBytes = Encrypt(plainBytes);
 
                 var secureEncryptedString = new SecureString();
 
                 foreach (byte b in encryptedBytes)
                     secureEncryptedString.AppendChar((char)b);
-
+                
                 secureEncryptedString.MakeReadOnly();
                 return secureEncryptedString;
             }
@@ -71,6 +70,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         public SecureString Decrypt(SecureString input)
         {
             IntPtr unmanagedString = IntPtr.Zero;
+
             try
             {
                 unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(input);
@@ -79,12 +79,12 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
                 Marshal.Copy(unmanagedString, plainBytes, 0, length);
 
-                var encryptedBytes = Decryption(plainBytes);
+                var encryptedBytes =  Decryption(plainBytes);
                 var secureDecryptedString = new SecureString();
 
                 foreach (byte b in encryptedBytes)
                     secureDecryptedString.AppendChar((char)b);
-
+                
                 secureDecryptedString.MakeReadOnly();
                 return secureDecryptedString;
             }
@@ -98,10 +98,10 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
             var memoryStream = new MemoryStream();
             input.BaseStream.CopyTo(memoryStream);
 
-            return new StreamReader(new MemoryStream(Decryption(memoryStream.ToArray())));
+            return new StreamReader(new MemoryStream(Encrypt(memoryStream.ToArray())));
         }
 
-        private byte[] Encryption(byte[] input)
+        private byte[] Encryption(byte[] input) 
         {
             var encryptor = _symetricAlgortihm.CreateEncryptor(_symetricAlgortihm.Key, _symetricAlgortihm.Key);
 
@@ -125,8 +125,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
             cryptoStream.CopyTo(outputMemoryStream);
 
-            return outputMemoryStream.ToArray();    
+            return outputMemoryStream.ToArray();
         }
-
     }
 }
