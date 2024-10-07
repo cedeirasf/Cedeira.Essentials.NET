@@ -124,15 +124,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
             cryptoStream.CopyTo(outputMemoryStream);
 
             return outputMemoryStream.ToArray();
-
-            //var decryptor = _symetricAlgortihm.CreateDecryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
-            //using (var cryptoStream = new CryptoStream(new MemoryStream(input), decryptor, CryptoStreamMode.Read))
-            //using (var outputMemoryStream = new MemoryStream())
-            //{
-            //    cryptoStream.CopyTo(outputMemoryStream);
-            //    return outputMemoryStream.ToArray();
-            //}
         }
-
     }
 }
