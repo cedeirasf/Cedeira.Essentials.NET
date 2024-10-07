@@ -22,7 +22,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         public string Encrypt(string input)
         {
             byte[] plainBytes = Encoding.UTF8.GetBytes(input);
-
             return Convert.ToHexString(Encrypt(plainBytes));
         }
         public SecureString Encrypt(SecureString input)
@@ -64,9 +63,8 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         }
         public string Decrypt(string input)
         {
-            byte[] plainBytes = Convert.FromHexString(input);
-
-            return Convert.ToHexString(Decryption(plainBytes));
+            byte[] plainBytes = Convert.FromHexString(input); 
+            return Encoding.UTF8.GetString(Decryption(plainBytes));
         }
         public SecureString Decrypt(SecureString input)
         {
@@ -117,15 +115,23 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         }
         private byte[] Decryption(byte[] input)
         {
+            //var decryptor = _symetricAlgortihm.CreateDecryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
+
+            //var cryptoStream = new CryptoStream(new MemoryStream(input), decryptor, CryptoStreamMode.Read);
+
+            //var outputMemoryStream = new MemoryStream();
+
+            //cryptoStream.CopyTo(outputMemoryStream);
+
+            //return outputMemoryStream.ToArray();    
+
             var decryptor = _symetricAlgortihm.CreateDecryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
-
-            var cryptoStream = new CryptoStream(new MemoryStream(input), decryptor, CryptoStreamMode.Read);
-
-            var outputMemoryStream = new MemoryStream();
-
-            cryptoStream.CopyTo(outputMemoryStream);
-
-            return outputMemoryStream.ToArray();    
+            using (var cryptoStream = new CryptoStream(new MemoryStream(input), decryptor, CryptoStreamMode.Read))
+            using (var outputMemoryStream = new MemoryStream())
+            {
+                cryptoStream.CopyTo(outputMemoryStream);
+                return outputMemoryStream.ToArray();
+            }
         }
 
     }
