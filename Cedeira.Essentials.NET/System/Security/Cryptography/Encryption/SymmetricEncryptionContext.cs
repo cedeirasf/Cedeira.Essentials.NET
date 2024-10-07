@@ -17,12 +17,11 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         {
             var symetricAlgorithmalgorithm = AlgorithmData.Where(x => x.Key == SymmetricAlgorithmTypeEnum.AES).Select(x => x.Value.CreateAlgorithm).First().Invoke();
 
+            symetricAlgorithmalgorithm.KeySize = 256;
             symetricAlgorithmalgorithm.GenerateKey();
             symetricAlgorithmalgorithm.GenerateIV();
             symetricAlgorithmalgorithm.Padding = PaddingMode.PKCS7;
             symetricAlgorithmalgorithm.Mode = CipherMode.CBC;
-
-            symetricAlgorithmalgorithm.IV = AdjustIV(symetricAlgorithmalgorithm.IV, 16);
 
             return new SymmetricEncryptionContext(symetricAlgorithmalgorithm);
         }
@@ -36,30 +35,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
             symetricAlgorithmalgorithm.Padding = padingMode;
             symetricAlgorithmalgorithm.Mode = CipherMode;
 
-            symetricAlgorithmalgorithm.IV = AdjustIV(symetricAlgorithmalgorithm.IV, 16);
-
             return new SymmetricEncryptionContext(symetricAlgorithmalgorithm);
-        }
-
-        private static byte[] AdjustIV(byte[] ivBytes, int requiredLength)
-        {
-            // Si el IV es demasiado largo, lo truncamos
-            if (ivBytes.Length > requiredLength)
-            {
-                return ivBytes.Take(requiredLength).ToArray();
-            }
-
-            // Si es demasiado corto, lo rellenamos con ceros
-            if (ivBytes.Length < requiredLength)
-            {
-                byte[] paddedIV = new byte[requiredLength];
-                Array.Copy(ivBytes, paddedIV, ivBytes.Length);
-                return paddedIV;
-            }
-
-            // Si ya tiene la longitud correcta, lo devolvemos tal cual
-            return ivBytes;
-
         }
 
 
