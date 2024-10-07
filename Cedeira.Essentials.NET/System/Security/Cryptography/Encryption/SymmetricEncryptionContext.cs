@@ -17,10 +17,10 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         {
             var symetricAlgorithmalgorithm = AlgorithmData.Where(x => x.Key == SymmetricAlgorithmTypeEnum.AES).Select(x => x.Value.CreateAlgorithm).First().Invoke();
 
+            symetricAlgorithmalgorithm.Mode = CipherMode.CBC;
+            symetricAlgorithmalgorithm.Padding = PaddingMode.PKCS7;
             symetricAlgorithmalgorithm.GenerateKey();
             symetricAlgorithmalgorithm.GenerateIV();
-            symetricAlgorithmalgorithm.Padding = PaddingMode.PKCS7;
-            symetricAlgorithmalgorithm.Mode = CipherMode.CBC;
 
             return new SymmetricEncryptionContext(symetricAlgorithmalgorithm);
         }
