@@ -103,7 +103,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
         private byte[] Encryption(byte[] input)
         {
-            var encryptor = _symetricAlgortihm.CreateEncryptor(_symetricAlgortihm.Key, _symetricAlgortihm.Key);
+            var encryptor = _symetricAlgortihm.CreateEncryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
 
             var memoryStream = new MemoryStream();
 
