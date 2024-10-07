@@ -64,7 +64,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         }
         public string Decrypt(string input)
         {
-            byte[] plainBytes = Encoding.UTF8.GetBytes(input);
+            byte[] plainBytes = Convert.FromHexString(input);
 
             return Convert.ToHexString(Decryption(plainBytes));
         }

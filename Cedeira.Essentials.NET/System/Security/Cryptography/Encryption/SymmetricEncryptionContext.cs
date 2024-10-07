@@ -17,7 +17,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         {
             var symetricAlgorithmalgorithm = AlgorithmData.Where(x => x.Key == SymmetricAlgorithmTypeEnum.AES).Select(x => x.Value.CreateAlgorithm).First().Invoke();
 
-            //symetricAlgorithmalgorithm.KeySize = 256;
             symetricAlgorithmalgorithm.GenerateKey();
             symetricAlgorithmalgorithm.GenerateIV();
             symetricAlgorithmalgorithm.Padding = PaddingMode.PKCS7;
