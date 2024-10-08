@@ -32,24 +32,24 @@ jobs:
 
         if [ -z "$major" ]; then
           echo "Major component version is missing"
-          $MAJOR_COMPONENT=0
+          MAJOR_COMPONENT=0
         fi
 
         if [ -z "$minor" ]; then
           echo "Minor component version is missing"
-          $MINOR_COMPONENT=0
+          MINOR_COMPONENT=0
         fi
 
         if [ -z "$patch" ]; then
           echo "Patch component version is missing"
-          $PATCH_COMPONENT=0
+          PATCH_COMPONENT=0
         fi
         
         echo "Tag components: $MAJOR_COMPONENT, $MINOR_COMPONENT, $PATCH_COMPONENT"
 
-        $MAJOR_TAG=$MAJOR_COMPONENT
-        $MINOR_TAG=$MAJOR_COMPONENT.$MINOR_COMPONENT
-        $PATCH_TAG=$MAJOR_COMPONENT.$MINOR_COMPONENT.$PATCH_COMPONENT
+        MAJOR_TAG=$MAJOR_COMPONENT
+        MINOR_TAG=$MAJOR_COMPONENT.$MINOR_COMPONENT
+        PATCH_TAG=$MAJOR_COMPONENT.$MINOR_COMPONENT.$PATCH_COMPONENT
         
     - name: Setup Docker Buildx
       uses: docker/setup-buildx-action@v3
