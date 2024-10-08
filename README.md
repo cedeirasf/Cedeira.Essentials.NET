@@ -16,8 +16,8 @@
 
 [![Unit Tests](https://github.com/cedeirasf/Cedeira.Essentials.NET/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/cedeirasf/Cedeira.Essentials.NET/actions/workflows/unit-tests.yml)
 
-[![Deploy Release](https://github.com/cedeirasf/Cedeira.Essentials.NET/actions/workflows/deploy-release.yml/badge.svg)](https://github.com/cedeirasf/Cedeira.Essentials.NET/actions/workflows/deploy-release.yml)
-[![Generate and Deploy Documentation](https://github.com/cedeirasf/Cedeira.Essentials.NET/actions/workflows/deploy-docfx.yml/badge.svg)](https://github.com/cedeirasf/Cedeira.Essentials.NET/actions/workflows/deploy-docfx.yml)
+[![Deploy Release](https://github.com/cedeirasf/Cedeira.Essentials.NET/actions/workflows/release-nuget.yml/badge.svg)](https://github.com/cedeirasf/Cedeira.Essentials.NET/actions/workflows/release-nuget.yml)
+[![Generate and Deploy Documentation](https://github.com/cedeirasf/Cedeira.Essentials.NET/actions/workflows/release-docfx.yml/badge.svg)](https://github.com/cedeirasf/Cedeira.Essentials.NET/actions/workflows/release-docfx.yml)
 
 [Bug Report](./issues/new?assignees=&labels=bug%2Clifecycle%2Fneeds-triage&projects=cedeirasf%2F2&template=1-bug-report.yml&title=...+is+broken)
 ⭕
