@@ -3,6 +3,10 @@ name: Generate and Deploy Documentation
 on:
   release:
     types: [published]
+    # TODO: remove this after the workflows are tested
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize]
 
 jobs:
   build:
@@ -10,27 +14,22 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
-      
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '8.0'
+      uses: actions/checkout@v4
         
-    - name: Install DocFX
-      run: dotnet tool install -g docfx
-      
-    - name: Generate Documentation
-      run: docfx docfx.json
-      
-    - name: Prepare Documentation for Deployment
-      run: |
-        mkdir -p ./docs
-        cp -r _site/* ./docs/
-    
-    # Comment out the deploy step until the server is defined
-    # - name: Deploy Documentation
-    #   run: |
-    #     # Deployment script or command here
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_TOKEN }}
+     
+        # TODO: matriz por tags?
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        file: ./docs/Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:latest
