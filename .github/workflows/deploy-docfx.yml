@@ -63,9 +63,9 @@ jobs:
     - name: Setup docker tags
       run: |
         DOCKER_LATEST_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:latest
-        DOCKER_MAJOR_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:${{ steps.fetch-release-tags.outputs.major-tag }}
-        DOCKER_MINOR_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:${{ steps.fetch-release-tags.outputs.minor-tag }}
-        DOCKER_PATCH_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:${{ steps.fetch-release-tags.outputs.patch-tag }}
+        DOCKER_MAJOR_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:$MAJOR_TAG
+        DOCKER_MINOR_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:$MAJOR_TAG.$MINOR_TAG
+        DOCKER_PATCH_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:$MAJOR_TAG.$MINOR_TAG.$PATCH_TAG
 
     - name: Build and push Docker image with tags
       uses: docker/build-push-action@v6
@@ -73,4 +73,4 @@ jobs:
         context: .
         file: ./docs/Dockerfile
         push: true
-        tags: "$DOCKER_LATEST_TAG,$DOCKER_MAJOR_TAG,$DOCKER_MINOR_TAG,$DOCKER_PATCH_TAG"
+        tags: $DOCKER_LATEST_TAG,$DOCKER_MAJOR_TAG,$DOCKER_MINOR_TAG,$DOCKER_PATCH_TAG
