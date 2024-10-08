@@ -74,4 +74,4 @@ jobs:
         context: .
         file: ./docs/Dockerfile
         push: true
-        tags: ${{ DOCKER_LATEST_TAG }}, ${{ DOCKER_MAJOR_TAG }}, ${{ DOCKER_MINOR_TAG }}, ${{ DOCKER_PATCH_TAG }}
+        tags: "$DOCKER_LATEST_TAG,$DOCKER_MAJOR_TAG,$DOCKER_MINOR_TAG,$DOCKER_PATCH_TAG"
