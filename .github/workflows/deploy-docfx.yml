@@ -15,8 +15,17 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+       
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v3
 
-    - name: Fetch realease tags
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_TOKEN }}
+
+    - name: Setup docker tags
       run: |
         tag=${{ github.event.release.tag_name }}
         echo "Release tag: $tag"
@@ -47,25 +56,10 @@ jobs:
         
         echo "Tag components: $MAJOR_COMPONENT, $MINOR_COMPONENT, $PATCH_COMPONENT"
 
-        echo "MAJOR_TAG=$MAJOR_COMPONENT" >> $GITHUB_ENV
-        echo "MINOR_TAG=$MAJOR_COMPONENT.$MINOR_COMPONENT" >> $GITHUB_ENV
-        echo "PATCH_TAG=$MAJOR_COMPONENT.$MINOR_COMPONENT.$PATCH_COMPONENT" >> $GITHUB_ENV
-        
-    - name: Setup Docker Buildx
-      uses: docker/setup-buildx-action@v3
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_TOKEN }}
-
-    - name: Setup docker tags
-      run: |
         DOCKER_LATEST_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:latest
-        DOCKER_MAJOR_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:$MAJOR_TAG
-        DOCKER_MINOR_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:$MAJOR_TAG.$MINOR_TAG
-        DOCKER_PATCH_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:$MAJOR_TAG.$MINOR_TAG.$PATCH_TAG
+        DOCKER_MAJOR_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:$MAJOR_COMPONENT
+        DOCKER_MINOR_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:$MAJOR_COMPONENT.$MINOR_COMPONENT
+        DOCKER_PATCH_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:$MAJOR_COMPONENT.$MINOR_COMPONENT.$PATCH_COMPONENT
 
         echo "Docker latest tag: $DOCKER_LATEST_TAG"
         echo "Docker major tag: $DOCKER_MAJOR_TAG"
