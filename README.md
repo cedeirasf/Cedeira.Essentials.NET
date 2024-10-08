@@ -46,11 +46,11 @@
 
 For the moment, this project is in early development phase, so that all version are inestables.
 
-You can take a look to the [upcoming features](#rocket-upcoming-features) to know more about `Cedeira.Essentials.NET` future.
+You can take a look to the [upcoming features](#-upcoming-features) to know more about `Cedeira.Essentials.NET` future.
 
 Hey! don't be discouraged, you can help me to carry out this project in many ways, contributing with new features, reporting bugs, sharing in your social networks or supporting with a :star:
 
-Please, look at [Contributing to `Cedeira Essentials`](#handshake-contributing-to-Cedeira-Essentials) to choose the way to collaborate that with you feel better.
+Please, look at [Contributing to `Cedeira Essentials`](#-contributing-to-cedeira-essentials) to choose the way to collaborate that with you feel better.
 
 &nbsp;
 
