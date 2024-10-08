@@ -16,7 +16,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Factori
 
         public ISymetricEncryptionResultPattern Create()
         {
-            return new SymetricEncryptionResultPattern(_symetricEncryptionContext.SymmetricAlgorithm);
+            return new SymetricEncryptionResultPattern(_symetricEncryptionContext.SymmetricAlgorithm, _resultFactory);
         }
     }
 }

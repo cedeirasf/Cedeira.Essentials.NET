@@ -37,7 +37,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
             return new SymmetricEncryptionContext(symetricAlgorithmalgorithm);
         }
 
-
         public static SymmetricEncryptionContext CreateFromFullAlgorithmConfig(string key, string iV, SymmetricAlgorithmTypeEnum symmetricAlgorithmName, CipherMode cipherMode, PaddingMode padingMode)
         {
             ValidateParameters(symmetricAlgorithmName, key,iV);

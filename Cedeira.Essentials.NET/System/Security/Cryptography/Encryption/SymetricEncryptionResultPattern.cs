@@ -1,131 +1,162 @@
-﻿using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
+﻿using Cedeira.Essentials.NET.System.ResultPattern;
+using Cedeira.Essentials.NET.System.ResultPattern.Factories;
+using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
 using System.Security;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 {
     public class SymetricEncryptionResultPattern : ISymetricEncryptionResultPattern
     {
-        private readonly SymmetricAlgorithm _symetricAlgortihm;
+        private readonly IResultFactory _resultFactory;
+        private readonly ISymetricEncryption _symmetricEncryption;
 
-        public SymetricEncryptionResultPattern(SymmetricAlgorithm symetricAlgortihm)
+        public SymetricEncryptionResultPattern(SymmetricAlgorithm symetricAlgorithm, IResultFactory resultFactory)
         {
-            _symetricAlgortihm = symetricAlgortihm;
+            _symmetricEncryption = new SymetricEncryption(symetricAlgorithm);
+            _resultFactory = resultFactory;
         }
 
-        public byte[] Encrypt(byte[] input)
+        public IResult<byte[]> Encrypt(byte[] input)
         {
-            return Encryption(input);
-        }
-        public string Encrypt(string input)
-        {
-            byte[] plainBytes = Encoding.UTF8.GetBytes(input);
-
-            return Convert.ToHexString(Encrypt(plainBytes));
-        }
-        public SecureString Encrypt(SecureString input)
-        {
-            IntPtr unmanagedString = IntPtr.Zero;
-            try
-            {
-                unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(input);
-                int length = input.Length * 2;
-                byte[] plainBytes = new byte[length];
-                Marshal.Copy(unmanagedString, plainBytes, 0, length);
-
-                byte[] encryptedBytes = Encrypt(plainBytes);
-
-                var secureEncryptedString = new SecureString();
-
-                foreach (byte b in encryptedBytes)
-                    secureEncryptedString.AppendChar((char)b);
-                
-                secureEncryptedString.MakeReadOnly();
-                return secureEncryptedString;
-            }
-            finally
-            {
-                Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
-            }
-        }
-        public StreamReader Encrypt(StreamReader input)
-        {
-            var memoryStream = new MemoryStream();
-            input.BaseStream.CopyTo(memoryStream);
-
-            return new StreamReader(new MemoryStream(Encrypt(memoryStream.ToArray())));
-        }
-        public byte[] Decryptt(byte[] input)
-        {
-            return Decryption(input);
-        }
-        public string Decrypt(string input)
-        {
-            byte[] plainBytes = Encoding.UTF8.GetBytes(input);
-
-            return Convert.ToHexString(Decryption(plainBytes));
-        }
-        public SecureString Decrypt(SecureString input)
-        {
-            IntPtr unmanagedString = IntPtr.Zero;
+            IResult<byte[]> result;
 
             try
             {
-                unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(input);
-                int length = input.Length * 2;
-                byte[] plainBytes = new byte[length];
+                byte[] response = _symmetricEncryption.Encrypt(input);
 
-                Marshal.Copy(unmanagedString, plainBytes, 0, length);
-
-                var encryptedBytes =  Decryption(plainBytes);
-                var secureDecryptedString = new SecureString();
-
-                foreach (byte b in encryptedBytes)
-                    secureDecryptedString.AppendChar((char)b);
-                
-                secureDecryptedString.MakeReadOnly();
-                return secureDecryptedString;
+                result = _resultFactory.Success(response);
             }
-            finally
+            catch (ArgumentException ex)
             {
-                Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
+                result = _resultFactory.Failure<byte[]>(ex.Message);
             }
+
+            return result;
         }
-        public StreamReader Decrypt(StreamReader input)
+        public IResult<byte[]> Decryptt(byte[] input)
         {
-            var memoryStream = new MemoryStream();
-            input.BaseStream.CopyTo(memoryStream);
+            IResult<byte[]> result;
 
-            return new StreamReader(new MemoryStream(Encrypt(memoryStream.ToArray())));
+            try
+            {
+                byte[] response = _symmetricEncryption.Decrypt(input);
+
+                result = _resultFactory.Success(response);
+            }
+            catch (ArgumentException ex)
+            {
+                result = _resultFactory.Failure<byte[]>(ex.Message);
+            }
+
+            return result;
         }
-
-        private byte[] Encryption(byte[] input) 
+        public IResult<string> Encrypt(string input)
         {
-            var encryptor = _symetricAlgortihm.CreateEncryptor(_symetricAlgortihm.Key, _symetricAlgortihm.Key);
+            IResult<string> result;
 
-            var memoryStream = new MemoryStream();
+            try
+            {
+                byte[] plainBytes = Encoding.UTF8.GetBytes(input);
 
-            var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write);
+                byte[] response = _symmetricEncryption.Encrypt(plainBytes);
 
-            cryptoStream.Write(input, 0, input.Length);
+                result = _resultFactory.Success(Convert.ToHexString(response));
+            }
+            catch (ArgumentException ex)
+            {
+                result = _resultFactory.Failure<string>(ex.Message);
+            }
 
-            cryptoStream.FlushFinalBlock();
-
-            return memoryStream.ToArray();
+            return result;
         }
-        private byte[] Decryption(byte[] input)
+        public IResult<string> Decrypt(string input)
         {
-            var decryptor = _symetricAlgortihm.CreateDecryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
+            IResult<string> result;
 
-            var cryptoStream = new CryptoStream(new MemoryStream(input), decryptor, CryptoStreamMode.Read);
+            try
+            {
+                byte[] plainBytes = Encoding.UTF8.GetBytes(input);
 
-            var outputMemoryStream = new MemoryStream();
+                byte[] response = _symmetricEncryption.Decrypt(plainBytes);
 
-            cryptoStream.CopyTo(outputMemoryStream);
+                result = _resultFactory.Success(Convert.ToHexString(response));
+            }
+            catch (ArgumentException ex)
+            {
+                result = _resultFactory.Failure<string>(ex.Message);
+            }
 
-            return outputMemoryStream.ToArray();
+            return result;
+        }
+        public IResult<SecureString> Encrypt(SecureString input)
+        {
+            IResult<SecureString> result;
+
+            try
+            {
+                SecureString response = _symmetricEncryption.Encrypt(input);
+
+                result = _resultFactory.Success(response);
+            }
+            catch (ArgumentException ex)
+            {
+                result = _resultFactory.Failure<SecureString>(ex.Message);
+            }
+
+            return result;
+        }
+        public IResult<SecureString> Decrypt(SecureString input)
+        {
+            IResult<SecureString> result;
+
+            try
+            {
+                SecureString response = _symmetricEncryption.Decrypt(input);
+
+                result = _resultFactory.Success(response);
+            }
+            catch (ArgumentException ex)
+            {
+                result = _resultFactory.Failure<SecureString>(ex.Message);
+            }
+
+            return result;
+        }
+        public IResult<StreamReader> Encrypt(StreamReader input)
+        {
+            IResult<StreamReader> result;
+
+            try
+            {
+                StreamReader response = _symmetricEncryption.Encrypt(input);
+
+                result = _resultFactory.Success(response);
+            }
+            catch (ArgumentException ex)
+            {
+                result = _resultFactory.Failure<StreamReader>(ex.Message);
+            }
+
+            return result;
+        }
+        public IResult<StreamReader> Decrypt(StreamReader input)
+        {
+            IResult<StreamReader> result;
+
+            try
+            {
+                StreamReader response = _symmetricEncryption.Decrypt(input);
+
+                result = _resultFactory.Success(response);
+            }
+            catch (ArgumentException ex)
+            {
+                result = _resultFactory.Failure<StreamReader>(ex.Message);
+            }
+
+            return result;
         }
     }
 }

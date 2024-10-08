@@ -12,7 +12,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Factori
             _symmetricEncryptionContext = symmetricEncryptionContext;       
         }
 
-        public ISymmetricEncryption Create() 
+        public ISymetricEncryption Create() 
         {
             return new SymetricEncryption(_symmetricEncryptionContext.SymmetricAlgorithm);
         }

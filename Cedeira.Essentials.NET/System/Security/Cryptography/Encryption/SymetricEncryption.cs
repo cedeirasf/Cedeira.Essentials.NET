@@ -1,4 +1,6 @@
-﻿using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
+﻿using Cedeira.Essentials.NET.Diagnostics.Invariants;
+using Cedeira.Essentials.NET.Extensions.System.Security.Cryptografy.Encryption;
+using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
@@ -6,7 +8,7 @@ using System.Text;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 {
-    public class SymetricEncryption : ISymmetricEncryption
+    public class SymetricEncryption : ISymetricEncryption
     {
         private readonly SymmetricAlgorithm _symetricAlgortihm;
 
@@ -17,88 +19,72 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
         public byte[] Encrypt(byte[] input)
         {
+            ValidateNull(input);
+
             return Encryption(input);
+        }
+        public byte[] Decrypt(byte[] input)
+        {
+            ValidateNull(input);
+
+            return Decryption(input);
         }
         public string Encrypt(string input)
         {
+            ValidateNull(input);
+
             byte[] plainBytes = Encoding.UTF8.GetBytes(input);
+
             return Convert.ToHexString(Encrypt(plainBytes));
+        }
+        public string Decrypt(string input)
+        {
+            ValidateNull(input);
+
+            byte[] plainBytes = Convert.FromHexString(input);
+
+            return Encoding.UTF8.GetString(Decryption(plainBytes));
         }
         public SecureString Encrypt(SecureString input)
         {
-            IntPtr unmanagedString = IntPtr.Zero;
-            try
-            {
-                unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(input);
-                int length = input.Length * 2;
-                byte[] plainBytes = new byte[length];
+            ValidateNull(input);
 
-                Marshal.Copy(unmanagedString, plainBytes, 0, length);
+            byte[] plainBytes = input.SecureStringToBytes();
 
-                var encryptedBytes = Encryption(plainBytes);
+            byte[] encryptedBytes = Encryption(plainBytes);
 
-                var secureEncryptedString = new SecureString();
+            return encryptedBytes.BytesToSecureString();
+        }
+        public SecureString Decrypt(SecureString input)
+        {
+            ValidateNull(input);
 
-                foreach (byte b in encryptedBytes)
-                    secureEncryptedString.AppendChar((char)b);
+            byte[] plainBytes = input.SecureStringToBytes();
 
-                secureEncryptedString.MakeReadOnly();
-                return secureEncryptedString;
-            }
-            finally
-            {
-                Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
-            }
+            byte[] encryptedBytes = Decryption(plainBytes);
+
+            return encryptedBytes.BytesToSecureString();
         }
         public StreamReader Encrypt(StreamReader input)
         {
+            ValidateNull(input);
+
             var memoryStream = new MemoryStream();
+
             input.BaseStream.CopyTo(memoryStream);
 
             return new StreamReader(new MemoryStream(Encrypt(memoryStream.ToArray())));
         }
-        public byte[] Decryptt(byte[] input)
-        {
-            return Decryption(input);
-        }
-        public string Decrypt(string input)
-        {
-            byte[] plainBytes = Convert.FromHexString(input); 
-            return Encoding.UTF8.GetString(Decryption(plainBytes));
-        }
-        public SecureString Decrypt(SecureString input)
-        {
-            IntPtr unmanagedString = IntPtr.Zero;
-            try
-            {
-                unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(input);
-                int length = input.Length * 2;
-                byte[] plainBytes = new byte[length];
-
-                Marshal.Copy(unmanagedString, plainBytes, 0, length);
-
-                var encryptedBytes = Decryption(plainBytes);
-                var secureDecryptedString = new SecureString();
-
-                foreach (byte b in encryptedBytes)
-                    secureDecryptedString.AppendChar((char)b);
-
-                secureDecryptedString.MakeReadOnly();
-                return secureDecryptedString;
-            }
-            finally
-            {
-                Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
-            }
-        }
         public StreamReader Decrypt(StreamReader input)
         {
+            ValidateNull(input);
+
             var memoryStream = new MemoryStream();
+
             input.BaseStream.CopyTo(memoryStream);
 
             return new StreamReader(new MemoryStream(Decryption(memoryStream.ToArray())));
         }
-
         private byte[] Encryption(byte[] input)
         {
             var encryptor = _symetricAlgortihm.CreateEncryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
@@ -125,5 +111,10 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
             return outputMemoryStream.ToArray();
         }
+        private void ValidateNull<T>(T input)
+        {
+            Invariants.For(input).IsNotNull($"{nameof(input)} cannot be null.");
+        }
+
     }
 }

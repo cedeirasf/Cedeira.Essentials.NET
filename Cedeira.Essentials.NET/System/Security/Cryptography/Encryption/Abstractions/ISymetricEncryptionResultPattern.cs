@@ -1,16 +1,17 @@
-﻿using System.Security;
+﻿using Cedeira.Essentials.NET.System.ResultPattern;
+using System.Security;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions
 {
     public interface ISymetricEncryptionResultPattern
     {
-        public string Encrypt(string input);
-        public byte[] Encrypt(byte[] input);
-        public SecureString Encrypt(SecureString input);
-        public StreamReader Encrypt(StreamReader input);
-        public string Decrypt(string input);
-        public byte[] Decryptt(byte[] input);
-        public SecureString Decrypt(SecureString input);
-        public StreamReader Decrypt(StreamReader input);
+        public IResult<byte[]> Encrypt(byte[] input);
+        public IResult<byte[]> Decryptt(byte[] input);
+        public IResult<string> Encrypt(string input);
+        public IResult<string> Decrypt(string input);
+        public IResult<SecureString> Encrypt(SecureString input);
+        public IResult<StreamReader> Encrypt(StreamReader input);
+        public IResult<SecureString> Decrypt(SecureString input);
+        public IResult<StreamReader> Decrypt(StreamReader input);
     }
 }
