@@ -57,7 +57,7 @@ jobs:
         
       - name: Push NuGet package
         id: push-nuget
-        run: dotnet nuget push "${{ env.PACKAGE_PATH }}" --api-key ${{ env.GH_PACKAGES_TOKEN }} --source "github"
+        run: dotnet nuget push "${{ env.PACKAGE_PATH }}" --api-key ${{ env.GH_PACKAGES_TOKEN }} --source "github" --skip-duplicate
 
       - name: Push Symbols package
         id: push-symbols
