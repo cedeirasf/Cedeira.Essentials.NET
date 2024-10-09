@@ -14,31 +14,55 @@ jobs:
     if: github.event.release.draft == false
     runs-on: ubuntu-latest
     permissions: write-all
+    env:
+      PROJECT_NAME: "Cedeira.Essentials.NET"
+      GH_PACKAGES_USERNAME: ${{ secrets.GH_PACKAGES_USERNAME || 'mauroalderete-cedeirasf' }}
+      GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
+        id: checkout
         with:
           fetch-depth: 0
           ref: ${{ github.event.release.target_commitish }}
 
       - name: Setup .NET
+        id: setup-dotnet
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
 
       - name: Add source to GitHub NuGet
-        run: dotnet nuget add source --username mauroalderete-cedeirasf --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/cedeirasf/index.json"
+        id: add-github-registry-source
+        run: dotnet nuget add source --username ${{ env.GH_PACKAGES_USERNAME }} --password ${{ env.GH_PACKAGES_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/cedeirasf/index.json"
 
       - name: Install dependencies
+        id: restore
         run: dotnet restore
 
       - name: Run unit tests
+        id: unit-tests
         run: dotnet test
 
-      - name: Build NuGet package with symbols
+      - name: Build project
+        id: build-project
         run: dotnet build --configuration Debug
 
-      - name: Pack NuGet package with symbols
+      - name: Pack NuGet packages with symbols and source
+        id: pack-nugets
         run: dotnet pack --configuration Debug --include-symbols --include-source
+
+      - name: Find NuGet package
+        id: find-nupkg
+        run: echo "PACKAGE_PATH=$(find ${{ env.GITHUB_WORKSPACE }}/bin/Debug/ -name '*.nupkg' ! -name '*.symbols.nupkg')" >> $GITHUB_ENV
+
+      - name: Find Symbols package
+        id: find-symbols
+        run: echo "SYMBOLS_PATH=$(find ${{ env.GITHUB_WORKSPACE }}/bin/Debug/ -name '*.symbols.nupkg')" >> $GITHUB_ENV
         
-      - name: Push NuGet package to GitHub
-        run: dotnet nuget push "Cedeira.Essentials.NET/bin/Debug/*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
+      - name: Push NuGet package
+        id: push-nuget
+        run: dotnet nuget push "${{ env.PACKAGE_PATH }}" --api-key ${{ env.GH_PACKAGES_TOKEN }} --source "github"
+
+      - name: Push Symbols package
+        id: push-symbols
+        run: dotnet nuget push "${{ env.SYMBOLS_PATH }}" --api-key ${{ env.GH_PACKAGES_TOKEN }} --source "github"
