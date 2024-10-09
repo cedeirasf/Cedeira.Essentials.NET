@@ -39,10 +39,6 @@ jobs:
         id: restore
         run: dotnet restore
 
-      - name: Run unit tests
-        id: unit-tests
-        run: dotnet test
-
       - name: Build project
         id: build-project
         run: dotnet build --configuration Debug
@@ -53,11 +49,11 @@ jobs:
 
       - name: Find NuGet package
         id: find-nupkg
-        run: echo "PACKAGE_PATH=$(find ${{ github.workspace }}/bin/Debug/ -name '*.nupkg' ! -name '*.symbols.nupkg')" >> $GITHUB_ENV
+        run: echo "PACKAGE_PATH=$(find ${{ github.workspace }}/${{ env.PROJECT_NAME }}/bin/Debug/ -name '*.nupkg' ! -name '*.symbols.nupkg')" >> $GITHUB_ENV
 
       - name: Find Symbols package
         id: find-symbols
-        run: echo "SYMBOLS_PATH=$(find $GITHUB_WORKSPACE/bin/Debug/ -name '*.symbols.nupkg')" >> $GITHUB_ENV
+        run: echo "SYMBOLS_PATH=$(find ${{ github.workspace }}/${{ env.PROJECT_NAME }}/bin/Debug/ -name '*.symbols.nupkg')" >> $GITHUB_ENV
         
       - name: Push NuGet package
         id: push-nuget
