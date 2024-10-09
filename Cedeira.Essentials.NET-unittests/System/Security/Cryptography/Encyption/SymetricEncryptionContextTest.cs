@@ -1,12 +1,9 @@
 ﻿using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption;
-using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions;
-using Cedeira.Essentials.NET.System.Security.Cryptography.Hash;
-using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using System.Security.Cryptography;
-using Microsoft.Extensions.DependencyInjection;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Enum;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System.Security.Cryptography;
 
 namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyption
 {
@@ -14,7 +11,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
     public class SymetricEncryptionContextTest
     {
         private Dictionary<string, (SymmetricAlgorithmTypeEnum algorithm, CipherModeTypeEnum cipherMode, string key, string iV, PaddingMode paddingMode, bool expectedResult)> TestEncryptions;
-        private string _input;
         private string _key_8_bytes;
         private string _key_16_bytes;
         private string _key_24_bytes;
@@ -26,7 +22,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
         [TestInitialize]
         public void SetUp()
         {
-            _input = "The password is really safe.";
             _key_8_bytes = "12345678";
             _key_16_bytes = "1234567890abcdef";
             _key_24_bytes = "1234567890abcdef12345678";
@@ -35,11 +30,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
             _iV_8_bytes = "abcdefgh";
             _serviceCollection = new ServiceCollection();
 
-        }
-
-        [TestMethod]
-        public void HashContext_Create_SymetricEncryptionContex_With_FullConfig()
-        {
             TestEncryptions = new Dictionary<string, (SymmetricAlgorithmTypeEnum algorithm, CipherModeTypeEnum cipherMode, string key, string iV, PaddingMode paddingMode, bool expectedResult)>
             {
                 {"Aes_CBC",new(SymmetricAlgorithmTypeEnum.AES,CipherModeTypeEnum.CBC,_key_16_bytes,_iV_16_bytes,PaddingMode.PKCS7,true) },
@@ -55,7 +45,11 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                 {"Aes_CBC_Key_IV_null",new(SymmetricAlgorithmTypeEnum.AES,CipherModeTypeEnum.CBC,null,null,PaddingMode.PKCS7,false) },
                 {"Aes_CBC_IV_mull",new(SymmetricAlgorithmTypeEnum.AES,CipherModeTypeEnum.CBC,_key_16_bytes,null,PaddingMode.PKCS7,false) },
             };
+        }
 
+        [TestMethod]
+        public void SymetricEncryptionContex_Create_With_FullConfig()
+        {
             foreach (var test in TestEncryptions)
             {
                 if (!test.Value.expectedResult)
@@ -91,10 +85,48 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                     Assert.IsNotNull(optionsSymmetricEncryptionContext);
                     Assert.AreEqual(symmetricEncryptionContext, optionsSymmetricEncryptionContext.Value);
                 }
+            }
+        }
 
+        [TestMethod]
+        public void SymetricEncryptionContex_Create()
+        {
+
+            _serviceCollection.AddSingleton<ISymmetricEncryptionContext>(SymmetricEncryptionContext.Create());
+
+            _serviceCollection.AddSingleton<IOptions<ISymmetricEncryptionContext>>(sp => new OptionsWrapper<ISymmetricEncryptionContext>(sp.GetRequiredService<ISymmetricEncryptionContext>()));
+
+            var serviceProvider = _serviceCollection.BuildServiceProvider();
+
+            var symmetricEncryptionContext = serviceProvider.GetService<ISymmetricEncryptionContext>();
+
+            var optionsSymmetricEncryptionContext = serviceProvider.GetService<IOptions<ISymmetricEncryptionContext>>();
+
+            Assert.IsNotNull(symmetricEncryptionContext);
+            Assert.IsNotNull(optionsSymmetricEncryptionContext);
+            Assert.AreEqual(symmetricEncryptionContext, optionsSymmetricEncryptionContext.Value);
+        }
+
+        [TestMethod]
+        public void SymetricEncryptionContex_CreateFromAlgorithmConfig()
+        {
+            foreach (var test in TestEncryptions.Where(x => x.Value.expectedResult != false).ToDictionary())
+            {
+                _serviceCollection.AddSingleton<ISymmetricEncryptionContext>(SymmetricEncryptionContext.CreateFromAlgorithmConfig(test.Value.algorithm,test.Value.cipherMode,test.Value.paddingMode));
+
+                _serviceCollection.AddSingleton<IOptions<ISymmetricEncryptionContext>>(sp => new OptionsWrapper<ISymmetricEncryptionContext>(sp.GetRequiredService<ISymmetricEncryptionContext>()));
+
+                var serviceProvider = _serviceCollection.BuildServiceProvider();
+
+                var symmetricEncryptionContext = serviceProvider.GetService<ISymmetricEncryptionContext>();
+
+                var optionsSymmetricEncryptionContext = serviceProvider.GetService<IOptions<ISymmetricEncryptionContext>>();
+
+                Assert.IsNotNull(symmetricEncryptionContext);
+                Assert.IsNotNull(optionsSymmetricEncryptionContext);
+                Assert.AreEqual(symmetricEncryptionContext, optionsSymmetricEncryptionContext.Value);
             }
 
         }
-
     }
 }
