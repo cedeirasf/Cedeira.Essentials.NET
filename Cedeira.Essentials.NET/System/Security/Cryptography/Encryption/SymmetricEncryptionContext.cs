@@ -76,6 +76,8 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
             {
                 throw new ArgumentException($"The algorithm {symmetricAlgorithmName} is not valid or not supported.");
             }
+
+
         }
 
     }

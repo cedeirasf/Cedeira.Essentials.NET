@@ -27,4 +27,8 @@
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="System\Security\Cryptography\Encyption\Factories\" />
+  </ItemGroup>
+
 </Project>
