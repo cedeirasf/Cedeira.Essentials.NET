@@ -1,4 +1,5 @@
 ﻿using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
+using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Enum;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -25,19 +26,19 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
             return new SymmetricEncryptionContext(symetricAlgorithmalgorithm);
         }
 
-        public static SymmetricEncryptionContext CreateFromAlgorithmConfig(SymmetricAlgorithmTypeEnum symmetricAlgorithmName, CipherMode CipherMode, PaddingMode padingMode)
+        public static SymmetricEncryptionContext CreateFromAlgorithmConfig(SymmetricAlgorithmTypeEnum symmetricAlgorithmName, CipherModeTypeEnum CipherMode, PaddingMode padingMode)
         {
             var symetricAlgorithmalgorithm = AlgorithmData.Where(x => x.Key == symmetricAlgorithmName).Select(x => x.Value.CreateAlgorithm).First().Invoke();
 
             symetricAlgorithmalgorithm.GenerateKey();
             symetricAlgorithmalgorithm.GenerateIV();
             symetricAlgorithmalgorithm.Padding = padingMode;
-            symetricAlgorithmalgorithm.Mode = CipherMode;
+            symetricAlgorithmalgorithm.Mode = (CipherMode)CipherMode;
 
             return new SymmetricEncryptionContext(symetricAlgorithmalgorithm);
         }
 
-        public static SymmetricEncryptionContext CreateFromFullAlgorithmConfig(string key, string iV, SymmetricAlgorithmTypeEnum symmetricAlgorithmName, CipherMode cipherMode, PaddingMode padingMode)
+        public static SymmetricEncryptionContext CreateFromFullAlgorithmConfig(string key, string iV, SymmetricAlgorithmTypeEnum symmetricAlgorithmName, CipherModeTypeEnum CipherMode, PaddingMode padingMode)
         {
             ValidateParameters(symmetricAlgorithmName, key,iV);
 
@@ -46,7 +47,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
             symetricAlgorithmalgorithm.Key = Encoding.UTF8.GetBytes(key);
             symetricAlgorithmalgorithm.IV = Encoding.UTF8.GetBytes(iV);
             symetricAlgorithmalgorithm.Padding = padingMode;
-            symetricAlgorithmalgorithm.Mode = cipherMode;
+            symetricAlgorithmalgorithm.Mode = (CipherMode)CipherMode;
 
             return new SymmetricEncryptionContext(symetricAlgorithmalgorithm);
         }
@@ -76,9 +77,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
             {
                 throw new ArgumentException($"The algorithm {symmetricAlgorithmName} is not valid or not supported.");
             }
-
-
         }
-
     }
 }
