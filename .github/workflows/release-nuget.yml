@@ -34,11 +34,11 @@ jobs:
       - name: Run unit tests
         run: dotnet test
 
-      - name: Build release
+      - name: Build NuGet package with symbols
         run: dotnet build --configuration Debug
 
-      - name: Pack NuGet package
+      - name: Pack NuGet package with symbols
         run: dotnet pack --configuration Debug --include-symbols --include-source
         
-      - name: Push NuGet package
-        run: dotnet nuget push "bin/Debug/*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
+      - name: Push NuGet package to GitHub
+        run: dotnet nuget push "Cedeira.Essentials.NET/bin/Debug/*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
