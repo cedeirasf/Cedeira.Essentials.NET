@@ -44,7 +44,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
         }
 
         [TestMethod]
-        public void SymmetricEncryptionResulPattern_Create()
+        public void SymmetricEncryptionResulPattern_Input_String_Create()
         {
             TestEncryptionsInputString = new Dictionary<string, (SymmetricAlgorithmTypeEnum algorithm, CipherModeTypeEnum cipherMode, string key, string iV, PaddingMode paddingMode, string expectedResponse, bool expectedResult)>
             {
@@ -75,10 +75,12 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                 if (test.Value.expectedResult)
                 {
                     Assert.IsNotNull(encriptedMessage);
+
                     Assert.IsTrue(encriptedMessage.IsSuccess());
                     var decryptedMessage = symmetricEncryptionResultPattern.Decrypt(encriptedMessage.SuccessValue);
 
                     Assert.IsNotNull(decryptedMessage);
+
                     Assert.IsTrue(encriptedMessage.IsSuccess());
 
                     Assert.AreEqual(decryptedMessage.SuccessValue, test.Value.expectedResponse);
