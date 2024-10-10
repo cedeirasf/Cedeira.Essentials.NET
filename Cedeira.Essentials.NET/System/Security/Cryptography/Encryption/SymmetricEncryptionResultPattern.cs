@@ -58,11 +58,9 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
             try
             {
-                byte[] plainBytes = Encoding.UTF8.GetBytes(input);
+                string response = _symmetricEncryption.Encrypt(input);
 
-                byte[] response = _symmetricEncryption.Encrypt(plainBytes);
-
-                result = _resultFactory.Success(Convert.ToHexString(response));
+                result = _resultFactory.Success(response);
             }
             catch (ArgumentException ex)
             {
@@ -77,11 +75,9 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
             try
             {
-                byte[] plainBytes = Encoding.UTF8.GetBytes(input);
+               string response = _symmetricEncryption.Decrypt(input);
 
-                byte[] response = _symmetricEncryption.Decrypt(plainBytes);
-
-                result = _resultFactory.Success(Convert.ToHexString(response));
+               result = _resultFactory.Success(response);
             }
             catch (ArgumentException ex)
             {

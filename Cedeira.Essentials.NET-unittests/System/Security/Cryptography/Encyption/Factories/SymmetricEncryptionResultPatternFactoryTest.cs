@@ -19,7 +19,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
         }
 
         [TestMethod]
-        public void SymetricEncryption_Create()
+        public void SymmetricEncryptionResulPattern_Create()
         {
             _serviceCollection.AddSingleton((ISymmetricEncryptionContext)SymmetricEncryptionContext.Create());
 

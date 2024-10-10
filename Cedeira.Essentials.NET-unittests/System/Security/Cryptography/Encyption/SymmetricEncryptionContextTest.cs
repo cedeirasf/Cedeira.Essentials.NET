@@ -48,7 +48,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
         }
 
         [TestMethod]
-        public void SymetricEncryptionContex_Create_With_FullConfig()
+        public void SymmetricEncryptionContex_Create_With_FullConfig()
         {
             foreach (var test in TestEncryptions)
             {
@@ -89,7 +89,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
         }
 
         [TestMethod]
-        public void SymetricEncryptionContex_Create()
+        public void SymmetricEncryptionContex_Create()
         {
 
             _serviceCollection.AddSingleton<ISymmetricEncryptionContext>(SymmetricEncryptionContext.Create());
@@ -108,7 +108,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
         }
 
         [TestMethod]
-        public void SymetricEncryptionContex_CreateFromAlgorithmConfig()
+        public void SymmetricEncryptionContex_CreateFromAlgorithmConfig()
         {
             foreach (var test in TestEncryptions.Where(x => x.Value.expectedResult != false).ToDictionary())
             {
