@@ -35,7 +35,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
             return result;
         }
-        public IResult<byte[]> Decryptt(byte[] input)
+        public IResult<byte[]> Decrypt(byte[] input)
         {
             IResult<byte[]> result;
 
