@@ -1,7 +1,7 @@
 ﻿namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions
 {
-    public interface ISymetricEncryptationFactory
+    public interface ISymmetricEncryptationFactory
     {
-        public ISymetricEncryption Create();
+        public ISymmetricEncryption Create();
     }
 }

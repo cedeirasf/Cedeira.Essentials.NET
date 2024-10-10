@@ -3,7 +3,7 @@ using System.Security;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions
 {
-    public interface ISymetricEncryptionResultPattern
+    public interface ISymmetricEncryptionResultPattern
     {
         public IResult<byte[]> Encrypt(byte[] input);
         public IResult<byte[]> Decryptt(byte[] input);

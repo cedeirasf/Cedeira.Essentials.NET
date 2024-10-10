@@ -5,14 +5,13 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptografy.Encrypti
 {
     public static class SecureStringExtension
     {
-
         public static byte[] SecureStringToBytes(this SecureString input)
         {
             IntPtr unmanagedString = IntPtr.Zero;
             try
             {
                 unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(input);
-                int length = input.Length * 2; // Cada char son 2 bytes
+                int length = input.Length * 2; 
                 byte[] plainBytes = new byte[length];
 
                 Marshal.Copy(unmanagedString, plainBytes, 0, length);
@@ -22,17 +21,6 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptografy.Encrypti
             {
                 Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
             }
-        }
-
-        public static SecureString BytesToSecureString(this byte[] encryptedBytes)
-        {
-            var secureEncryptedString = new SecureString();
-
-            foreach (byte b in encryptedBytes)
-                secureEncryptedString.AppendChar((char)b); // Convertir bytes a chars
-
-            secureEncryptedString.MakeReadOnly();
-            return secureEncryptedString;
         }
     }
 }

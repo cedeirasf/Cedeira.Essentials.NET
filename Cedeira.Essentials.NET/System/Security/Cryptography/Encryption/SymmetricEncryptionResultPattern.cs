@@ -7,14 +7,14 @@ using System.Text;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 {
-    public class SymetricEncryptionResultPattern : ISymetricEncryptionResultPattern
+    public class SymmetricEncryptionResultPattern : ISymmetricEncryptionResultPattern
     {
         private readonly IResultFactory _resultFactory;
-        private readonly ISymetricEncryption _symmetricEncryption;
+        private readonly ISymmetricEncryption _symmetricEncryption;
 
-        public SymetricEncryptionResultPattern(SymmetricAlgorithm symetricAlgorithm, IResultFactory resultFactory)
+        public SymmetricEncryptionResultPattern(SymmetricAlgorithm symetricAlgorithm, IResultFactory resultFactory)
         {
-            _symmetricEncryption = new SymetricEncryption(symetricAlgorithm);
+            _symmetricEncryption = new SymmetricEncryption(symetricAlgorithm);
             _resultFactory = resultFactory;
         }
 

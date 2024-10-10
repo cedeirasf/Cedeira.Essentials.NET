@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyption
 {
     [TestClass]
-    public class SymetricEncryptionContextTest
+    public class SymmetricEncryptionContextTest
     {
         private Dictionary<string, (SymmetricAlgorithmTypeEnum algorithm, CipherModeTypeEnum cipherMode, string key, string iV, PaddingMode paddingMode, bool expectedResult)> TestEncryptions;
         private string _key_8_bytes;

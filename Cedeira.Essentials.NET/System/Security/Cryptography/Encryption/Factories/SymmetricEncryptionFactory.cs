@@ -2,19 +2,19 @@
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Factories
 {
-    public class SymetricEncryptionFactory : ISymetricEncryptationFactory
+    public class SymmetricEncryptionFactory : ISymmetricEncryptationFactory
     {
 
         private readonly ISymmetricEncryptionContext _symmetricEncryptionContext;
 
-        public SymetricEncryptionFactory(ISymmetricEncryptionContext symmetricEncryptionContext)
+        public SymmetricEncryptionFactory(ISymmetricEncryptionContext symmetricEncryptionContext)
         {
             _symmetricEncryptionContext = symmetricEncryptionContext;       
         }
 
-        public ISymetricEncryption Create() 
+        public ISymmetricEncryption Create() 
         {
-            return new SymetricEncryption(_symmetricEncryptionContext.SymmetricAlgorithm);
+            return new SymmetricEncryption(_symmetricEncryptionContext.SymmetricAlgorithm);
         }
     }
 }

@@ -1,18 +1,17 @@
 ﻿using Cedeira.Essentials.NET.Diagnostics.Invariants;
 using Cedeira.Essentials.NET.Extensions.System.Security.Cryptografy.Encryption;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
-using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 {
-    public class SymetricEncryption : ISymetricEncryption
+    public class SymmetricEncryption : ISymmetricEncryption
     {
         private readonly SymmetricAlgorithm _symetricAlgortihm;
 
-        public SymetricEncryption(SymmetricAlgorithm symetricAlgortihm)
+        public SymmetricEncryption(SymmetricAlgorithm symetricAlgortihm)
         {
             _symetricAlgortihm = symetricAlgortihm;
         }
