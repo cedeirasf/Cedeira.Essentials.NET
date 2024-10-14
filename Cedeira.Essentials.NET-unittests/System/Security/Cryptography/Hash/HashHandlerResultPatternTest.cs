@@ -83,9 +83,10 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
             _messageValidate = "Hashes do not match.";
             _inputByte = Encoding.UTF8.GetBytes(_input);
             _inputStreamReader = new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes(_input)));
-            _inputSecureString = new SecureString();
             _resultFactory = new ResultFactory();
             _hashformatterBase64 = bytes => Convert.ToBase64String(bytes);
+
+            _inputSecureString = new SecureString();
 
             foreach (char character in _input)
             {
