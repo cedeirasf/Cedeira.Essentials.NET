@@ -1,5 +1,4 @@
 ﻿using System.Security;
-using System.Security.Cryptography;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions
 {

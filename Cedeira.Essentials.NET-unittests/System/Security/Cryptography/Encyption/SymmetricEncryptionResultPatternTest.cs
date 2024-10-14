@@ -1,14 +1,10 @@
-﻿using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
+﻿using Cedeira.Essentials.NET.System.ResultPattern.Factories;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption;
+using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Enum;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using System.ComponentModel;
-using System.Security.Cryptography;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Factories;
-using Cedeira.Essentials.NET.System.ResultPattern.Factories;
-using Cedeira.Essentials.NET.System.ResultPattern;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using Microsoft.Extensions.DependencyInjection;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyption
@@ -62,8 +58,8 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                 {"TRIPLE_DES_CBC",new(SymmetricAlgorithmTypeEnum.TripleDES,CipherModeTypeEnum.CBC,_key_16_bytes,_iV_8_bytes,PaddingMode.PKCS7,_input,true) },
                 {"TRIPLE_DES_CFB",new(SymmetricAlgorithmTypeEnum.TripleDES,CipherModeTypeEnum.CFB,_key_24_bytes,_iV_8_bytes,PaddingMode.PKCS7,_input,true) },
                 {"TRIPLE_DES_ECB",new(SymmetricAlgorithmTypeEnum.TripleDES,CipherModeTypeEnum.CFB,_key_16_bytes,_iV_8_bytes,PaddingMode.PKCS7,_input, true) },
-                {"Aes_CBC_key_null",new(SymmetricAlgorithmTypeEnum.AES,CipherModeTypeEnum.CBC,_key_32_bytes,_iV_16_bytes,PaddingMode.PKCS7,null,false) },
-                {"Aes_CBC_Key_IV_null",new(SymmetricAlgorithmTypeEnum.AES,CipherModeTypeEnum.CBC,_key_32_bytes,_iV_16_bytes,PaddingMode.PKCS7,"",true) },
+                {"Aes_CBC_expected_value_null",new(SymmetricAlgorithmTypeEnum.AES,CipherModeTypeEnum.CBC,_key_32_bytes,_iV_16_bytes,PaddingMode.PKCS7,null,false) },
+                {"Aes_CBC_expected_value_empty",new(SymmetricAlgorithmTypeEnum.AES,CipherModeTypeEnum.CBC,_key_32_bytes,_iV_16_bytes,PaddingMode.PKCS7,"",true) },
             };
 
             foreach (var test in TestEncryptionsInputString)
@@ -115,7 +111,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                 {"TRIPLE_DES_CBC",new(SymmetricAlgorithmTypeEnum.TripleDES,CipherModeTypeEnum.CBC,_key_16_bytes,_iV_8_bytes,PaddingMode.PKCS7,_inputByte,true) },
                 {"TRIPLE_DES_CFB",new(SymmetricAlgorithmTypeEnum.TripleDES,CipherModeTypeEnum.CFB,_key_24_bytes,_iV_8_bytes,PaddingMode.PKCS7,_inputByte,true) },
                 {"TRIPLE_DES_ECB",new(SymmetricAlgorithmTypeEnum.TripleDES,CipherModeTypeEnum.CFB,_key_16_bytes,_iV_8_bytes,PaddingMode.PKCS7,_inputByte, true) },
-                {"Aes_CBC_key_null",new(SymmetricAlgorithmTypeEnum.AES,CipherModeTypeEnum.CBC,_key_32_bytes,_iV_16_bytes,PaddingMode.PKCS7,null,false) },
+                {"Aes_CBC_expected_value_null",new(SymmetricAlgorithmTypeEnum.AES,CipherModeTypeEnum.CBC,_key_32_bytes,_iV_16_bytes,PaddingMode.PKCS7,null,false) },
             };
 
             foreach (var test in TestEncryptionsInputBytes)
@@ -132,15 +128,12 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                 if (test.Value.expectedResult)
                 {
                     Assert.IsNotNull(encriptedMessage);
-
                     Assert.IsTrue(encriptedMessage.IsSuccess());
 
                     var decryptedMessage = symmetricEncryptionResultPattern.Decrypt(encriptedMessage.SuccessValue);
 
                     Assert.IsNotNull(decryptedMessage);
-
                     Assert.IsTrue(encriptedMessage.IsSuccess());
-
                     Assert.AreEqual(Convert.ToHexString(decryptedMessage.SuccessValue), Convert.ToHexString(test.Value.expectedResponse));
                 }
                 else

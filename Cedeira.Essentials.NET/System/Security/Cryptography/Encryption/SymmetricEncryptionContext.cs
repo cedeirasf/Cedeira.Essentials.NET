@@ -52,7 +52,8 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         {
             { SymmetricAlgorithmTypeEnum.AES, (Aes.Create, new[] { 16, 24, 32 }, 16) },       
             { SymmetricAlgorithmTypeEnum.DES, (DES.Create, new[] { 8 }, 8)},                  
-            { SymmetricAlgorithmTypeEnum.TripleDES, (TripleDES.Create, new[] { 16, 24 }, 8) } 
+            { SymmetricAlgorithmTypeEnum.TripleDES, (TripleDES.Create, new[] { 16, 24 }, 8) },
+            { SymmetricAlgorithmTypeEnum.TripleDesGNC, (TripleDES.Create, new[] { 16, 24 }, 8) } 
         };
 
         private static void ValidateParameters(SymmetricAlgorithmTypeEnum symmetricAlgorithmName, string key, string iV)
