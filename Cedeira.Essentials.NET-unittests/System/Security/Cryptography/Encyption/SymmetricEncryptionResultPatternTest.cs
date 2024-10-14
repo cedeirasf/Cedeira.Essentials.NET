@@ -14,32 +14,104 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
     [TestClass]
     public class SymmetricEncryptionResultPatternTest
     {
-
+        /// <summary>
+        /// A dictionary to hold test cases for various string expectedResponse.
+        /// </summary>
         private Dictionary<string, (SymmetricAlgorithmTypeEnum algorithm, CipherModeTypeEnum cipherMode, string key, string iV, PaddingMode paddingMode, string expectedResponse, bool expectedResult)> TestEncryptionsInputString;
+
+        /// <summary>
+        /// A dictionary to hold test cases for various Bytes expectedResponse.
+        /// </summary>
         private Dictionary<string, (SymmetricAlgorithmTypeEnum algorithm, CipherModeTypeEnum cipherMode, string key, string iV, PaddingMode paddingMode, byte[] expectedResponse, bool expectedResult)> TestEncryptionsInputBytes;
+
+        /// <summary>
+        /// A dictionary to hold test cases for various SecureString expectedResponse.
+        /// </summary>
         private Dictionary<string, (SymmetricAlgorithmTypeEnum algorithm, CipherModeTypeEnum cipherMode, string key, string iV, PaddingMode paddingMode, SecureString expectedResponse, bool expectedResult)> TestEncryptionsInputSecureString;
+
+        /// <summary>
+        /// A dictionary to hold test cases for various StreamReader expectedResponse.
+        /// </summary>
         private Dictionary<string, (SymmetricAlgorithmTypeEnum algorithm, CipherModeTypeEnum cipherMode, string key, string iV, PaddingMode paddingMode, StreamReader expectedResponse, bool expectedResult)> TestEncryptionsInputStreamReader;
 
+
+        /// <summary>
+        /// Key of 8 bytes.
+        /// </summary>
         private string _key_8_bytes;
+
+        /// <summary>
+        /// Key of 16 bytes.
+        /// </summary>
         private string _key_16_bytes;
+
+        /// <summary>
+        /// Key of 24 bytes.
+        /// </summary>
         private string _key_24_bytes;
+
+        /// <summary>
+        /// Key of 32 bytes.
+        /// </summary>
         private string _key_32_bytes;
+
+        /// <summary>
+        /// Initialization vector of 16 bytes.
+        /// </summary>
         private string _iV_16_bytes;
+
+        /// <summary>
+        /// Initialization vector of 8 bytes.
+        /// </summary>
         private string _iV_8_bytes;
+
+        /// <summary>
+        /// Initialization an input string
+        /// </summary>
         private string _input;
+
+        /// <summary>
+        /// Initialization an input string
+        /// </summary>
         private byte[] _inputByte;
+
+        /// <summary>
+        /// Initialization an input Byte
+        /// </summary>
         private SecureString _inputSecureString;
-        private StreamReader _inputStreamReader;   
+
+        /// <summary>
+        /// Initialization an input SecureString
+        /// </summary>
+        private StreamReader _inputStreamReader;
+
+        /// <summary>
+        /// Service collection for dependency injection.
+        /// </summary>
         private ServiceCollection _serviceCollection;
+
+        /// <summary>
+        /// Initialization  IResultFactory
+        /// </summary>
         private IResultFactory _resultFactory;
 
 
+        /// <summary>
+        /// Test initialization method to set up keys, IVs, and decyption a encryption methods
+        /// </summary>
         [TestInitialize]
         public void SetUp()
         {
             _input = "Mejor que el codigo Cesar.";
             _inputByte = Encoding.UTF8.GetBytes(_input);
-            _inputSecureString = _inputByte.BytesToSecureString();
+            _inputSecureString = new SecureString();
+
+            foreach (char character in _input)
+            {
+                _inputSecureString.AppendChar(character);
+            }
+            _inputSecureString.MakeReadOnly();
+
             _inputStreamReader = new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes(_input)));
             _key_8_bytes = "12345678";
             _key_16_bytes = "1234567890abcdef";
@@ -52,6 +124,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
         }
 
+        /// <summary>
+        /// Test method to create symmetric encryption context with full configuration and test encrypt and decrypt methos wiht a string input
+        /// </summary>
         [TestMethod]
         public void SymmetricEncryptionResulPattern_Input_String_Create()
         {
@@ -108,6 +183,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
             }
         }
 
+        /// <summary>
+        /// Test method to create symmetric encryption context with full configuration and test encrypt and decrypt methos wiht a byte input
+        /// </summary>
         [TestMethod]
         public void SymmetricEncryptionResulPattern_Input_Byte_Create()
         {
@@ -161,6 +239,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
             }
         }
 
+        /// <summary>
+        /// Test method to create symmetric encryption context with full configuration and test encrypt and decrypt methos wiht a SecureString input
+        /// </summary>
         [TestMethod]
         public void SymmetricEncryptionResulPattern_Input_SecureString_Create()
         {
@@ -201,7 +282,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
                     Assert.IsNotNull(decryptedMessage);
                     Assert.IsTrue(encriptedMessage.IsSuccess());
-                    Assert.AreEqual(decryptedMessage.SuccessValue,test.Value.expectedResponse);
+                    Assert.AreEqual(decryptedMessage.SuccessValue.ToString(),test.Value.expectedResponse.ToString());
                 }
                 else
                 {
@@ -214,6 +295,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
             }
         }
 
+        /// <summary>
+        /// Test method to create symmetric encryption context with full configuration and test encrypt and decrypt methos wiht a StreamReader input
+        /// </summary>
         [TestMethod]
         public void SymmetricEncryptionResulPattern_Input_StreamReder_Create()
         {
