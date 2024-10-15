@@ -1,6 +1,9 @@
 ﻿using Cedeira.Essentials.NET.Diagnostics.Invariants;
 using Cedeira.Essentials.NET.Extensions.System.Security.Cryptografy.Encryption;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
+using System;
+using System.IO;
+using System.Reflection.PortableExecutable;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
@@ -86,9 +89,9 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         {
             ValidateNull(input);
 
-            var encryptor= _symetricAlgortihm.CreateEncryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
+            var encryptor = _symetricAlgortihm.CreateEncryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
 
-            return input.Encrypt(encryptor);    
+            return input.Encrypt(encryptor);
 
         }
 
@@ -103,7 +106,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
             var decryptor = _symetricAlgortihm.CreateDecryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
 
-            return input.Decrypt(decryptor);    
+            return input.Decrypt(decryptor);
         }
 
         /// <summary>
@@ -115,14 +118,21 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         {
             ValidateNull(input);
 
-            var decryptor = _symetricAlgortihm.CreateEncryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
+            var encryptor = _symetricAlgortihm.CreateEncryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
 
-            using (var cryptoStream = new CryptoStream(input.BaseStream, decryptor, CryptoStreamMode.Write))
+            var output = new MemoryStream();
+
+            using (var cryptoStream = new CryptoStream(output, encryptor, CryptoStreamMode.Write))
+            using (var writer = new StreamWriter(cryptoStream))
             {
-                return new StreamReader(cryptoStream);
+                input.BaseStream.Position = 0;
+                writer.Write(input.ReadToEnd());
+                writer.Flush();
             }
-        }
+            output.Position = 0;
 
+            return new StreamReader(output, leaveOpen: true);
+        }
 
         /// <summary>
         /// Decrypts the data from the specified StreamReader.
@@ -131,14 +141,18 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         /// <returns>A StreamReader containing the decrypted data.</returns>
         public StreamReader Decrypt(StreamReader input)
         {
-            ValidateNull(input);
-        
             var decryptor = _symetricAlgortihm.CreateDecryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
 
-            using (var cryptoStream = new CryptoStream(input.BaseStream, decryptor, CryptoStreamMode.Read)) 
+            ValidateNull(input);
+
+            using (var cryptoStream = new CryptoStream(input.BaseStream, decryptor, CryptoStreamMode.Read))
             {
-                return new StreamReader(cryptoStream);  
+                using (var reader = new StreamReader(cryptoStream))
+                {
+                    return new StreamReader(reader.ReadToEnd());
+                }
             }
+
         }
 
         /// <summary>

@@ -102,12 +102,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                         var excep = Assert.ThrowsException<ArgumentNullException>(() =>
                         {
                             _serviceCollection.AddSingleton<ISymmetricEncryptionContext>(
-                                SymmetricEncryptionContext.CreateFromFullAlgorithmConfig(
-                                    test.Value.key,
-                                    test.Value.iV,
-                                    test.Value.algorithm,
-                                    test.Value.cipherMode,
-                                    test.Value.paddingMode));
+                                SymmetricEncryptionContext.CreateFromFullAlgorithmConfig(test.Value.algorithm, test.Value.cipherMode, test.Value.paddingMode, test.Value.key, test.Value.iV));
                         });
                     }
                     else
@@ -115,12 +110,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                         var excep = Assert.ThrowsException<ArgumentException>(() =>
                         {
                             _serviceCollection.AddSingleton<ISymmetricEncryptionContext>(
-                                SymmetricEncryptionContext.CreateFromFullAlgorithmConfig(
-                                    test.Value.key,
-                                    test.Value.iV,
-                                    test.Value.algorithm,
-                                    test.Value.cipherMode,
-                                    test.Value.paddingMode));
+                                SymmetricEncryptionContext.CreateFromFullAlgorithmConfig(test.Value.algorithm, test.Value.cipherMode, test.Value.paddingMode, test.Value.key, test.Value.iV));
                         });
                     }
                 }
@@ -128,14 +118,9 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                 {
                     
                     _serviceCollection.AddSingleton<ISymmetricEncryptionContext>(
-                        SymmetricEncryptionContext.CreateFromFullAlgorithmConfig(
-                            test.Value.key,
-                            test.Value.iV,
-                            test.Value.algorithm,
-                            test.Value.cipherMode,
-                            test.Value.paddingMode));
+                        SymmetricEncryptionContext.CreateFromFullAlgorithmConfig(test.Value.algorithm, test.Value.cipherMode, test.Value.paddingMode, test.Value.key, test.Value.iV));
 
-                   
+
                     _serviceCollection.AddSingleton<IOptions<ISymmetricEncryptionContext>>(sp =>
                         new OptionsWrapper<ISymmetricEncryptionContext>(
                             sp.GetRequiredService<ISymmetricEncryptionContext>()));

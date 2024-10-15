@@ -150,7 +150,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
             foreach (var test in TestEncryptionsInputString)
             {
-                _serviceCollection.AddSingleton((ISymmetricEncryptionContext)SymmetricEncryptionContext.CreateFromFullAlgorithmConfig(test.Value.key, test.Value.iV, test.Value.algorithm, test.Value.cipherMode, test.Value.paddingMode));
+                _serviceCollection.AddSingleton((ISymmetricEncryptionContext)SymmetricEncryptionContext.CreateFromFullAlgorithmConfig(test.Value.algorithm, test.Value.cipherMode, test.Value.paddingMode, test.Value.key, test.Value.iV));
                 _serviceCollection.AddSingleton(sp => new SymmetricEncryptionResultPatternFactory(sp.GetRequiredService<ISymmetricEncryptionContext>(), _resultFactory).Create());
 
                 var serviceProvider = _serviceCollection.BuildServiceProvider();
@@ -208,7 +208,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
             foreach (var test in TestEncryptionsInputBytes)
             {
-                _serviceCollection.AddSingleton((ISymmetricEncryptionContext)SymmetricEncryptionContext.CreateFromFullAlgorithmConfig(test.Value.key, test.Value.iV, test.Value.algorithm, test.Value.cipherMode, test.Value.paddingMode));
+                _serviceCollection.AddSingleton((ISymmetricEncryptionContext)SymmetricEncryptionContext.CreateFromFullAlgorithmConfig(test.Value.algorithm, test.Value.cipherMode, test.Value.paddingMode, test.Value.key, test.Value.iV));
                 _serviceCollection.AddSingleton(sp => new SymmetricEncryptionResultPatternFactory(sp.GetRequiredService<ISymmetricEncryptionContext>(), _resultFactory).Create());
 
                 var serviceProvider = _serviceCollection.BuildServiceProvider();
@@ -264,7 +264,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
             foreach (var test in TestEncryptionsInputSecureString)
             {
-                _serviceCollection.AddSingleton((ISymmetricEncryptionContext)SymmetricEncryptionContext.CreateFromFullAlgorithmConfig(test.Value.key, test.Value.iV, test.Value.algorithm, test.Value.cipherMode, test.Value.paddingMode));
+                _serviceCollection.AddSingleton((ISymmetricEncryptionContext)SymmetricEncryptionContext.CreateFromFullAlgorithmConfig(test.Value.algorithm, test.Value.cipherMode, test.Value.paddingMode, test.Value.key, test.Value.iV));
                 _serviceCollection.AddSingleton(sp => new SymmetricEncryptionResultPatternFactory(sp.GetRequiredService<ISymmetricEncryptionContext>(), _resultFactory).Create());
 
                 var serviceProvider = _serviceCollection.BuildServiceProvider();
@@ -320,7 +320,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
             foreach (var test in TestEncryptionsInputStreamReader)
             {
-                _serviceCollection.AddSingleton((ISymmetricEncryptionContext)SymmetricEncryptionContext.CreateFromFullAlgorithmConfig(test.Value.key, test.Value.iV, test.Value.algorithm, test.Value.cipherMode, test.Value.paddingMode));
+                _serviceCollection.AddSingleton((ISymmetricEncryptionContext)SymmetricEncryptionContext.CreateFromFullAlgorithmConfig(test.Value.algorithm, test.Value.cipherMode, test.Value.paddingMode, test.Value.key, test.Value.iV));
                 _serviceCollection.AddSingleton(sp => new SymmetricEncryptionResultPatternFactory(sp.GetRequiredService<ISymmetricEncryptionContext>(), _resultFactory).Create());
 
                 var serviceProvider = _serviceCollection.BuildServiceProvider();
