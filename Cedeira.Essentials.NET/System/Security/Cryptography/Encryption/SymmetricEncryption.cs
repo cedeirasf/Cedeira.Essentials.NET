@@ -61,7 +61,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
             byte[] plainBytes = Encoding.UTF8.GetBytes(input);
 
-            return Convert.ToHexString(Encrypt(plainBytes));
+            return Convert.ToHexString(Encryption(plainBytes));
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
             var encryptor= _symetricAlgortihm.CreateEncryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
 
-            return input.EncryptSecureString(encryptor);    
+            return input.Encrypt(encryptor);    
 
         }
 
@@ -103,7 +103,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
             var decryptor = _symetricAlgortihm.CreateDecryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
 
-            return input.DecryptSecureString(decryptor);    
+            return input.Decrypt(decryptor);    
         }
 
         /// <summary>
@@ -115,14 +115,14 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         {
             ValidateNull(input);
 
-            using (var memoryStream = new MemoryStream())
-            {
-                input.BaseStream.CopyTo(memoryStream);
+            var decryptor = _symetricAlgortihm.CreateEncryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
 
-                var encryptedStream = new MemoryStream(Encrypt(memoryStream.ToArray()));
-                return new StreamReader(encryptedStream);
+            using (var cryptoStream = new CryptoStream(input.BaseStream, decryptor, CryptoStreamMode.Write))
+            {
+                return new StreamReader(cryptoStream);
             }
         }
+
 
         /// <summary>
         /// Decrypts the data from the specified StreamReader.
@@ -132,13 +132,12 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         public StreamReader Decrypt(StreamReader input)
         {
             ValidateNull(input);
+        
+            var decryptor = _symetricAlgortihm.CreateDecryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
 
-            using (var memoryStream = new MemoryStream())
+            using (var cryptoStream = new CryptoStream(input.BaseStream, decryptor, CryptoStreamMode.Read)) 
             {
-                input.BaseStream.CopyTo(memoryStream);
-
-                var decryptedStream = new MemoryStream(Decryption(memoryStream.ToArray()));
-                return new StreamReader(decryptedStream);
+                return new StreamReader(cryptoStream);  
             }
         }
 
@@ -149,7 +148,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         /// <returns>The encrypted byte array.</returns>
         private byte[] Encryption(byte[] input)
         {
-            var decryptor = _symetricAlgortihm.CreateDecryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
+            var decryptor = _symetricAlgortihm.CreateEncryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
 
             using (var inputMemoryStream = new MemoryStream(input))
             using (var cryptoStream = new CryptoStream(inputMemoryStream, decryptor, CryptoStreamMode.Read))
@@ -167,7 +166,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         /// <returns>The decrypted byte array.</returns>
         private byte[] Decryption(byte[] input)
         {
-            var encryptor = _symetricAlgortihm.CreateEncryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
+            var encryptor = _symetricAlgortihm.CreateDecryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
 
             using (var memoryStream = new MemoryStream())
             using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))

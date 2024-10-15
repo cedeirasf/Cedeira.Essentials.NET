@@ -13,7 +13,7 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptografy.Encrypti
         /// <param name="input">The SecureString to encrypt.</param>
         /// <param name="cryptoTransform">The ICryptoTransform used for encryption.</param>
         /// <returns>A new SecureString containing the encrypted data.</returns>
-        public static SecureString EncryptSecureString(this SecureString input, ICryptoTransform cryptoTransform)
+        public static SecureString Encrypt(this SecureString input, ICryptoTransform cryptoTransform)
         {
             using (MemoryStream ms = new MemoryStream())
             using (CryptoStream cs = new CryptoStream(ms, cryptoTransform, CryptoStreamMode.Write))
@@ -53,7 +53,7 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptografy.Encrypti
         /// <param name="input">The SecureString to decrypt.</param>
         /// <param name="cryptoTransform">The ICryptoTransform used for decryption.</param>
         /// <returns>A new SecureString containing the decrypted data.</returns>
-        public static SecureString DecryptSecureString(this SecureString input, ICryptoTransform cryptoTransform)
+        public static SecureString Decrypt(this SecureString input, ICryptoTransform cryptoTransform)
         {
             IntPtr cipherPtr = Marshal.SecureStringToGlobalAllocUnicode(input);
 
