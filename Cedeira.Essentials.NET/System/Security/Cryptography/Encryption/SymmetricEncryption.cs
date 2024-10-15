@@ -1,9 +1,6 @@
 ﻿using Cedeira.Essentials.NET.Diagnostics.Invariants;
 using Cedeira.Essentials.NET.Extensions.System.Security.Cryptografhy.Encryption;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
-using System;
-using System.IO;
-using System.Reflection.PortableExecutable;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
@@ -122,12 +119,14 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
             var output = new MemoryStream();
 
-            using (var cryptoStream = new CryptoStream(output, encryptor, CryptoStreamMode.Write))
-            using (var writer = new StreamWriter(cryptoStream))
+            using (var cryptoStream = new CryptoStream(output, encryptor, CryptoStreamMode.Write, leaveOpen: true))
             {
-                input.BaseStream.Position = 0;
-                writer.Write(input.ReadToEnd());
-                writer.Flush();
+                using (var writer = new StreamWriter(cryptoStream))
+                {
+                    input.BaseStream.Position = 0; 
+                    writer.Write(input.ReadToEnd());
+                    writer.Flush();
+                }
             }
             output.Position = 0;
 
@@ -149,7 +148,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
             {
                 using (var reader = new StreamReader(cryptoStream))
                 {
-                    return new StreamReader(reader.ReadToEnd());
+                    return input;
                 }
             }
 
