@@ -82,7 +82,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         /// <param name="CipherMode">The cipher mode to apply.</param>
         /// <param name="padingMode">The padding mode to apply.</param>
         /// <returns>A new instance of <see cref="SymmetricEncryptionContext"/>.</returns>
-        public static SymmetricEncryptionContext CreateFromFullAlgorithmConfig(string key, string iV, SymmetricAlgorithmTypeEnum symmetricAlgorithmName, CipherModeTypeEnum CipherMode, PaddingMode padingMode)
+        public static SymmetricEncryptionContext CreateFromFullAlgorithmConfig(SymmetricAlgorithmTypeEnum symmetricAlgorithmName, CipherModeTypeEnum CipherMode, PaddingMode padingMode, string key, string iV)
         {
             ValidateParameters(symmetricAlgorithmName, key,iV);
 
