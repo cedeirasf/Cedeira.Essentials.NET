@@ -160,6 +160,62 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         }
 
         /// <summary>
+        /// Validates if the provided string input matches the decrypted version of the cipherInput.
+        /// Throws a CryptographicException if the validation fails.
+        /// </summary>
+        /// <param name="input">The original plain text input string to compare.</param>
+        /// <param name="cipherInput">The encrypted input string to be decrypted and compared against the input.</param>
+        /// <returns>Returns true if the decrypted text matches the original input; otherwise, throws an exception.</returns>
+        public bool ValidateEncryption(string input, string cipherInput)
+        {
+            var decryptedText = Decrypt(cipherInput);
+
+            return (input == decryptedText) ? true : throw new CryptographicException("Encryption validation failed: The decrypted text does not match the original input.");
+        }
+
+        /// <summary>
+        /// Validates if the provided byte array input matches the decrypted version of the cipherInput byte array.
+        /// Throws a CryptographicException if the validation fails.
+        /// </summary>
+        /// <param name="input">The original plain text input as a byte array to compare.</param>
+        /// <param name="cipherInput">The encrypted byte array to be decrypted and compared against the input.</param>
+        /// <returns>Returns true if the decrypted byte array matches the original input; otherwise, throws an exception.</returns>
+        public bool ValidateEncryption(byte[] input, byte[] cipherInput)
+        {
+            var decryptedText = Decrypt(cipherInput);
+
+            return (input == decryptedText) ? true : throw new CryptographicException("Encryption validation failed: The decrypted text does not match the original input."); throw new CryptographicException("Encryption fail  ");
+        }
+
+        /// <summary>
+        /// Validates if the provided SecureString input matches the decrypted version of the cipherInput SecureString.
+        /// Throws a CryptographicException if the validation fails.
+        /// </summary>
+        /// <param name="input">The original plain text input as a SecureString to compare.</param>
+        /// <param name="cipherInput">The encrypted SecureString to be decrypted and compared against the input.</param>
+        /// <returns>Returns true if the decrypted SecureString matches the original input; otherwise, throws an exception.</returns>
+        public bool ValidateEncryption(SecureString input, SecureString cipherInput)
+        {
+            var decryptedText = Decrypt(cipherInput);
+
+            return (input == decryptedText) ? true : throw new CryptographicException("Encryption validation failed: The decrypted text does not match the original input."); throw new CryptographicException("Encryption fail  ");
+        }
+
+        /// <summary>
+        /// Validates if the provided StreamReader input matches the decrypted version of the cipherInput StreamReader.
+        /// Throws a CryptographicException if the validation fails.
+        /// </summary>
+        /// <param name="input">The original plain text input as a StreamReader to compare.</param>
+        /// <param name="cipherInput">The encrypted StreamReader to be decrypted and compared against the input.</param>
+        /// <returns>Returns true if the decrypted StreamReader matches the original input; otherwise, throws an exception.</returns>
+        public bool ValidateEncryption(StreamReader input, StreamReader cipherInput)
+        {
+            var decryptedText = Decrypt(cipherInput);
+
+            return (input == decryptedText) ? true : throw new CryptographicException("Encryption validation failed: The decrypted text does not match the original input."); throw new CryptographicException("Encryption fail  ");
+        }
+
+        /// <summary>
         /// Encrypts the specified byte array using the symmetric algorithm.
         /// </summary>
         /// <param name="input">The byte array to encrypt.</param>
@@ -197,6 +253,10 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
                 return memoryStream.ToArray();
             }
         }
+
+        
+
+
 
         /// <summary>
         /// Validates that the specified input is not null.
