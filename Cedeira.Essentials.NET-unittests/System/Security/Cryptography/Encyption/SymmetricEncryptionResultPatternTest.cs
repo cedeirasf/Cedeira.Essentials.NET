@@ -301,7 +301,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
         /// Test method to create symmetric encryption context with full configuration and test encrypt and decrypt methos wiht a StreamReader input
         /// </summary>
         [TestMethod]
-        public void SymmetricEncryptionResulPattern_Input_StreamReder_Create()
+        public void SymmetricEncryptionResulPattern_Input_StreamReader_Create()
         {
             TestEncryptionsInputStreamReader = new Dictionary<string, (SymmetricAlgorithmTypeEnum algorithm, CipherModeTypeEnum cipherMode, string key, string iV, PaddingMode paddingMode, StreamReader expectedResponse, bool expectedResult)>
             {
