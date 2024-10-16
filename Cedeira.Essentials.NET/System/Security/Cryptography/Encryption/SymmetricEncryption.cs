@@ -1,5 +1,5 @@
 ﻿using Cedeira.Essentials.NET.Diagnostics.Invariants;
-using Cedeira.Essentials.NET.Extensions.System.Security.Cryptografhy.Encryption;
+using Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encryption;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
 using System.Security;
 using System.Security.Cryptography;

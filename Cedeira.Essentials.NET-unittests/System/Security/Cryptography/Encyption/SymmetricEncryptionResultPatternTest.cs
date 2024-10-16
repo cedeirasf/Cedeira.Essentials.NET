@@ -1,10 +1,11 @@
-﻿using Cedeira.Essentials.NET.Extensions.System.Security.Cryptografhy.Encryption;
+﻿using Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encryption;
 using Cedeira.Essentials.NET.System.ResultPattern.Factories;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Enum;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Factories;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
@@ -113,6 +114,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
             _inputSecureString.MakeReadOnly();
 
             _inputStreamReader = new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes(_input)));
+            _inputStreamReader.BaseStream.Position = 0;
             _key_8_bytes = "12345678";
             _key_16_bytes = "1234567890abcdef";
             _key_24_bytes = "1234567890abcdef12345678";
@@ -320,6 +322,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
             foreach (var test in TestEncryptionsInputStreamReader)
             {
+
                 _serviceCollection.AddSingleton((ISymmetricEncryptionContext)SymmetricEncryptionContext.CreateFromFullAlgorithmConfig(test.Value.algorithm, test.Value.cipherMode, test.Value.paddingMode, test.Value.key, test.Value.iV));
                 _serviceCollection.AddSingleton(sp => new SymmetricEncryptionResultPatternFactory(sp.GetRequiredService<ISymmetricEncryptionContext>(), _resultFactory).Create());
 
@@ -329,18 +332,24 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
                 var encriptedMessage = symmetricEncryptionResultPattern.Encrypt(test.Value.expectedResponse);
 
-
-
                 if (test.Value.expectedResult)
                 {
+                    test.Value.expectedResponse.BaseStream.Position = 0;
+                    test.Value.expectedResponse.DiscardBufferedData();
+
+                    var expectedResult = test.Value.expectedResponse.ReadToEnd();
+
                     Assert.IsNotNull(encriptedMessage);
                     Assert.IsTrue(encriptedMessage.IsSuccess());
 
                     var decryptedMessage = symmetricEncryptionResultPattern.Decrypt(encriptedMessage.SuccessValue);
 
                     Assert.IsNotNull(decryptedMessage);
+
+                    var result = decryptedMessage.SuccessValue.ReadToEnd();
+
                     Assert.IsTrue(encriptedMessage.IsSuccess());
-                    Assert.AreEqual(decryptedMessage.SuccessValue.ReadToEnd(), test.Value.expectedResponse.ReadToEnd());
+                    Assert.AreEqual(result, expectedResult);
                 }
                 else
                 {

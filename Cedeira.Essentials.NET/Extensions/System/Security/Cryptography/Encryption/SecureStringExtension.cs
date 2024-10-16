@@ -3,7 +3,7 @@ using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptografhy.Encryption
+namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encryption
 {
     public static class SecureStringExtension
     {
