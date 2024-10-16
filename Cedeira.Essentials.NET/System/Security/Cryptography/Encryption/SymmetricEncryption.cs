@@ -140,17 +140,20 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         /// <returns>A StreamReader containing the decrypted data.</returns>
         public StreamReader Decrypt(StreamReader input)
         {
+            ValidateNull(input);
+
             var decryptor = _symetricAlgortihm.CreateDecryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
 
-            ValidateNull(input);
+            var output = new MemoryStream();
 
             using (var cryptoStream = new CryptoStream(input.BaseStream, decryptor, CryptoStreamMode.Read))
             {
-                using (var reader = new StreamReader(cryptoStream))
-                {
-                    return input;
-                }
+                cryptoStream.CopyTo(output);
             }
+
+            output.Position = 0;
+
+            return new StreamReader(output);
 
         }
 

@@ -282,7 +282,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
                     Assert.IsNotNull(decryptedMessage);
                     Assert.IsTrue(encriptedMessage.IsSuccess());
-                    Assert.AreEqual(decryptedMessage.SuccessValue.ToString(),test.Value.expectedResponse.ToString());
+                    Assert.AreEqual(decryptedMessage.SuccessValue.ToString(), test.Value.expectedResponse.ToString());
                 }
                 else
                 {
@@ -329,6 +329,8 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
                 var encriptedMessage = symmetricEncryptionResultPattern.Encrypt(test.Value.expectedResponse);
 
+
+
                 if (test.Value.expectedResult)
                 {
                     Assert.IsNotNull(encriptedMessage);
@@ -338,7 +340,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
                     Assert.IsNotNull(decryptedMessage);
                     Assert.IsTrue(encriptedMessage.IsSuccess());
-                    Assert.AreEqual(decryptedMessage.SuccessValue.ToString(), test.Value.expectedResponse.ToString());
+                    Assert.AreEqual(decryptedMessage.SuccessValue.ReadToEnd(), test.Value.expectedResponse.ReadToEnd());
                 }
                 else
                 {
