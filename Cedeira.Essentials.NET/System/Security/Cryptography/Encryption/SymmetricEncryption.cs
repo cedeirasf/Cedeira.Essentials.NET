@@ -15,7 +15,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         /// <summary>
         /// Gets the symmetric algorithm used for encryption and decryption.
         /// </summary>
-        private readonly SymmetricAlgorithm _symetricAlgortihm;
+        private readonly SymmetricAlgorithm _symmetricAlgortihm;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SymmetricEncryption"/> class with the specified symmetric algorithm.
@@ -23,7 +23,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         /// <param name="symetricAlgortihm">The symmetric algorithm used for encryption and decryption.</param>
         public SymmetricEncryption(SymmetricAlgorithm symetricAlgortihm)
         {
-            _symetricAlgortihm = symetricAlgortihm;
+            _symmetricAlgortihm = symetricAlgortihm;
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         {
             ValidateNull(input);
 
-            var encryptor = _symetricAlgortihm.CreateEncryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
+            var encryptor = _symmetricAlgortihm.CreateEncryptor(_symmetricAlgortihm.Key, _symmetricAlgortihm.IV);
 
             return input.Encrypt(encryptor);
 
@@ -101,7 +101,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         {
             ValidateNull(input);
 
-            var decryptor = _symetricAlgortihm.CreateDecryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
+            var decryptor = _symmetricAlgortihm.CreateDecryptor(_symmetricAlgortihm.Key, _symmetricAlgortihm.IV);
 
             return input.Decrypt(decryptor);
         }
@@ -115,7 +115,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         {
             ValidateNull(input);
 
-            var encryptor = _symetricAlgortihm.CreateEncryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
+            var encryptor = _symmetricAlgortihm.CreateEncryptor(_symmetricAlgortihm.Key, _symmetricAlgortihm.IV);
 
             var output = new MemoryStream();
 
@@ -124,7 +124,9 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
                 using (var writer = new StreamWriter(cryptoStream))
                 {
                     input.BaseStream.Position = 0; 
+
                     writer.Write(input.ReadToEnd());
+
                     writer.Flush();
                 }
             }
@@ -142,7 +144,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         {
             ValidateNull(input);
 
-            var decryptor = _symetricAlgortihm.CreateDecryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
+            var decryptor = _symmetricAlgortihm.CreateDecryptor(_symmetricAlgortihm.Key, _symmetricAlgortihm.IV);
 
             var output = new MemoryStream();
 
@@ -164,13 +166,14 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         /// <returns>The encrypted byte array.</returns>
         private byte[] Encryption(byte[] input)
         {
-            var decryptor = _symetricAlgortihm.CreateEncryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
+            var decryptor = _symmetricAlgortihm.CreateEncryptor(_symmetricAlgortihm.Key, _symmetricAlgortihm.IV);
 
             using (var inputMemoryStream = new MemoryStream(input))
             using (var cryptoStream = new CryptoStream(inputMemoryStream, decryptor, CryptoStreamMode.Read))
             using (var outputMemoryStream = new MemoryStream())
             {
                 cryptoStream.CopyTo(outputMemoryStream);
+
                 return outputMemoryStream.ToArray();
             }
         }
@@ -182,12 +185,13 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         /// <returns>The decrypted byte array.</returns>
         private byte[] Decryption(byte[] input)
         {
-            var encryptor = _symetricAlgortihm.CreateDecryptor(_symetricAlgortihm.Key, _symetricAlgortihm.IV);
+            var encryptor = _symmetricAlgortihm.CreateDecryptor(_symmetricAlgortihm.Key, _symmetricAlgortihm.IV);
 
             using (var memoryStream = new MemoryStream())
             using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
             {
                 cryptoStream.Write(input, 0, input.Length);
+
                 cryptoStream.FlushFinalBlock();
 
                 return memoryStream.ToArray();
