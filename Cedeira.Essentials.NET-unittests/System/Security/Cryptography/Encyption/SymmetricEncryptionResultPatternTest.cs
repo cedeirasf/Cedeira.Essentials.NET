@@ -36,6 +36,14 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
         private Dictionary<string, (SymmetricAlgorithmTypeEnum algorithm, CipherModeTypeEnum cipherMode, string key, string iV, PaddingMode paddingMode, StreamReader expectedResponse, bool expectedResult)> TestEncryptionsInputStreamReader;
 
 
+        private Dictionary<string, (string? value, string? cipherValue, bool expectedResult)> _TestValidateEncryptionString;
+
+        private Dictionary<string, (byte[]? value, byte[]? cipherValue, bool expectedResult)> _TestValidateEncryptionArrayByte;
+
+        private Dictionary<string, (SecureString? value, SecureString? cipherValue, bool expectedResult)> _TestValidateEncryptionSecureString;
+
+        private Dictionary<string, (StreamReader? value, StreamReader? cipherValue, bool expectedResult)> _TestValidateEncryptionStreamReader;
+
         /// <summary>
         /// Key of 8 bytes.
         /// </summary>
@@ -362,8 +370,64 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
             }
         }
 
+
+        /// <summary>
+        /// Test method to create symmetric encryption context with full configuration and test encrypt and decrypt methos wiht a StreamReader input
+        /// </summary>
+        [TestMethod]
+        public void Validate_SymmetricEncryptionResulPattern_Input_StreamReder_Create()
+        {
+            _serviceCollection.AddSingleton((ISymmetricEncryptionContext)SymmetricEncryptionContext.Create());
+            _serviceCollection.AddSingleton(sp => new SymmetricEncryptionResultPatternFactory(sp.GetRequiredService<ISymmetricEncryptionContext>(), _resultFactory).Create());
+
+            var serviceProvider = _serviceCollection.BuildServiceProvider();
+
+            var symmetricEncryptionResultPattern = serviceProvider.GetService<ISymmetricEncryptionResultPattern>();
+
+            var encriptedMessage = symmetricEncryptionResultPattern.Encrypt(_inputStreamReader);
+
+            _TestValidateEncryptionStreamReader = new Dictionary<string, (StreamReader? value, StreamReader? cipherValue, bool expectedResult)>
+            {
+                {"Value_ok_cipherValue_ok",new (_inputStreamReader,encriptedMessage.SuccessValue,true)},
+                {"Value_null_cipherValue_ok",new (null,encriptedMessage.SuccessValue,false)},
+                {"Value_ok_cipherValue_null",new (null,encriptedMessage.SuccessValue,false)},
+                {"Value_ok_cipherValue_wrong",new (_inputStreamReader,_inputStreamReader,false)}
+            };
+
+            foreach (var test in _TestValidateEncryptionStreamReader)
+            {
+                if (test.Value.expectedResult)
+                {
+                    test.Value.value.BaseStream.Position = 0;
+                    test.Value.value.DiscardBufferedData();
+
+                    var result = symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
+
+
+                    Assert.IsTrue(result.IsSuccess());
+                }
+                else if(test.Value.value is not null || test.Value.cipherValue is not null)
+                {
+                    Assert.ThrowsException<ArgumentNullException>(() =>
+                    {
+                        symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
+                    });
+                }
+                else 
+                {
+                    Assert.ThrowsException<CryptographicException>(() =>
+                    {
+                        symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
+                    });
+                }
+            }
+        }
+
+
     }
+
 }
+
 
 
 

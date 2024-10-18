@@ -196,6 +196,9 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         /// <returns>Returns true if the decrypted SecureString matches the original input; otherwise, throws an exception.</returns>
         public bool ValidateEncryption(SecureString input, SecureString cipherInput)
         {
+            ValidateNull(input);
+            ValidateNull(cipherInput);
+
             var decryptedText = Decrypt(cipherInput);
 
             return (input == decryptedText) ? true : throw new CryptographicException("Encryption validation failed: The decrypted text does not match the original input."); throw new CryptographicException("Encryption fail  ");
@@ -211,6 +214,9 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         public bool ValidateEncryption(StreamReader input, StreamReader cipherInput)
         {
             var decryptedText = Decrypt(cipherInput);
+
+            var inputString = input.ReadToEnd();        
+            var chiperInputString = cipherInput.ReadToEnd();
 
             return (input == decryptedText) ? true : throw new CryptographicException("Encryption validation failed: The decrypted text does not match the original input."); throw new CryptographicException("Encryption fail  ");
         }
@@ -253,9 +259,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
                 return memoryStream.ToArray();
             }
         }
-
-        
-
 
 
         /// <summary>
