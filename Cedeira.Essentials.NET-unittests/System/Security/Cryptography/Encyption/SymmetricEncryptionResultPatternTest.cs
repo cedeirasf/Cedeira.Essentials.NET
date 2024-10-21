@@ -1,9 +1,11 @@
-﻿using Cedeira.Essentials.NET.System.ResultPattern.Factories;
+﻿using Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encryption;
+using Cedeira.Essentials.NET.System.ResultPattern.Factories;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Enum;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Factories;
 using Microsoft.Extensions.DependencyInjection;
+using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
@@ -311,7 +313,8 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
                     Assert.IsNotNull(decryptedMessage);
                     Assert.IsTrue(encriptedMessage.IsSuccess());
-                    Assert.AreEqual(decryptedMessage.SuccessValue.ToString(), test.Value.expectedResponse.ToString());
+
+                    Assert.AreEqual(decryptedMessage.SuccessValue.SecureStringToString(), test.Value.expectedResponse.SecureStringToString());
                 }
                 else
                 {
@@ -538,7 +541,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
             var encriptedMessage = symmetricEncryptionResultPattern.Encrypt(_inputSecureString);
 
-            var otherEncriptedMessage = symmetricEncryptionResultPattern.Encrypt(_inputSecureString);
+            var otherEncriptedMessage = symmetricEncryptionResultPattern.Encrypt(_inputSecureStringFake);
 
             _TestValidateEncryptionSecureString = new Dictionary<string, (SecureString? value, SecureString? cipherValue, bool expectedResult)>
             {
