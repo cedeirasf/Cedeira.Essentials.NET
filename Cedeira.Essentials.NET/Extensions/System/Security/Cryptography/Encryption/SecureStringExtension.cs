@@ -91,12 +91,12 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encrypt
             }
         }
 
-        public static bool Validate(this SecureString input, SecureString decryptedValue) 
+        public static bool ValidateEncryption(this SecureString input, SecureString decryptedValue)
         {
-            var result = true;
+            bool result = true;
 
-           var inputPtr = Marshal.SecureStringToGlobalAllocUnicode(input);
-           var  decryptedTextPtr = Marshal.SecureStringToGlobalAllocUnicode(decryptedValue);
+            nint inputPtr = Marshal.SecureStringToGlobalAllocUnicode(input);
+            nint decryptedTextPtr = Marshal.SecureStringToGlobalAllocUnicode(decryptedValue);
 
             string inputString = Marshal.PtrToStringUni(inputPtr);
             string decryptedTextString = Marshal.PtrToStringUni(decryptedTextPtr);

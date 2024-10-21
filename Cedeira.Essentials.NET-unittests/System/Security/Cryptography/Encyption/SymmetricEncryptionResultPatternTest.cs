@@ -391,7 +391,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
 
         /// <summary>
-        /// Test method to create symmetric encryption context with full configuration and test encrypt and decrypt methos wiht a StreamReader input
+        /// Test method to create symmetric encryption context and test validate method wiht a StreamReader input
         /// </summary>
         [TestMethod]
         public void Validate_SymmetricEncryptionResulPattern_Input_StreamReder_Create()
@@ -438,7 +438,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
         }
 
         /// <summary>
-        /// Test method to create symmetric encryption context with full configuration and test encrypt and decrypt methos wiht a string input
+        /// Test method to create symmetric encryption context and test validate method wiht a string input
         /// </summary>
         [TestMethod]
         public void Validate_SymmetricEncryptionResulPattern_Input_String_Create()
@@ -481,7 +481,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
         }
 
         /// <summary>
-        /// Test method to create symmetric encryption context with full configuration and test encrypt and decrypt methos wiht a string input
+        /// Test method to create symmetric encryption context and test validate method wiht a string input
         /// </summary>
         [TestMethod]
         public void Validate_SymmetricEncryptionResulPattern_Input_Array_Byte_Create()
@@ -524,7 +524,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
         }
 
         /// <summary>
-        /// Test method to create symmetric encryption context with full configuration and test encrypt and decrypt methos wiht a SecureString input
+        /// Test method to create symmetric encryption context and test validate method wiht a SecureString input
         /// </summary>
         [TestMethod]
         public void Validate_SymmetricEncryptionResulPattern_Input_SecureString_Create()
