@@ -102,7 +102,7 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encrypt
             string decryptedTextString = Marshal.PtrToStringUni(decryptedTextPtr);
 
             if (inputString != decryptedTextString)
-                return false;
+                result = false;
 
             return result;
         }

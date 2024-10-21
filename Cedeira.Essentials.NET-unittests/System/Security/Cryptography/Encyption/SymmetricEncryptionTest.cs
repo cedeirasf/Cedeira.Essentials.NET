@@ -96,17 +96,17 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
             var serviceProvider = _serviceCollection.BuildServiceProvider();
 
-            var symmetricEncryptionResultPattern = serviceProvider.GetService<ISymmetricEncryptionResultPattern>();
+            var symmetricEncryption = serviceProvider.GetService<ISymmetricEncryption>();
 
-            var encriptedMessage = symmetricEncryptionResultPattern.Encrypt(_inputStreamReader);
+            var encriptedMessage = symmetricEncryption.Encrypt(_inputStreamReader);
 
-            var otherEncriptedMessage = symmetricEncryptionResultPattern.Encrypt(_inputStreamReaderFake);
+            var otherEncriptedMessage = symmetricEncryption.Encrypt(_inputStreamReaderFake);
 
             _TestValidateEncryptionStreamReader = new Dictionary<string, (StreamReader? value, StreamReader? cipherValue)>
             {
-                {"Value_null_cipherValue_ok",new (null,encriptedMessage.SuccessValue)},
-                {"Value_ok_cipherValue_null",new (null,encriptedMessage.SuccessValue)},
-                {"Value_ok_cipherValue_wrong",new (_inputStreamReader, otherEncriptedMessage.SuccessValue)}
+                {"Value_null_cipherValue_ok",new (null,encriptedMessage)},
+                {"Value_ok_cipherValue_null",new (null,encriptedMessage)},
+                {"Value_ok_cipherValue_wrong",new (_inputStreamReader, otherEncriptedMessage)}
             };
 
             foreach (var test in _TestValidateEncryptionStreamReader)
@@ -115,14 +115,14 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                 {
                     Assert.ThrowsException<CryptographicException>(() =>
                     {
-                        var result = symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
+                        symmetricEncryption.ThrowIfInvalidEncryption(test.Value.value, test.Value.cipherValue);
                     });
                 }
                 else
                 {
                     Assert.ThrowsException<ArgumentNullException>(() =>
                     {
-                        var result = symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
+                        var result = symmetricEncryption.ValidateEncryption(test.Value.value, test.Value.cipherValue);
                     });
                 }
             }
@@ -139,17 +139,17 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
             var serviceProvider = _serviceCollection.BuildServiceProvider();
 
-            var symmetricEncryptionResultPattern = serviceProvider.GetService<ISymmetricEncryptionResultPattern>();
+            var symmetricEncryption = serviceProvider.GetService<ISymmetricEncryption>();
 
-            var encriptedMessage = symmetricEncryptionResultPattern.Encrypt(_input);
+            var encriptedMessage = symmetricEncryption.Encrypt(_input);
 
-            var otherEncriptedMessage = symmetricEncryptionResultPattern.Encrypt(_inputFake);
+            var otherEncriptedMessage = symmetricEncryption.Encrypt(_inputFake);
 
             _TestValidateEncryptionString = new Dictionary<string, (string? value, string? cipherValue)>
             {
-                {"Value_null_cipherValue_ok",new (null,encriptedMessage.SuccessValue)},
-                {"Value_ok_cipherValue_null",new (null,encriptedMessage.SuccessValue)},
-                {"Value_ok_cipherValue_wrong",new (_input, otherEncriptedMessage.SuccessValue)}
+                {"Value_null_cipherValue_ok",new (null,encriptedMessage)},
+                {"Value_ok_cipherValue_null",new (null,encriptedMessage)},
+                {"Value_ok_cipherValue_wrong",new (_input, otherEncriptedMessage)}
             };
 
             foreach (var test in _TestValidateEncryptionString)
@@ -158,14 +158,14 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                 {
                     Assert.ThrowsException<CryptographicException>(() =>
                     {
-                        var result = symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
+                        symmetricEncryption.ThrowIfInvalidEncryption(test.Value.value, test.Value.cipherValue);
                     });
                 }
                 else
                 {
                     Assert.ThrowsException<ArgumentNullException>(() =>
                     {
-                        var result = symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
+                        var result = symmetricEncryption.ValidateEncryption(test.Value.value, test.Value.cipherValue);
                     });
                 }
             }
@@ -182,17 +182,17 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
             var serviceProvider = _serviceCollection.BuildServiceProvider();
 
-            var symmetricEncryptionResultPattern = serviceProvider.GetService<ISymmetricEncryptionResultPattern>();
+            var symmetricEncryption = serviceProvider.GetService<ISymmetricEncryption>();
 
-            var encriptedMessage = symmetricEncryptionResultPattern.Encrypt(_inputByte);
+            var encriptedMessage = symmetricEncryption.Encrypt(_inputByte);
 
-            var otherEncriptedMessage = symmetricEncryptionResultPattern.Encrypt(_inputByteFake);
+            var otherEncriptedMessage = symmetricEncryption.Encrypt(_inputByteFake);
 
             _TestValidateEncryptionArrayByte = new Dictionary<string, (byte[]? value, byte[]? cipherValue)>
             {
-                {"Value_null_cipherValue_ok",new (null,encriptedMessage.SuccessValue)},
-                {"Value_ok_cipherValue_null",new (null,encriptedMessage.SuccessValue)},
-                {"Value_ok_cipherValue_wrong",new (_inputByte, otherEncriptedMessage.SuccessValue)}
+                {"Value_null_cipherValue_ok",new (null,encriptedMessage)},
+                {"Value_ok_cipherValue_null",new (null,encriptedMessage)},
+                {"Value_ok_cipherValue_wrong",new (_inputByte, otherEncriptedMessage)}
             };
 
             foreach (var test in _TestValidateEncryptionArrayByte)
@@ -201,14 +201,14 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                 {
                     Assert.ThrowsException<CryptographicException>(() =>
                     {
-                        var result = symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
+                         symmetricEncryption.ThrowIfInvalidEncryption(test.Value.value, test.Value.cipherValue);
                     });
                 }
                 else
                 {
                     Assert.ThrowsException<ArgumentNullException>(() =>
                     {
-                        var result = symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
+                        var result = symmetricEncryption.ValidateEncryption(test.Value.value, test.Value.cipherValue);
                     });
                 }
             }
@@ -225,17 +225,17 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
             var serviceProvider = _serviceCollection.BuildServiceProvider();
 
-            var symmetricEncryptionResultPattern = serviceProvider.GetService<ISymmetricEncryptionResultPattern>();
+            var symmetricEncryption = serviceProvider.GetService<ISymmetricEncryption>();
 
-            var encriptedMessage = symmetricEncryptionResultPattern.Encrypt(_inputSecureString);
+            var encriptedMessage = symmetricEncryption.Encrypt(_inputSecureString);
 
-            var otherEncriptedMessage = symmetricEncryptionResultPattern.Encrypt(_inputSecureString);
+            var otherEncriptedMessage = symmetricEncryption.Encrypt(_inputSecureString);
 
             _TestValidateEncryptionSecureString = new Dictionary<string, (SecureString? value, SecureString? cipherValue)>
             {
-                {"Value_null_cipherValue_ok",new (null,encriptedMessage.SuccessValue)},
-                {"Value_ok_cipherValue_null",new (null,encriptedMessage.SuccessValue)},
-                {"Value_ok_cipherValue_wrong",new (_inputSecureString, otherEncriptedMessage.SuccessValue)}
+                {"Value_null_cipherValue_ok",new (null,encriptedMessage)},
+                {"Value_ok_cipherValue_null",new (null,encriptedMessage)},
+                {"Value_ok_cipherValue_wrong",new (_inputSecureString, otherEncriptedMessage)}
             };
 
             foreach (var test in _TestValidateEncryptionSecureString)
@@ -244,14 +244,14 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                 {
                     Assert.ThrowsException<CryptographicException>(() =>
                     {
-                        var result = symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
+                         symmetricEncryption.ThrowIfInvalidEncryption(test.Value.value, test.Value.cipherValue);
                     });
                 }
                 else
                 {
                     Assert.ThrowsException<ArgumentNullException>(() =>
                     {
-                        var result = symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
+                        var result = symmetricEncryption.ValidateEncryption(test.Value.value, test.Value.cipherValue);
                     });
                 }
             }
