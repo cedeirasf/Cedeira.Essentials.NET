@@ -165,12 +165,15 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         /// </summary>
         /// <param name="input">The original plain text input string to compare.</param>
         /// <param name="cipherInput">The encrypted input string to be decrypted and compared against the input.</param>
-        /// <returns>Returns true if the decrypted text matches the original input; otherwise, throws an exception.</returns>
+        /// <returns>Returns true if the decrypted text matches the original input; otherwise, false</returns>
         public bool ValidateEncryption(string input, string cipherInput)
         {
+            ValidateNull(input);
+            ValidateNull(cipherInput);
+
             var decryptedText = Decrypt(cipherInput);
 
-            return (input == decryptedText) ? true : throw new CryptographicException("Encryption validation failed: The decrypted text does not match the original input.");
+            return (input == decryptedText) ? true : false;
         }
 
         /// <summary>
@@ -179,12 +182,15 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         /// </summary>
         /// <param name="input">The original plain text input as a byte array to compare.</param>
         /// <param name="cipherInput">The encrypted byte array to be decrypted and compared against the input.</param>
-        /// <returns>Returns true if the decrypted byte array matches the original input; otherwise, throws an exception.</returns>
+        /// <returns>Returns true if the decrypted byte array matches the original input; otherwise, false.</returns>
         public bool ValidateEncryption(byte[] input, byte[] cipherInput)
         {
+            ValidateNull(input);
+            ValidateNull(cipherInput);
+
             var decryptedText = Decrypt(cipherInput);
 
-            return (input == decryptedText) ? true : throw new CryptographicException("Encryption validation failed: The decrypted text does not match the original input."); throw new CryptographicException("Encryption fail  ");
+            return (input.SequenceEqual(decryptedText)) ? true : false;
         }
 
         /// <summary>
@@ -193,7 +199,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         /// </summary>
         /// <param name="input">The original plain text input as a SecureString to compare.</param>
         /// <param name="cipherInput">The encrypted SecureString to be decrypted and compared against the input.</param>
-        /// <returns>Returns true if the decrypted SecureString matches the original input; otherwise, throws an exception.</returns>
+        /// <returns>Returns true if the decrypted SecureString matches the original input; otherwise,false.</returns>
         public bool ValidateEncryption(SecureString input, SecureString cipherInput)
         {
             ValidateNull(input);
@@ -201,7 +207,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
             var decryptedText = Decrypt(cipherInput);
 
-            return (input == decryptedText) ? true : throw new CryptographicException("Encryption validation failed: The decrypted text does not match the original input."); throw new CryptographicException("Encryption fail  ");
+            return (input.Validate(decryptedText)) ? true : false;
         }
 
         /// <summary>
@@ -210,16 +216,19 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         /// </summary>
         /// <param name="input">The original plain text input as a StreamReader to compare.</param>
         /// <param name="cipherInput">The encrypted StreamReader to be decrypted and compared against the input.</param>
-        /// <returns>Returns true if the decrypted StreamReader matches the original input; otherwise, throws an exception.</returns>
+        /// <returns>Returns true if the decrypted StreamReader matches the original input; otherwise false.</returns>
         public bool ValidateEncryption(StreamReader input, StreamReader cipherInput)
         {
             ValidateNull(input);
             ValidateNull(cipherInput);
 
+            bool result = true; 
+
             var decryptedText = Decrypt(cipherInput);
 
             input.BaseStream.Position = 0;
             decryptedText.BaseStream.Position = 0;
+
             input.DiscardBufferedData();
             decryptedText.DiscardBufferedData();
 
@@ -229,14 +238,39 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
                        (byteFromDecrypted = decryptedText.BaseStream.ReadByte()) != -1)
             {
                 if (byteFromInput != byteFromDecrypted)
-                    throw new CryptographicException("Encryption validation failed: The decrypted text does not match the original input.");
+                    result = false;
             }
 
             if (input.BaseStream.ReadByte() != -1 || decryptedText.BaseStream.ReadByte() != -1)
-                throw new CryptographicException("Encryption validation failed: Streams are of different lengths.");
-            
-            return true;
+                result = false;
+
+            return result;
         }
+
+        public void ThrowIfInvalidEncryption(string input, string cipherIput) 
+        {
+            if (!ValidateEncryption(input, cipherIput))
+                throw new CryptographicException("Encryption validation failed: The decrypted text does not match the original input.");
+        }
+
+        public void ThrowIfInvalidEncryption(byte[] input, byte[] cipherIput)
+        {
+            if (!ValidateEncryption(input, cipherIput))
+                throw new CryptographicException("Encryption validation failed: The decrypted text does not match the original input.");
+        }
+
+        public void ThrowIfInvalidEncryption(SecureString input, SecureString cipherIput)
+        {
+            if (!ValidateEncryption(input, cipherIput))
+                throw new CryptographicException("Encryption validation failed: The decrypted text does not match the original input.");
+        }
+
+        public void ThrowIfInvalidEncryption(StreamReader input, StreamReader cipherIput)
+        {
+            if (!ValidateEncryption(input, cipherIput))
+                throw new CryptographicException("Encryption validation failed: The decrypted text does not match the original input.");
+        }
+
 
         /// <summary>
         /// Encrypts the specified byte array using the symmetric algorithm.

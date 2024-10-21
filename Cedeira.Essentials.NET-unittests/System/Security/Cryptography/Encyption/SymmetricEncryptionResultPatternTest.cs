@@ -1,11 +1,9 @@
-﻿using Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encryption;
-using Cedeira.Essentials.NET.System.ResultPattern.Factories;
+﻿using Cedeira.Essentials.NET.System.ResultPattern.Factories;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Enum;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Factories;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
@@ -36,13 +34,13 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
         private Dictionary<string, (SymmetricAlgorithmTypeEnum algorithm, CipherModeTypeEnum cipherMode, string key, string iV, PaddingMode paddingMode, StreamReader expectedResponse, bool expectedResult)> TestEncryptionsInputStreamReader;
 
 
-        private Dictionary<string, (string? value, string? cipherValue, bool expectedResult)> _TestValidateEncryptionString;
+            private Dictionary<string, (string? value, string? cipherValue, bool expectedResult)> _TestValidateEncryptionString;
 
-        private Dictionary<string, (byte[]? value, byte[]? cipherValue, bool expectedResult)> _TestValidateEncryptionArrayByte;
+            private Dictionary<string, (byte[]? value, byte[]? cipherValue, bool expectedResult)> _TestValidateEncryptionArrayByte;
 
-        private Dictionary<string, (SecureString? value, SecureString? cipherValue, bool expectedResult)> _TestValidateEncryptionSecureString;
+            private Dictionary<string, (SecureString? value, SecureString? cipherValue, bool expectedResult)> _TestValidateEncryptionSecureString;
 
-        private Dictionary<string, (StreamReader? value, StreamReader? cipherValue, bool expectedResult)> _TestValidateEncryptionStreamReader;
+            private Dictionary<string, (StreamReader? value, StreamReader? cipherValue, bool expectedResult)> _TestValidateEncryptionStreamReader;
 
         /// <summary>
         /// Key of 8 bytes.
@@ -96,6 +94,12 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
         private StreamReader _inputStreamReaderFake;
 
+        private string _inputFake;
+
+        private byte[] _inputByteFake;
+
+        private SecureString _inputSecureStringFake;    
+
         /// <summary>
         /// Service collection for dependency injection.
         /// </summary>
@@ -128,6 +132,16 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
             _inputStreamReaderFake = new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes("Fake.")));
             _inputStreamReaderFake.BaseStream.Position = 0;
+            _inputFake = " Calle falsa 123";
+            _inputByteFake = Encoding.UTF8.GetBytes(_inputFake);
+
+            _inputSecureStringFake = new SecureString();
+
+            foreach (char character in _inputFake)
+            {
+                _inputSecureStringFake.AppendChar(character);
+            }
+            _inputSecureStringFake.MakeReadOnly();
 
             _key_8_bytes = "12345678";
             _key_16_bytes = "1234567890abcdef";
@@ -137,7 +151,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
             _iV_8_bytes = "abcdefgh";
             _serviceCollection = new ServiceCollection();
             _resultFactory = new ResultFactory();
-
         }
 
         /// <summary>
@@ -413,16 +426,146 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
                     Assert.IsTrue(result.IsSuccess());
                 }
-                else 
+                else
                 {
 
                     var result = symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
 
                     Assert.IsTrue(result.IsFailure());
                 }
-                
+
             }
         }
+
+        /// <summary>
+        /// Test method to create symmetric encryption context with full configuration and test encrypt and decrypt methos wiht a string input
+        /// </summary>
+        [TestMethod]
+        public void Validate_SymmetricEncryptionResulPattern_Input_String_Create()
+        {
+            _serviceCollection.AddSingleton((ISymmetricEncryptionContext)SymmetricEncryptionContext.Create());
+            _serviceCollection.AddSingleton(sp => new SymmetricEncryptionResultPatternFactory(sp.GetRequiredService<ISymmetricEncryptionContext>(), _resultFactory).Create());
+
+            var serviceProvider = _serviceCollection.BuildServiceProvider();
+
+            var symmetricEncryptionResultPattern = serviceProvider.GetService<ISymmetricEncryptionResultPattern>();
+
+            var encriptedMessage = symmetricEncryptionResultPattern.Encrypt(_input);
+
+            var otherEncriptedMessage = symmetricEncryptionResultPattern.Encrypt(_inputFake);
+
+            _TestValidateEncryptionString = new Dictionary<string, (string? value, string? cipherValue, bool expectedResult)>
+            {
+                {"Value_ok_cipherValue_ok",new (_input,encriptedMessage.SuccessValue,true)},
+                {"Value_null_cipherValue_ok",new (null,encriptedMessage.SuccessValue,false)},
+                {"Value_ok_cipherValue_null",new (null,encriptedMessage.SuccessValue,false)},
+                {"Value_ok_cipherValue_wrong",new (_input, otherEncriptedMessage.SuccessValue,false)}
+            };
+
+            foreach (var test in _TestValidateEncryptionString)
+            {
+                if (test.Value.expectedResult)
+                {
+                    var result = symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
+
+                    Assert.IsTrue(result.IsSuccess());
+                }
+                else
+                {
+                    var result = symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
+
+                    Assert.IsTrue(result.IsFailure());
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Test method to create symmetric encryption context with full configuration and test encrypt and decrypt methos wiht a string input
+        /// </summary>
+        [TestMethod]
+        public void Validate_SymmetricEncryptionResulPattern_Input_Array_Byte_Create()
+        {
+            _serviceCollection.AddSingleton((ISymmetricEncryptionContext)SymmetricEncryptionContext.Create());
+            _serviceCollection.AddSingleton(sp => new SymmetricEncryptionResultPatternFactory(sp.GetRequiredService<ISymmetricEncryptionContext>(), _resultFactory).Create());
+
+            var serviceProvider = _serviceCollection.BuildServiceProvider();
+
+            var symmetricEncryptionResultPattern = serviceProvider.GetService<ISymmetricEncryptionResultPattern>();
+
+            var encriptedMessage = symmetricEncryptionResultPattern.Encrypt(_inputByte);
+
+            var otherEncriptedMessage = symmetricEncryptionResultPattern.Encrypt(_inputByteFake);
+
+            _TestValidateEncryptionArrayByte = new Dictionary<string, (byte[]? value, byte[]? cipherValue, bool expectedResult)>
+            {
+                {"Value_ok_cipherValue_ok",new (_inputByte,encriptedMessage.SuccessValue,true)},
+                {"Value_null_cipherValue_ok",new (null,encriptedMessage.SuccessValue,false)},
+                {"Value_ok_cipherValue_null",new (null,encriptedMessage.SuccessValue,false)},
+                {"Value_ok_cipherValue_wrong",new (_inputByte, otherEncriptedMessage.SuccessValue,false)}
+            };
+
+            foreach (var test in _TestValidateEncryptionArrayByte)
+            {
+                if (test.Value.expectedResult)
+                {
+                    var result = symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
+
+                    Assert.IsTrue(result.IsSuccess());
+                }
+                else
+                {
+                    var result = symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
+
+                    Assert.IsTrue(result.IsFailure());
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Test method to create symmetric encryption context with full configuration and test encrypt and decrypt methos wiht a SecureString input
+        /// </summary>
+        [TestMethod]
+        public void Validate_SymmetricEncryptionResulPattern_Input_SecureString_Create()
+        {
+            _serviceCollection.AddSingleton((ISymmetricEncryptionContext)SymmetricEncryptionContext.Create());
+            _serviceCollection.AddSingleton(sp => new SymmetricEncryptionResultPatternFactory(sp.GetRequiredService<ISymmetricEncryptionContext>(), _resultFactory).Create());
+
+            var serviceProvider = _serviceCollection.BuildServiceProvider();
+
+            var symmetricEncryptionResultPattern = serviceProvider.GetService<ISymmetricEncryptionResultPattern>();
+
+            var encriptedMessage = symmetricEncryptionResultPattern.Encrypt(_inputSecureString);
+
+            var otherEncriptedMessage = symmetricEncryptionResultPattern.Encrypt(_inputSecureString);
+
+            _TestValidateEncryptionSecureString = new Dictionary<string, (SecureString? value, SecureString? cipherValue, bool expectedResult)>
+            {
+                {"Value_ok_cipherValue_ok",new (_inputSecureString,encriptedMessage.SuccessValue,true)},
+                {"Value_null_cipherValue_ok",new (null,encriptedMessage.SuccessValue,false)},
+                {"Value_ok_cipherValue_null",new (null,encriptedMessage.SuccessValue,false)},
+                {"Value_ok_cipherValue_wrong",new (_inputSecureString, otherEncriptedMessage.SuccessValue,false)}
+            };
+
+            foreach (var test in _TestValidateEncryptionSecureString)
+            {
+                if (test.Value.expectedResult)
+                {
+                    var result = symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
+
+                    Assert.IsTrue(result.IsSuccess());
+                }
+                else
+                {
+                    var result = symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
+
+                    Assert.IsTrue(result.IsFailure());
+                }
+
+            }
+        }
+
 
 
     }

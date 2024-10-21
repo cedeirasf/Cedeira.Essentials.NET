@@ -233,7 +233,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
                   ? _resultFactory.Success(isValid)
                   : _resultFactory.Failure("Encryption validation failed: The decrypted cipherInput does not match the original input.");
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
                 result = _resultFactory.Failure(ex.Message);
             }
@@ -260,7 +260,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
                   ? _resultFactory.Success(isValid)
                   : _resultFactory.Failure("Encryption validation failed: The decrypted cipherInput does not match the original input.");
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
                 result = _resultFactory.Failure(ex.Message);
             }
@@ -287,7 +287,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
                   ? _resultFactory.Success(isValid)
                   : _resultFactory.Failure("Encryption validation failed: The decrypted cipherInput does not match the original input.");
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
                 result = _resultFactory.Failure(ex.Message);
             }

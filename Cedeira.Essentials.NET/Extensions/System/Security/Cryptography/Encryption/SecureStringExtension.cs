@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
@@ -89,6 +90,23 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encrypt
                 Marshal.ZeroFreeGlobalAllocUnicode(cipherPtr);
             }
         }
+
+        public static bool Validate(this SecureString input, SecureString decryptedValue) 
+        {
+            var result = true;
+
+           var inputPtr = Marshal.SecureStringToGlobalAllocUnicode(input);
+           var  decryptedTextPtr = Marshal.SecureStringToGlobalAllocUnicode(decryptedValue);
+
+            string inputString = Marshal.PtrToStringUni(inputPtr);
+            string decryptedTextString = Marshal.PtrToStringUni(decryptedTextPtr);
+
+            if (inputString != decryptedTextString)
+                return false;
+
+            return result;
+        }
+
     }
 }
 
