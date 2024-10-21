@@ -229,7 +229,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
             var encriptedMessage = symmetricEncryption.Encrypt(_inputSecureString);
 
-            var otherEncriptedMessage = symmetricEncryption.Encrypt(_inputSecureString);
+            var otherEncriptedMessage = symmetricEncryption.Encrypt(_inputSecureStringFake);
 
             _TestValidateEncryptionSecureString = new Dictionary<string, (SecureString? value, SecureString? cipherValue)>
             {
