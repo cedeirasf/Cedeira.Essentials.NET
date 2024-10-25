@@ -213,5 +213,114 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
             return result;
         }
+
+        /// <summary>
+        /// Validates if the provided string input matches the decrypted version of the cipherInput.
+        /// Returns the result as an <see cref="IResult{T}"/> indicating success or failure.
+        /// </summary>
+        /// <param name="input">The original plain text input string to compare.</param>
+        /// <param name="cipherInput">The encrypted input string to be decrypted and compared against the input.</param>
+        /// <returns>An <see cref="IResult"/> indicating whether the decrypted text matches the original input.</returns>
+        public IResult ValidateEncryption(string input, string cipherInput)
+        {
+            IResult result;
+
+            try
+            {
+                bool isValid = _symmetricEncryption.ValidateEncryption(input, cipherInput);
+
+                result = isValid
+                  ? _resultFactory.Success(isValid)
+                  : _resultFactory.Failure("Encryption validation failed: The decrypted cipherInput does not match the original input.");
+            }
+            catch (Exception ex)
+            {
+                result = _resultFactory.Failure(ex.Message);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Validates if the provided byte array input matches the decrypted version of the cipherInput byte array.
+        /// Returns the result as an <see cref="IResult{T}"/> indicating success or failure.
+        /// </summary>
+        /// <param name="input">The original plain text input as a byte array to compare.</param>
+        /// <param name="cipherInput">The encrypted byte array to be decrypted and compared against the input.</param>
+        /// <returns>An <see cref="IResult"/> indicating whether the decrypted byte array matches the original input.</returns>
+        public IResult ValidateEncryption(byte[] input, byte[] cipherInput)
+        {
+            IResult result;
+
+            try
+            {
+                bool isValid = _symmetricEncryption.ValidateEncryption(input, cipherInput);
+
+                result = isValid
+                  ? _resultFactory.Success(isValid)
+                  : _resultFactory.Failure("Encryption validation failed: The decrypted cipherInput does not match the original input.");
+            }
+            catch (Exception ex)
+            {
+                result = _resultFactory.Failure(ex.Message);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Validates if the provided SecureString input matches the decrypted version of the cipherInput SecureString.
+        /// Returns the result as an <see cref="IResult{T}"/> indicating success or failure.
+        /// </summary>
+        /// <param name="input">The original plain text input as a SecureString to compare.</param>
+        /// <param name="cipherInput">The encrypted SecureString to be decrypted and compared against the input.</param>
+        /// <returns>An <see cref="IResult"/> indicating whether the decrypted SecureString matches the original input.</returns>
+        public IResult ValidateEncryption(SecureString input, SecureString cipherInput)
+        {
+            IResult result;
+
+            try
+            {
+                bool isValid = _symmetricEncryption.ValidateEncryption(input, cipherInput);
+
+                result = isValid
+                  ? _resultFactory.Success(isValid)
+                  : _resultFactory.Failure("Encryption validation failed: The decrypted cipherInput does not match the original input.");
+            }
+            catch (Exception ex)
+            {
+                result = _resultFactory.Failure(ex.Message);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Validates if the provided StreamReader input matches the decrypted version of the cipherInput StreamReader.
+        /// Returns the result as an <see cref="IResult{T}"/> indicating success or failure.
+        /// </summary>
+        /// <param name="input">The original plain text input as a StreamReader to compare.</param>
+        /// <param name="cipherInput">The encrypted StreamReader to be decrypted and compared against the input.</param>
+        /// <returns>An <see cref="IResult"/> indicating whether the decrypted StreamReader matches the original input.</returns>
+        public IResult ValidateEncryption(StreamReader input, StreamReader cipherInput)
+        {
+            IResult result;
+
+            try
+            {
+                bool isValid = _symmetricEncryption.ValidateEncryption(input, cipherInput);
+
+                result = isValid
+                  ? _resultFactory.Success(isValid)
+                  : _resultFactory.Failure("Encryption validation failed: The decrypted cipherInput does not match the original input.");
+            }
+            catch (Exception ex)
+            {
+                result = _resultFactory.Failure(ex.Message);
+            }
+
+            return result;
+        }
+
     }
 }
