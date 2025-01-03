@@ -173,7 +173,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         }
 
         /// <summary>
-        /// Este customInvariant permite agregar una validación personalizada al valor. 
+        /// Este customInvariant permite agregar una validación personalizada
         /// </summary>
         /// <param name="action"></param>
         /// <param name="errorMessage"></param>

@@ -111,7 +111,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             var validator = Invariants.For("Hello");
             validator.CustomInvariant(x =>
             {
-                if (x.Length != 5)
+                if (x.Length == 5)
                 {
                     throw new ArgumentException();
                 }
