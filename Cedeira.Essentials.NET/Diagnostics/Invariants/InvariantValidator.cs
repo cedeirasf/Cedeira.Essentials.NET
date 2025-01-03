@@ -173,7 +173,8 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         }
 
         /// <summary>
-        /// Este customInvariant permite agregar una validación personalizada
+        /// verifica que el valor cumpla con una condición personalizada.Si es safisfactoria, no hace nada.Si no, lanza una ArgumentException.
+        /// Se puede especificar un mensaje de error personalizado.
         /// </summary>
         /// <param name="action"></param>
         /// <param name="errorMessage"></param>
@@ -191,7 +192,6 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             }
             return this;
         }
-
     }
 }
 
