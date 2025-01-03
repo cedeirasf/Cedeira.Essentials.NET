@@ -103,6 +103,14 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
                 .MaximumLength(10)
                 .MatchesRegex("^[a-zA-Z0-9]*$");
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CustomValidation_ShouldPass_WhenValueIsValid()
+        {
+            var validator = Invariants.For("Hello");
+            validator.CustomInvariant(x => x.Length == 5, "Value must be 5 characters long.");
+        }       
     }
 
 }
