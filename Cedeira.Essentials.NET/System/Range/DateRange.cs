@@ -1,4 +1,5 @@
 ﻿using Cedeira.Essentials.NET.Diagnostics.Invariants;
+using System.Range;
 
 namespace Cedeira.Essentials.NET.System.Range
 {
