@@ -1,5 +1,5 @@
 ﻿using Cedeira.Essentials.NET.Diagnostics.Invariants;
-using System.Range;
+
 
 namespace Cedeira.Essentials.NET.System.Range
 {
@@ -36,7 +36,7 @@ namespace Cedeira.Essentials.NET.System.Range
             return (Start < other.End && End > other.Start);
         }
 
-        //verifica el rango comun entro dos rangos 
+        // Devuelve el rango comun entre dos rangos  
         public DateRange? Intersect(DateRange other)
         {
             if (!OverlapsWith(other))
