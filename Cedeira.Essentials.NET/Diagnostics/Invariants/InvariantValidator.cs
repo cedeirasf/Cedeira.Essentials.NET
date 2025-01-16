@@ -49,7 +49,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         /// Lanza una ArgumentNullException si el valor es nulo.
         /// </summary>
         /// <returns>El propio InvariantValidator para permitir chaining.</returns>
-       
+
         public InvariantValidator<T> IsNotNull()
         {
             return this.IsNotNull("Value can not be null.");
@@ -172,7 +172,26 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             return this;
         }
 
-
+        /// <summary>
+        /// verifica que el valor cumpla con una condición personalizada.Si es safisfactoria, no hace nada.Si no, lanza una ArgumentException.
+        /// Se puede especificar un mensaje de error personalizado.
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="errorMessage"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public InvariantValidator<T> CustomInvariant(Action<T> action, string? errorMessage = null)
+        {
+            try
+            {
+                action(_value);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(errorMessage ?? ex.Message, ex);
+            }
+            return this;
+        }
     }
 }
 

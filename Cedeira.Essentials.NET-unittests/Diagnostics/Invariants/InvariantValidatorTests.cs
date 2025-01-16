@@ -24,7 +24,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         public void IsNotNull_ShouldPass_WhenValueIsNotNull()
         {
             var validator = Invariants.For("Hello");
-            validator.IsNotNull(); 
+            validator.IsNotNull();
         }
 
         [TestMethod]
@@ -39,7 +39,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         public void IsNotNullOrEmpty_ShouldPass_WhenValueIsNotEmpty()
         {
             var validator = Invariants.For("Hello");
-            validator.IsNotNullOrEmpty(); 
+            validator.IsNotNullOrEmpty();
         }
 
         [TestMethod]
@@ -54,7 +54,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         public void MaximumLength_ShouldPass_WhenValueLengthIsLessThanMax()
         {
             var validator = Invariants.For("Hello");
-            validator.MaximumLength(10); 
+            validator.MaximumLength(10);
         }
 
         [TestMethod]
@@ -69,7 +69,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         public void MatchesRegex_ShouldPass_WhenValueMatchesPattern()
         {
             var validator = Invariants.For("Hello123");
-            validator.MatchesRegex("^[a-zA-Z0-9]*$"); 
+            validator.MatchesRegex("^[a-zA-Z0-9]*$");
         }
 
         [TestMethod]
@@ -89,7 +89,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
                 .IsNotNull()
                 .IsNotNullOrEmpty()
                 .MaximumLength(10)
-                .MatchesRegex("^[a-zA-Z0-9]*$"); 
+                .MatchesRegex("^[a-zA-Z0-9]*$");
         }
 
         [TestMethod]
@@ -103,7 +103,33 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
                 .MaximumLength(10)
                 .MatchesRegex("^[a-zA-Z0-9]*$");
         }
-    }
 
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CustomValidation_Should_Throw_Exception()
+        {
+            var validator = Invariants.For("Hello");
+            validator.CustomInvariant(x =>
+            {
+                if (x.Length == 5)
+                {
+                    throw new ArgumentException();
+                }
+            }, "Value must be 5 characters long.");
+        }
+
+        [TestMethod]
+        public void CustomValidation_ShouldPass_()
+        {
+            var validator = Invariants.For(1);
+            validator.CustomInvariant(value =>
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentException();
+                }
+            }, "Value must be positive.");  
+        }
+    }
 }
 
