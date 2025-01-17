@@ -1,6 +1,6 @@
 ﻿using Cedeira.Essentials.NET.System.Resilience.Fallback;
 
-namespace Cedeira.Essentials.NET_unittests.System.Collections
+namespace Cedeira.Essentials.NET_unittests.System.Resilience
 {
     [TestClass]
     public class FallbackStrategyTest

@@ -33,10 +33,12 @@ namespace Cedeira.Essentials.NET.System.Range
             Invariants.For(start).IsNotNull();
             Invariants.For(end).IsNotNull();
 
-            if (start > end)
+            Invariants.For(start).CustomInvariant(value =>
             {
-                throw new ArgumentException("The start date must be earlier than or equal to the end date.");
-            }
+                if (value > end)
+                    throw new ArgumentException();
+
+            }, "The start date must be earlier than or equal to the end date.");
 
             Start = start;
             End = end;
@@ -114,7 +116,7 @@ namespace Cedeira.Essentials.NET.System.Range
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{Start:yyyy-MM-dd} to {End:yyyy-MM-dd}";
+            return $"{Start:dd-MM-yyyy} to {End:dd-MM-yyyy}";
         }
 
         /// <summary>
