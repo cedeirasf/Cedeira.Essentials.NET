@@ -1,4 +1,4 @@
-﻿namespace Cedeira.Essentials.NET_unittests.System.Collections
+﻿namespace Cedeira.Essentials.NET_unittests.System.Resilience
 {
     public class UserClassTest
     {
