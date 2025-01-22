@@ -51,6 +51,16 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void IsNotNullOrEmpty_ShouldThrow_WhenValueIsNull()
+        {
+            string? primitiveString = null;
+
+            var validator = Invariants.For(primitiveString);
+            validator.IsNotNullOrEmpty();
+        }
+
+        [TestMethod]
         public void MaximumLength_ShouldPass_WhenValueLengthIsLessThanMax()
         {
             var validator = Invariants.For("Hello");

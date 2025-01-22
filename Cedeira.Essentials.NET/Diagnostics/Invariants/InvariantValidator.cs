@@ -95,7 +95,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         /// <exception cref="ArgumentException">Si el valor es una cadena vacía.</exception>
         public InvariantValidator<T> IsNotNullOrEmpty(string errorMessage)
         {
-            if (string.IsNullOrEmpty(errorMessage))
+            if (_value == null)
             {
                 throw new ArgumentNullException(nameof(errorMessage));
             }
