@@ -86,23 +86,28 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         }
 
         /// <summary>
-        /// Verifica que el valor no sea nulo esté vacío.
-        /// Lanza una ArgumentException si el valor es una cadena vacía.
+        /// Verifica que el valor no sea nulo o esté vacío.
+        /// Lanza una ArgumentException si el valor es nulo o una cadena vacía.
         /// </summary>
         /// <param name="errorMessage">El mensaje de error específico a lanzar si el valor es nulo o está vacío.</param>
         /// <returns>El propio InvariantValidator para permitir chaining.</returns>
         /// <exception cref="ArgumentNullException">Si el mensaje de error es nulo o vacío.</exception>
-        /// <exception cref="ArgumentException">Si el valor es una cadena vacía.</exception>
+        /// <exception cref="ArgumentException">Si el valor es nulo o está vacío.</exception>
         public InvariantValidator<T> IsNotNullOrEmpty(string errorMessage)
         {
-            if (_value == null)
+            if (string.IsNullOrEmpty(errorMessage))
             {
-                throw new ArgumentNullException(nameof(errorMessage));
+                throw new ArgumentNullException($"{nameof(errorMessage)} cannot be null or empty. Please provide a valid error message.");
             }
-            if (_value is string x && string.IsNullOrEmpty(x))
+            else if (_value == null)
+            {
+                throw new ArgumentNullException(errorMessage);
+            }
+            else if (_value is string x && string.IsNullOrEmpty(x))
             {
                 throw new ArgumentException(errorMessage);
             }
+
             return this;
         }
 
