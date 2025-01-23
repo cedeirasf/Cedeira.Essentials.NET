@@ -211,7 +211,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             }
             catch (Exception ex)
             {
-                throw new ArgumentException(errorMessage ?? ex.Message, nameof(_value), ex);
+                throw new ArgumentException(errorMessage ?? ex.Message, ex);
             }
             return this;
         }

@@ -161,6 +161,16 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
                 }
             }, "Value must be positive.");  
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CustomValidation_ShouldNotPass_With_Null_Action()
+        {
+            var validator = Invariants.For(1);
+            validator.CustomInvariant(null
+            , "Value must be positive.");
+        }
+
     }
 }
 
