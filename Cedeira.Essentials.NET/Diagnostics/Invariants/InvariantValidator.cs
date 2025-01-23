@@ -5,6 +5,9 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
     public class InvariantValidator<T>
     {
         private readonly T _value;
+        private const string DefaultNullErrorMessage = "Value cannot be null or empty.";
+        private const string DefaultSpecialCharactersMessage = "Value cannot contain special characters";
+        private const string ErrorMessageParamName = "errorMessage";
 
         public InvariantValidator(T value)
         {
@@ -33,10 +36,8 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         /// <exception cref="ArgumentException">Si los valores no son iguales.</exception>
         public InvariantValidator<T> IsEqual(T expected, string errorMessage)
         {
-            if (string.IsNullOrEmpty(errorMessage))
-            {
-                throw new ArgumentNullException(nameof(errorMessage));
-            }
+            ValidateErrorMessage(errorMessage);
+
             if (!Equals(_value, expected))
             {
                 throw new ArgumentException(errorMessage);
@@ -49,10 +50,9 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         /// Lanza una ArgumentNullException si el valor es nulo.
         /// </summary>
         /// <returns>El propio InvariantValidator para permitir chaining.</returns>
-
         public InvariantValidator<T> IsNotNull()
         {
-            return this.IsNotNull("Value can not be null.");
+            return this.IsNotNull(DefaultNullErrorMessage);
         }
 
         /// <summary>
@@ -64,13 +64,11 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         /// <exception cref="ArgumentNullException">Si el mensaje de error es nulo o vacío, o si el valor es nulo.</exception>
         public InvariantValidator<T> IsNotNull(string errorMessage)
         {
-            if (string.IsNullOrEmpty(errorMessage))
-            {
-                throw new ArgumentNullException(nameof(errorMessage));
-            }
+            ValidateErrorMessage(errorMessage);
+
             if (_value == null)
             {
-                throw new ArgumentNullException(errorMessage);
+                throw new ArgumentNullException(nameof(_value), errorMessage);
             }
             return this;
         }
@@ -82,7 +80,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         /// <returns>El propio InvariantValidator para permitir chaining.</returns>
         public InvariantValidator<T> IsNotNullOrEmpty()
         {
-            return this.IsNotNullOrEmpty("Value cannot be null or empty.");
+            return this.IsNotNullOrEmpty(DefaultNullErrorMessage);
         }
 
         /// <summary>
@@ -95,17 +93,16 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         /// <exception cref="ArgumentException">Si el valor es nulo o está vacío.</exception>
         public InvariantValidator<T> IsNotNullOrEmpty(string errorMessage)
         {
-            if (string.IsNullOrEmpty(errorMessage))
+            ValidateErrorMessage(errorMessage);
+
+            if (_value == null)
             {
-                throw new ArgumentNullException($"{nameof(errorMessage)} cannot be null or empty. Please provide a valid error message.");
+                throw new ArgumentNullException(nameof(_value), errorMessage);
             }
-            else if (_value == null)
+
+            if (_value is string stringValue && string.IsNullOrEmpty(stringValue))
             {
-                throw new ArgumentNullException(errorMessage);
-            }
-            else if (_value is string x && string.IsNullOrEmpty(x))
-            {
-                throw new ArgumentException(errorMessage);
+                throw new ArgumentException(errorMessage, nameof(_value));
             }
 
             return this;
@@ -133,13 +130,16 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         /// <exception cref="ArgumentException">Si la longitud del valor excede la longitud máxima.</exception>
         public InvariantValidator<T> MaximumLength(int maxLength, string errorMessage)
         {
-            if (string.IsNullOrEmpty(errorMessage))
+            ValidateErrorMessage(errorMessage);
+
+            if (maxLength < 0)
             {
-                throw new ArgumentNullException(nameof(errorMessage));
+                throw new ArgumentException("Maximum length cannot be negative.", nameof(maxLength));
             }
-            if (_value is string x && x.Length > maxLength)
+
+            if (_value is string stringValue && stringValue.Length > maxLength)
             {
-                throw new ArgumentException(errorMessage);
+                throw new ArgumentException(errorMessage, nameof(_value));
             }
             return this;
         }
@@ -152,7 +152,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         /// <returns>El propio InvariantValidator para permitir chaining.</returns>
         public InvariantValidator<T> MatchesRegex(string pattern)
         {
-            return this.MatchesRegex(pattern, "Value cannot contain especial characters");
+            return this.MatchesRegex(pattern, DefaultSpecialCharactersMessage);
         }
 
         /// <summary>
@@ -166,27 +166,45 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         /// <exception cref="FormatException">Si el valor contiene caracteres especiales.</exception>
         public InvariantValidator<T> MatchesRegex(string pattern, string errorMessage)
         {
-            if (string.IsNullOrEmpty(errorMessage))
+            ValidateErrorMessage(errorMessage);
+
+            if (string.IsNullOrEmpty(pattern))
             {
-                throw new ArgumentNullException(nameof(errorMessage));
+                throw new ArgumentNullException(nameof(pattern));
             }
-            if (_value is string x && !Regex.IsMatch(x, pattern))
+
+            if (_value is string stringValue)
             {
-                throw new FormatException(errorMessage);
+                try
+                {
+                    if (!Regex.IsMatch(stringValue, pattern, RegexOptions.Compiled))
+                    {
+                        throw new FormatException(errorMessage);
+                    }
+                }
+                catch (ArgumentException ex)
+                {
+                    throw new ArgumentException("Invalid regular expression pattern", nameof(pattern), ex);
+                }
             }
             return this;
         }
 
         /// <summary>
-        /// verifica que el valor cumpla con una condición personalizada.Si es safisfactoria, no hace nada.Si no, lanza una ArgumentException.
-        /// Se puede especificar un mensaje de error personalizado.
+        /// Verifica que el valor cumpla con una condición personalizada.
+        /// Si es satisfactoria, no hace nada. Si no, lanza una ArgumentException.
         /// </summary>
-        /// <param name="action"></param>
-        /// <param name="errorMessage"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <param name="action">La acción de validación personalizada.</param>
+        /// <param name="errorMessage">Mensaje de error opcional.</param>
+        /// <returns>El propio InvariantValidator para permitir chaining.</returns>
+        /// <exception cref="ArgumentException">Si la validación falla.</exception>
         public InvariantValidator<T> CustomInvariant(Action<T> action, string? errorMessage = null)
         {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
             try
             {
                 action(_value);
@@ -197,6 +215,19 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             }
             return this;
         }
+
+        /// <summary>
+        /// Método Helper Privado para validar mensajes de error
+        /// </summary>
+        /// <param name="errorMessage">El mensaje de error a validar</param>
+        /// <param name="paramName">El nombre del parámetro para la excepción</param>
+        /// <exception cref="ArgumentNullException">Si el mensaje de error es nulo o vacío</exception>
+        private static void ValidateErrorMessage(string errorMessage, string paramName = ErrorMessageParamName)
+        {
+            if (string.IsNullOrEmpty(errorMessage))
+            {
+                throw new ArgumentNullException(paramName, "Error message cannot be null or empty.");
+            }
+        }
     }
 }
-
