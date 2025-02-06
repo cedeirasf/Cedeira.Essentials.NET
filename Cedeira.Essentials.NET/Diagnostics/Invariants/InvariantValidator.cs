@@ -68,7 +68,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
 
             if (_value == null)
             {
-                throw new ArgumentNullException(nameof(_value), errorMessage);
+                throw new ArgumentNullException(errorMessage);
             }
             return this;
         }
@@ -97,12 +97,12 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
 
             if (_value == null)
             {
-                throw new ArgumentNullException(nameof(_value), errorMessage);
+                throw new ArgumentNullException(errorMessage);
             }
 
             if (_value is string stringValue && string.IsNullOrEmpty(stringValue))
             {
-                throw new ArgumentException(errorMessage, nameof(_value));
+                throw new ArgumentException(errorMessage);
             }
 
             return this;
@@ -139,7 +139,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
 
             if (_value is string stringValue && stringValue.Length > maxLength)
             {
-                throw new ArgumentException(errorMessage, nameof(_value));
+                throw new ArgumentException(errorMessage);
             }
             return this;
         }
