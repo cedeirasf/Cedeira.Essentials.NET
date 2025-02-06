@@ -127,12 +127,12 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encrypt
             {
                 if (inputPtr != IntPtr.Zero)
                 {
-                    Marshal.ZeroFreeGlobalAllocUnicode(inputPtr);  
+                    Marshal.ZeroFreeGlobalAllocUnicode(inputPtr);
                 }
 
                 if (decryptedTextPtr != IntPtr.Zero)
                 {
-                    Marshal.ZeroFreeGlobalAllocUnicode(decryptedTextPtr);  
+                    Marshal.ZeroFreeGlobalAllocUnicode(decryptedTextPtr);
                 }
             }
 
