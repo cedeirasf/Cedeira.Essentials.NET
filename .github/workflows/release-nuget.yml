@@ -33,7 +33,7 @@ jobs:
           #!/bin/bash
 
           # Find all projects files and discard testing projects
-          echo "find . -name '*.csproj' | grep -v 'unittests'"
+          echo "$(find . -name '*.csproj' | grep -v 'unittests')"
 
       - name: Add source to GitHub NuGet
         id: add-github-registry-source
