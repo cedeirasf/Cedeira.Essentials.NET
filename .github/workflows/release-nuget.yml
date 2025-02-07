@@ -27,6 +27,14 @@ jobs:
         with:
           dotnet-version: '8.x'
 
+      - name: Find projects files and discard testing projects
+        id: find-projects
+        run: |
+          #!/bin/bash
+
+          # Find all projects files and discard testing projects
+          echo "find . -name '*.csproj' | grep -v 'unittests'"
+
       - name: Add source to GitHub NuGet
         id: add-github-registry-source
         run: dotnet nuget add source --username ${{ env.GH_PACKAGES_USERNAME }} --password ${{ env.GH_PACKAGES_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/cedeirasf/index.json"
