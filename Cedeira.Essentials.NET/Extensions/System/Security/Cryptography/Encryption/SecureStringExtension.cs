@@ -90,6 +90,7 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encrypt
             {
                 cipherPtr = Marshal.SecureStringToGlobalAllocUnicode(input);
                 string base64CipherText = Marshal.PtrToStringUni(cipherPtr) ?? string.Empty;
+                Marshal.ZeroFreeGlobalAllocUnicode(cipherPtr);
 
                 Invariants.For(base64CipherText).IsNotNullOrEmpty();
 
