@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using Cedeira.Essentials.NET.Diagnostics.Invariants;
+using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
@@ -15,35 +16,59 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encrypt
         /// <returns>A new SecureString containing the encrypted data.</returns>
         public static SecureString Encrypt(this SecureString input, ICryptoTransform cryptoTransform)
         {
-            using (MemoryStream ms = new MemoryStream())
-            using (CryptoStream cs = new CryptoStream(ms, cryptoTransform, CryptoStreamMode.Write))
+            Invariants.For(cryptoTransform).IsNotNull();
+
+            IntPtr inputPtr = IntPtr.Zero;
+            byte[] inputBytes = null;
+            byte[] encryptedBytes = null;
+            char[] base64Chars = null;
+
+            try
             {
-                IntPtr inputPtr = Marshal.SecureStringToGlobalAllocUnicode(input);
+                inputPtr = Marshal.SecureStringToGlobalAllocUnicode(input);
+                string inputString = Marshal.PtrToStringUni(inputPtr) ?? string.Empty;
+                Marshal.ZeroFreeGlobalAllocUnicode(inputPtr);
 
-                try
+                Invariants.For(inputString).IsNotNullOrEmpty();
+
+                inputBytes = Encoding.Unicode.GetBytes(inputString);
+
+                using var ms = new MemoryStream();
+                using (var cs = new CryptoStream(ms, cryptoTransform, CryptoStreamMode.Write))
                 {
-                    string inputPtrString = Marshal.PtrToStringUni(inputPtr);
-                    byte[] inputBytes = Encoding.Unicode.GetBytes(inputPtrString);  // Usamos Unicode
-
                     cs.Write(inputBytes, 0, inputBytes.Length);
-                    cs.FlushFinalBlock();  // Asegura que todos los datos se escriban
+                    cs.FlushFinalBlock();
                 }
-                finally
+
+                encryptedBytes = ms.ToArray();
+                base64Chars = Convert.ToBase64String(encryptedBytes).ToCharArray();
+
+                var secureEncryptedText = new SecureString();
+                foreach (char c in base64Chars)
                 {
-                    Marshal.ZeroFreeGlobalAllocUnicode(inputPtr);
-                }
-
-                byte[] encryptedBytes = ms.ToArray();
-
-                SecureString secureEncryptedText = new SecureString();
-
-                foreach (char c in Convert.ToBase64String(encryptedBytes))
                     secureEncryptedText.AppendChar(c);
-
+                }
                 secureEncryptedText.MakeReadOnly();
-                Array.Clear(encryptedBytes, 0, encryptedBytes.Length);
 
                 return secureEncryptedText;
+            }
+            catch (Exception ex)
+            {
+                throw new CryptographicException("Encryption failed", ex);
+            }
+            finally
+            {
+                if (inputBytes != null)
+                    Array.Clear(inputBytes, 0, inputBytes.Length);
+
+                if (encryptedBytes != null)
+                    Array.Clear(encryptedBytes, 0, encryptedBytes.Length);
+
+                if (base64Chars != null)
+                    Array.Clear(base64Chars, 0, base64Chars.Length);
+
+                if (inputPtr != IntPtr.Zero)
+                    Marshal.ZeroFreeGlobalAllocUnicode(inputPtr);
             }
         }
 
@@ -55,46 +80,56 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encrypt
         /// <returns>A new SecureString containing the decrypted data.</returns>
         public static SecureString Decrypt(this SecureString input, ICryptoTransform cryptoTransform)
         {
-            IntPtr cipherPtr = Marshal.SecureStringToGlobalAllocUnicode(input);
+            Invariants.For(cryptoTransform).IsNotNull();
+
+            IntPtr cipherPtr = IntPtr.Zero;
+            byte[] cipherBytes = null;
+            byte[] decryptedBytes = null;
 
             try
             {
-                byte[] cipherBytes = Convert.FromBase64String(Marshal.PtrToStringUni(cipherPtr));
+                cipherPtr = Marshal.SecureStringToGlobalAllocUnicode(input);
+                string base64CipherText = Marshal.PtrToStringUni(cipherPtr) ?? string.Empty;
 
-                using (MemoryStream ms = new MemoryStream(cipherBytes))
-                using (CryptoStream cs = new CryptoStream(ms, cryptoTransform, CryptoStreamMode.Read))
+                Invariants.For(base64CipherText).IsNotNullOrEmpty();
+
+                cipherBytes = Convert.FromBase64String(base64CipherText);
+
+                using var ms = new MemoryStream(cipherBytes);
+                using var cs = new CryptoStream(ms, cryptoTransform, CryptoStreamMode.Read);
+                using var decryptedStream = new MemoryStream();
+
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = cs.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    using (MemoryStream decryptedStream = new MemoryStream())
-                    {
-                        byte[] buffer = new byte[1024];
-                        int bytesRead;
-
-                        while ((bytesRead = cs.Read(buffer, 0, buffer.Length)) > 0)
-                        {
-                            decryptedStream.Write(buffer, 0, bytesRead);
-                        }
-
-                        byte[] decryptedBytes = decryptedStream.ToArray();
-                        char[] decryptedChars = Encoding.Unicode.GetChars(decryptedBytes);
-
-                        SecureString decryptedSecureString = new SecureString();
-
-                        foreach (char c in decryptedChars)
-                        {
-                            decryptedSecureString.AppendChar(c);
-                        }
-
-                        decryptedSecureString.MakeReadOnly();
-
-                        Array.Clear(decryptedBytes, 0, decryptedBytes.Length);
-
-                        return decryptedSecureString;
-                    }
+                    decryptedStream.Write(buffer, 0, bytesRead);
                 }
+
+                decryptedBytes = decryptedStream.ToArray();
+                string decryptedText = Encoding.Unicode.GetString(decryptedBytes);
+
+                SecureString secureDecryptedText = new SecureString();
+                foreach (char c in decryptedText)
+                {
+                    secureDecryptedText.AppendChar(c);
+                }
+                secureDecryptedText.MakeReadOnly();
+
+                return secureDecryptedText;
+            }
+            catch (Exception ex)
+            {
+                throw new CryptographicException("Decryption failed", ex);
             }
             finally
             {
-                Marshal.ZeroFreeGlobalAllocUnicode(cipherPtr);
+                if (cipherBytes != null)
+                    Array.Clear(cipherBytes, 0, cipherBytes.Length);
+                if (decryptedBytes != null)
+                    Array.Clear(decryptedBytes, 0, decryptedBytes.Length);
+                if (cipherPtr != IntPtr.Zero)
+                    Marshal.ZeroFreeGlobalAllocUnicode(cipherPtr);
             }
         }
 
@@ -117,8 +152,8 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encrypt
                 inputPtr = Marshal.SecureStringToGlobalAllocUnicode(input);
                 decryptedTextPtr = Marshal.SecureStringToGlobalAllocUnicode(decryptedValue);
 
-                string inputString = Marshal.PtrToStringUni(inputPtr);
-                string decryptedTextString = Marshal.PtrToStringUni(decryptedTextPtr);
+                string? inputString = Marshal.PtrToStringUni(inputPtr);
+                string? decryptedTextString = Marshal.PtrToStringUni(decryptedTextPtr);
 
                 if (inputString != decryptedTextString)
                     result = false;
@@ -148,20 +183,36 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encrypt
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="secureString"/> is null.</exception>
         public static string SecureStringToString(this SecureString secureString)
         {
-            if (secureString == null)
-                throw new ArgumentNullException(nameof(secureString));
-
-            IntPtr ptr = Marshal.SecureStringToGlobalAllocUnicode(secureString);
+            IntPtr ptr = IntPtr.Zero;
             try
             {
-                return Marshal.PtrToStringUni(ptr);
+                ptr = Marshal.SecureStringToGlobalAllocUnicode(secureString);
+                string? result = Marshal.PtrToStringUni(ptr);
+                return result ?? string.Empty;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to convert SecureString to string.", ex);
             }
             finally
             {
-                Marshal.ZeroFreeGlobalAllocUnicode(ptr);
+                if (ptr != IntPtr.Zero)
+                    Marshal.ZeroFreeGlobalAllocUnicode(ptr);
             }
         }
 
+        public static SecureString StringToSecureString(this SecureString input, string inputString)
+        {
+            Invariants.For(inputString).IsNotNullOrEmpty();
+
+            SecureString secureString = new SecureString();
+            foreach (char c in inputString)
+            {
+                secureString.AppendChar(c);
+            }
+            secureString.MakeReadOnly();
+            return secureString;
+        }
     }
 }
 
