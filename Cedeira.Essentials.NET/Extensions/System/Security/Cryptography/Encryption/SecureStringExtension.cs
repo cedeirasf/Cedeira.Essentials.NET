@@ -31,10 +31,9 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encrypt
             {
                 inputPtr = Marshal.SecureStringToGlobalAllocUnicode(input);
                 string inputString = Marshal.PtrToStringUni(inputPtr) ?? string.Empty;
-                Marshal.ZeroFreeGlobalAllocUnicode(inputPtr);
 
                 Invariants.For(inputString).IsNotNullOrEmpty();
-
+                
                 inputBytes = Encoding.Unicode.GetBytes(inputString);
 
                 using var ms = new MemoryStream();
@@ -94,7 +93,6 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encrypt
             {
                 cipherPtr = Marshal.SecureStringToGlobalAllocUnicode(input);
                 string base64CipherText = Marshal.PtrToStringUni(cipherPtr) ?? string.Empty;
-                Marshal.ZeroFreeGlobalAllocUnicode(cipherPtr);
 
                 Invariants.For(base64CipherText).IsNotNullOrEmpty();
 
