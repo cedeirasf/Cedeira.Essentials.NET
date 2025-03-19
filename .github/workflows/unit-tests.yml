@@ -24,24 +24,21 @@ jobs:
 
       - name: Run unit tests
         run: |
-          dotnet test --logger trx \
-            /p:CollectCoverage=true \
-            /p:CoverletOutput=coverage.xml \
-            /p:CoverletOutputFormat=opencover
+          dotnet test --collect:"XPlat Code Coverage;Format=lcov" --results-directory ./tests-results         
 
       - name: Publish test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-results
-          path: "**/TestResults/*.trx"
+          path: "./tests-results/*/*.info"
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
           name: Essentials.NET-codecov # 'Custom defined name of the upload. Visible in the Codecov UI'
           flags: UnitTests
-          files: ./coverage.xml
+          files: "./tests-results/*/*.info"
           verbose: true
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
