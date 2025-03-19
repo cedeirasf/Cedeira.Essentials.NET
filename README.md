@@ -15,6 +15,8 @@
 [![Project Automation](https://github.com/cedeirasf/CedMT-template-coding-projects/actions/workflows/project-automation.yml/badge.svg)](https://github.com/cedeirasf/CedMT-template-coding-projects/actions/workflows/project-automation.yml)
 
 [![Unit Tests](https://github.com/cedeirasf/Cedeira.Essentials.NET/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/cedeirasf/Cedeira.Essentials.NET/actions/workflows/unit-tests.yml)
+[![codecov](https://codecov.io/gh/cedeirasf/Cedeira.Essentials.NET/branch/main/graph/badge.svg)](https://codecov.io/gh/cedeirasf/Cedeira.Essentials.NET)
+
 
 [![Deploy Release](https://github.com/cedeirasf/Cedeira.Essentials.NET/actions/workflows/release-nuget.yml/badge.svg)](https://github.com/cedeirasf/Cedeira.Essentials.NET/actions/workflows/release-nuget.yml)
 [![Generate and Deploy Documentation](https://github.com/cedeirasf/Cedeira.Essentials.NET/actions/workflows/release-docfx.yml/badge.svg)](https://github.com/cedeirasf/Cedeira.Essentials.NET/actions/workflows/release-docfx.yml)

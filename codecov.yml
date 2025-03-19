@@ -1,0 +1,44 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 80%
+        threshold: 5% 
+        informational: false
+    patch:
+      default:
+        target: 80%
+        threshold: 1%
+        informational: true
+
+comment:
+  layout: "reach,diff,flags,tree"
+  behavior: default
+  require_changes: true
+  show_carryforward_flags: true
+  after_n_builds: 1 
+
+github_checks:
+  annotations: true 
+
+parsers:
+  gcov:
+    branch_detection:
+      conditional: yes
+      loop: yes
+      method: no
+      macro: no
+
+flags:
+  diagnostics:
+    paths:
+      - Cedeira.Essentials.NET/Diagnostics/
+  extensions:
+    paths:
+      - Cedeira.Essentials.NET/Extensions/
+  system:
+    paths:
+      - Cedeira.Essentials.NET/System/
+
+ignore:
+  - "Cedeira.Essentials.NET/-unittests/*"  # Ignora la carpeta de pruebas
