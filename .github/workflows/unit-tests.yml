@@ -2,7 +2,7 @@ name: Unit Tests
 
 on:
   pull_request:
-    branches: ['main']
+    branches: ["main"]
 
 jobs:
   unit-tests:
@@ -13,21 +13,33 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
-      
+          dotnet-version: "8.0.x"
+
       - name: Install dependencies
         run: dotnet restore
 
       - name: Run unit tests
-        run: dotnet test
+        run: |
+          dotnet test --collect:"XPlat Code Coverage;Format=lcov" --results-directory ./tests-results         
 
       - name: Publish test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-results
-          path: '**/TestResults/*.trx'
+          path: "./tests-results/*/*.info"
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          name: Essentials.NET-codecov # 'Custom defined name of the upload. Visible in the Codecov UI'
+          flags: UnitTests
+          files: "./tests-results/*/*.info"
+          verbose: true
+          fail_ci_if_error: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
