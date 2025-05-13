@@ -37,3 +37,13 @@ Se agregan y corrigen las pruebas unitarias para ContainsException (Type, string
 ## 2025-05-13 19:45
 
 Se agregan las pruebas unitarias para FindException (Type, string, T) en ExceptionExtensionTests.cs, cubriendo todos los escenarios del plan de pruebas y siguiendo el patrón de agrupación por método. Próximo paso: ejecutar los tests unitarios para validar la implementación. 
+
+## 2025-05-13 20:00
+
+Se investiga el incidente reportado sobre la desaparición de las implementaciones de ContainsException y FindException que reciben un parámetro Type. El análisis del historial de commits muestra lo siguiente:
+
+- En el commit `3363fdc` se agregaron correctamente las variantes por Type.
+- En los siguientes commits (`edee27f`, `340a6b2`) se agregaron las variantes por string y genéricas, pero en el commit `340a6b2` se observa que accidentalmente se eliminaron las implementaciones por Type, probablemente por un error de edición o un mal merge.
+- En el commit `6b7344c` se reintrodujeron las variantes por Type, corrigiendo el error anterior.
+
+La causa probable fue un conflicto o sobrescritura accidental al agregar nuevas variantes, lo que llevó a la pérdida temporal de las implementaciones por Type. Las pruebas unitarias estaban bien planteadas y ayudaron a detectar la ausencia de estas variantes. Se recomienda, para el futuro, revisar cuidadosamente los cambios al agregar sobrecargas similares y validar con tests antes de eliminar código. Este incidente resalta la importancia de los tests y de los commits atómicos y descriptivos. 
