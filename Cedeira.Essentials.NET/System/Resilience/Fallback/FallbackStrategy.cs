@@ -8,7 +8,9 @@ namespace Cedeira.Essentials.NET.System.Resilience.Fallback
     public static class FallbackStrategy
     {
         /// <summary>
-        /// Returns the first non-null value from a list of value providers.
+        /// Devuelve el primer valor no nulo de una lista de proveedores de valores.
+        /// Si alguna función lanza una FallbackStrategyException, la excepción se propaga y se detiene la evaluación.
+        /// El resto de las excepciones son ignoradas y se continúa con el siguiente proveedor.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="valueProviders"></param>
@@ -58,7 +60,9 @@ namespace Cedeira.Essentials.NET.System.Resilience.Fallback
         }
 
         /// <summary>
-        /// Returns the first non-null value from a list of value providers.Async version.
+        /// Devuelve el primer valor no nulo de una lista de proveedores de valores (versión asíncrona).
+        /// Si alguna función lanza una FallbackStrategyException, la excepción se propaga y se detiene la evaluación.
+        /// El resto de las excepciones son ignoradas y se continúa con el siguiente proveedor.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="valueProviders"></param>
