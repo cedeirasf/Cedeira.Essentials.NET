@@ -75,5 +75,31 @@
             if (exceptionType.IsInstanceOfType(e)) return e;
             return e.InnerException?.FindException(exceptionType);
         }
+
+        /// <summary>
+        /// Determina si la excepción o alguna de sus InnerException es del tipo especificado por nombre.
+        /// </summary>
+        /// <param name="e">La instancia de la excepción</param>
+        /// <param name="exceptionTypeName">El nombre del tipo de excepción a buscar</param>
+        /// <returns>True si se encuentra una excepción del tipo especificado; de lo contrario, false</returns>
+        public static bool ContainsException(this Exception e, string exceptionTypeName)
+        {
+            if (e == null || string.IsNullOrWhiteSpace(exceptionTypeName)) return false;
+            if (e.GetType().Name == exceptionTypeName) return true;
+            return e.InnerException != null && e.InnerException.ContainsException(exceptionTypeName);
+        }
+
+        /// <summary>
+        /// Busca la primera excepción anidada que coincide con el nombre de tipo especificado.
+        /// </summary>
+        /// <param name="e">La instancia de la excepción</param>
+        /// <param name="exceptionTypeName">El nombre del tipo de excepción a buscar</param>
+        /// <returns>La primera excepción encontrada del tipo especificado, o null si no existe</returns>
+        public static Exception? FindException(this Exception e, string exceptionTypeName)
+        {
+            if (e == null || string.IsNullOrWhiteSpace(exceptionTypeName)) return null;
+            if (e.GetType().Name == exceptionTypeName) return e;
+            return e.InnerException?.FindException(exceptionTypeName);
+        }
     }
 }

@@ -13,3 +13,7 @@ Se documenta la estrategia y las firmas propuestas para los métodos de extensi�
 ## 2025-05-13 18:45
 
 Se implementan los métodos ContainsException y FindException por tipo (Type) en la clase ExceptionExtension, siguiendo el estilo y la documentación del repositorio. Ambos métodos son recursivos y permiten detectar o recuperar excepciones anidadas del tipo especificado. Próximo paso: comitear el avance y continuar con variantes por nombre y genérica. 
+
+## 2025-05-13 18:55
+
+Se implementan los métodos ContainsException y FindException por nombre (string) en la clase ExceptionExtension. Estas variantes permiten buscar excepciones anidadas comparando el nombre del tipo. Próximo paso: comitear el avance y continuar con la variante genérica. 
