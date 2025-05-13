@@ -290,5 +290,177 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         #endregion
+
+        #region FindException Tests
+
+        /// <summary>
+        /// Verifica que FindException(Type) retorna la excepción si es del tipo buscado.
+        /// </summary>
+        [TestMethod]
+        public void FindException_Type_SimpleMatch_ReturnsException()
+        {
+            var ex = new ArgumentNullException();
+            var result = ExceptionExtension.FindException(ex, typeof(ArgumentNullException));
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ArgumentNullException));
+        }
+
+        /// <summary>
+        /// Verifica que FindException(Type) retorna la InnerException si es del tipo buscado.
+        /// </summary>
+        [TestMethod]
+        public void FindException_Type_InnerMatch_ReturnsException()
+        {
+            var inner = new ArgumentOutOfRangeException();
+            var ex = new Exception("outer", inner);
+            var result = ExceptionExtension.FindException(ex, typeof(ArgumentOutOfRangeException));
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ArgumentOutOfRangeException));
+        }
+
+        /// <summary>
+        /// Verifica que FindException(Type) retorna null si no hay coincidencia.
+        /// </summary>
+        [TestMethod]
+        public void FindException_Type_NoMatch_ReturnsNull()
+        {
+            var ex = new Exception();
+            var result = ExceptionExtension.FindException(ex, typeof(ArgumentException));
+            Assert.IsNull(result);
+        }
+
+        /// <summary>
+        /// Verifica que FindException(Type) maneja excepciones nulas y tipo nulo.
+        /// </summary>
+        [TestMethod]
+        public void FindException_Type_NullInputs_ReturnsNull()
+        {
+            Exception? ex = null;
+            var result1 = ExceptionExtension.FindException(ex, typeof(Exception));
+            Assert.IsNull(result1);
+            var ex2 = new Exception();
+            var result2 = ExceptionExtension.FindException(ex2, (Type)null);
+            Assert.IsNull(result2);
+        }
+
+        /// <summary>
+        /// Verifica que FindException(string) retorna la excepción si es del nombre buscado.
+        /// </summary>
+        [TestMethod]
+        public void FindException_String_SimpleMatch_ReturnsException()
+        {
+            var ex = new ArgumentNullException();
+            var result = ExceptionExtension.FindException(ex, "ArgumentNullException");
+            Assert.IsNotNull(result);
+            Assert.AreEqual("ArgumentNullException", result.GetType().Name);
+        }
+
+        /// <summary>
+        /// Verifica que FindException(string) retorna la InnerException si es del nombre buscado.
+        /// </summary>
+        [TestMethod]
+        public void FindException_String_InnerMatch_ReturnsException()
+        {
+            var inner = new ArgumentOutOfRangeException();
+            var ex = new Exception("outer", inner);
+            var result = ExceptionExtension.FindException(ex, "ArgumentOutOfRangeException");
+            Assert.IsNotNull(result);
+            Assert.AreEqual("ArgumentOutOfRangeException", result.GetType().Name);
+        }
+
+        /// <summary>
+        /// Verifica que FindException(string) retorna null si no hay coincidencia.
+        /// </summary>
+        [TestMethod]
+        public void FindException_String_NoMatch_ReturnsNull()
+        {
+            var ex = new Exception();
+            var result = ExceptionExtension.FindException(ex, "ArgumentException");
+            Assert.IsNull(result);
+        }
+
+        /// <summary>
+        /// Verifica que FindException(string) maneja excepciones nulas y nombre nulo/vacío.
+        /// </summary>
+        [TestMethod]
+        public void FindException_String_NullInputs_ReturnsNull()
+        {
+            Exception? ex = null;
+            var result1 = ExceptionExtension.FindException(ex, "Exception");
+            Assert.IsNull(result1);
+            var ex2 = new Exception();
+            var result2 = ExceptionExtension.FindException(ex2, (string)null);
+            Assert.IsNull(result2);
+            var result3 = ExceptionExtension.FindException(ex2, "");
+            Assert.IsNull(result3);
+        }
+
+        /// <summary>
+        /// Verifica que FindException<T>() retorna la excepción si es del tipo genérico buscado.
+        /// </summary>
+        [TestMethod]
+        public void FindException_Generic_SimpleMatch_ReturnsException()
+        {
+            var ex = new ArgumentNullException();
+            var result = ex.FindException<ArgumentNullException>();
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ArgumentNullException));
+        }
+
+        /// <summary>
+        /// Verifica que FindException<T>() retorna la InnerException si es del tipo genérico buscado.
+        /// </summary>
+        [TestMethod]
+        public void FindException_Generic_InnerMatch_ReturnsException()
+        {
+            var inner = new ArgumentOutOfRangeException();
+            var ex = new Exception("outer", inner);
+            var result = ex.FindException<ArgumentOutOfRangeException>();
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ArgumentOutOfRangeException));
+        }
+
+        /// <summary>
+        /// Verifica que FindException<T>() retorna null si no hay coincidencia.
+        /// </summary>
+        [TestMethod]
+        public void FindException_Generic_NoMatch_ReturnsNull()
+        {
+            var ex = new Exception();
+            var result = ex.FindException<ArgumentException>();
+            Assert.IsNull(result);
+        }
+
+        /// <summary>
+        /// Verifica que FindException<T>() maneja excepciones nulas.
+        /// </summary>
+        [TestMethod]
+        public void FindException_Generic_NullInput_ReturnsNull()
+        {
+            Exception? ex = null;
+            var result = ExceptionExtension.FindException<Exception>(ex);
+            Assert.IsNull(result);
+        }
+
+        /// <summary>
+        /// Verifica que FindException funciona con jerarquía de herencia.
+        /// </summary>
+        [TestMethod]
+        public void FindException_InheritanceHierarchy_ReturnsFirstMatch()
+        {
+            var inner = new ArgumentOutOfRangeException();
+            var ex = new Exception("outer", inner);
+            var resultType = ExceptionExtension.FindException(ex, typeof(ArgumentException));
+            Assert.IsNotNull(resultType);
+            Assert.IsInstanceOfType(resultType, typeof(ArgumentOutOfRangeException));
+            var resultGeneric = ex.FindException<ArgumentException>();
+            Assert.IsNotNull(resultGeneric);
+            Assert.IsInstanceOfType(resultGeneric, typeof(ArgumentOutOfRangeException));
+            var resultString = ExceptionExtension.FindException(ex, "ArgumentOutOfRangeException");
+            Assert.IsNotNull(resultString);
+            Assert.AreEqual("ArgumentOutOfRangeException", resultString.GetType().Name);
+        }
+
+        #endregion
     }
 }

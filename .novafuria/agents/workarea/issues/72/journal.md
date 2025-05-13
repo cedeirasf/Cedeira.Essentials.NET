@@ -33,3 +33,7 @@ Se decide seguir el patrón existente en ExceptionExtensionTests.cs, agrupando l
 ## 2025-05-13 19:35
 
 Se agregan y corrigen las pruebas unitarias para ContainsException (Type, string, T) en ExceptionExtensionTests.cs, asegurando la correcta desambiguación de sobrecargas y cubriendo todos los escenarios del plan de pruebas. Próximo paso: avanzar con las pruebas unitarias para FindException. 
+
+## 2025-05-13 19:45
+
+Se agregan las pruebas unitarias para FindException (Type, string, T) en ExceptionExtensionTests.cs, cubriendo todos los escenarios del plan de pruebas y siguiendo el patrón de agrupación por método. Próximo paso: ejecutar los tests unitarios para validar la implementación. 
