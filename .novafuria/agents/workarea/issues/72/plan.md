@@ -40,3 +40,24 @@ public static T? FindException<T>(this Exception ex) where T : Exception
 - [ ] Crear pruebas unitarias
 - [ ] Documentar el código y actualizar el README si corresponde
 - [ ] Registrar avances en journal.md 
+
+## Plan de pruebas unitarias
+
+Se diseñarán pruebas para cubrir los siguientes escenarios en cada variante de los métodos ContainsException y FindException:
+
+### Escenarios generales
+- Excepción simple del tipo buscado (debe encontrarla)
+- Excepción anidada (InnerException) del tipo buscado (debe encontrarla)
+- Excepción anidada en varios niveles (debe encontrar la primera coincidencia)
+- Ninguna excepción del tipo buscado (debe devolver false/null)
+- Excepción nula (debe manejarse sin lanzar excepción)
+- Tipo/nombre nulo o vacío (debe manejarse sin lanzar excepción)
+
+### Casos específicos
+- Buscar por tipo (Type)
+- Buscar por nombre (string)
+- Buscar por tipo genérico (T)
+- Buscar tipos base y derivados (herencia)
+- Buscar tipos con el mismo nombre pero diferente namespace (si aplica)
+
+Cada método será testeado con asserts positivos y negativos, y se validará que la recursividad no cause stack overflow en cadenas largas de InnerException. 
