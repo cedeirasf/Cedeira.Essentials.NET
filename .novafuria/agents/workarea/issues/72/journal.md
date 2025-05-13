@@ -17,3 +17,7 @@ Se implementan los métodos ContainsException y FindException por tipo (Type) en
 ## 2025-05-13 18:55
 
 Se implementan los métodos ContainsException y FindException por nombre (string) en la clase ExceptionExtension. Estas variantes permiten buscar excepciones anidadas comparando el nombre del tipo. Próximo paso: comitear el avance y continuar con la variante genérica. 
+
+## 2025-05-13 19:05
+
+Se implementan los métodos ContainsException y FindException genéricos (T) en la clase ExceptionExtension. Estas variantes permiten buscar excepciones anidadas utilizando el tipo genérico, facilitando el uso en código fuertemente tipado. Próximo paso: comitear el avance y luego avanzar con las pruebas unitarias. 
