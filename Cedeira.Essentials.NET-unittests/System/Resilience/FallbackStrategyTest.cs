@@ -139,5 +139,27 @@ namespace Cedeira.Essentials.NET_unittests.System.Resilience
 
             Assert.AreEqual("valid", asyncTest);
         }
+
+        [TestMethod]
+        public void Coalesce_ThrowsFallbackStrategyException_WhenProviderThrowsIt()
+        {
+            Assert.ThrowsException<FallbackStrategyException>(() =>
+                FallbackStrategy.Coalesce(
+                    () => throw new FallbackStrategyException("Escape anticipado"),
+                    () => "no debe llegar aquí"
+                )
+            );
+        }
+
+        [TestMethod]
+        public async Task CoalesceAsync_ThrowsFallbackStrategyException_WhenProviderThrowsIt()
+        {
+            await Assert.ThrowsExceptionAsync<FallbackStrategyException>(async () =>
+                await FallbackStrategy.Coalesce(
+                    async () => throw new FallbackStrategyException("Escape anticipado async"),
+                    async () => await Task.FromResult("no debe llegar aquí")
+                )
+            );
+        }
     }
 }
