@@ -1,0 +1,7 @@
+## 2025-05-13 18:15
+
+Se crea la estructura de carpetas para el área de trabajo de la issue 72 y se inicializan los archivos plan.md y journal.md. Se ha leído y comprendido la descripción de la issue, que solicita la creación de métodos de extensión para detectar y recuperar excepciones anidadas de tipos específicos, similar a una implementación previa en otro repositorio. Próximo paso: analizar en detalle la implementación de referencia y definir la estrategia para este repositorio. 
+
+## 2025-05-13 18:25
+
+Se intentó acceder a la implementación de referencia en el archivo ExceptionExtension.cs del repositorio Cedeira.CedMT.WorkspaceContext, pero la consulta directa a la API de GitHub y la búsqueda web no devolvieron resultados. Se confirma que la issue requiere métodos recursivos similares a los mencionados, pero no se pudo obtener el código fuente exacto. Se procederá a definir la estrategia en base a la descripción de la issue y las prácticas actuales del repositorio (por ejemplo, la extensión FullMessage en ExceptionExtension.cs). 
