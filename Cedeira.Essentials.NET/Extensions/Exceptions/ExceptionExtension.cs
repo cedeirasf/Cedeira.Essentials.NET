@@ -77,6 +77,32 @@
         }
 
         /// <summary>
+        /// Determina si la excepción o alguna de sus InnerException es del tipo especificado.
+        /// </summary>
+        /// <param name="e">La instancia de la excepción</param>
+        /// <param name="exceptionType">El tipo de excepción a buscar</param>
+        /// <returns>True si se encuentra una excepción del tipo especificado; de lo contrario, false</returns>
+        public static bool ContainsException(this Exception e, Type exceptionType)
+        {
+            if (e == null || exceptionType == null) return false;
+            if (exceptionType.IsInstanceOfType(e)) return true;
+            return e.InnerException != null && e.InnerException.ContainsException(exceptionType);
+        }
+
+        /// <summary>
+        /// Busca la primera excepción anidada que coincide con el tipo especificado.
+        /// </summary>
+        /// <param name="e">La instancia de la excepción</param>
+        /// <param name="exceptionType">El tipo de excepción a buscar</param>
+        /// <returns>La primera excepción encontrada del tipo especificado, o null si no existe</returns>
+        public static Exception? FindException(this Exception e, Type exceptionType)
+        {
+            if (e == null || exceptionType == null) return null;
+            if (exceptionType.IsInstanceOfType(e)) return e;
+            return e.InnerException?.FindException(exceptionType);
+        }
+
+        /// <summary>
         /// Determina si la excepción o alguna de sus InnerException es del tipo especificado por nombre.
         /// </summary>
         /// <param name="e">La instancia de la excepción</param>
