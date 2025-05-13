@@ -44,6 +44,10 @@ namespace Cedeira.Essentials.NET.System.Resilience.Fallback
                         return result;
                     }
                 }
+                catch (FallbackStrategyException)
+                {
+                    throw;
+                }
                 catch (Exception)
                 {
                     continue;
@@ -90,6 +94,10 @@ namespace Cedeira.Essentials.NET.System.Resilience.Fallback
                         return result;
                     }
 
+                }
+                catch (FallbackStrategyException)
+                {
+                    throw;
                 }
                 catch (Exception)
                 {
