@@ -9,3 +9,7 @@ Se intentó acceder a la implementación de referencia en el archivo ExceptionEx
 ## 2025-05-13 18:35
 
 Se documenta la estrategia y las firmas propuestas para los métodos de extensión solicitados en la issue 72. Se opta por implementar los métodos en la clase ExceptionExtension, siguiendo el patrón de FullMessage, y se detallan las variantes requeridas (por tipo, nombre y genérica). Próximo paso: avanzar con la implementación de los métodos y registrar cada avance en el journal. 
+
+## 2025-05-13 18:45
+
+Se implementan los métodos ContainsException y FindException por tipo (Type) en la clase ExceptionExtension, siguiendo el estilo y la documentación del repositorio. Ambos métodos son recursivos y permiten detectar o recuperar excepciones anidadas del tipo especificado. Próximo paso: comitear el avance y continuar con variantes por nombre y genérica. 
