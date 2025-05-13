@@ -5,3 +5,7 @@ Se crea la estructura de carpetas para el área de trabajo de la issue 72 y se i
 ## 2025-05-13 18:25
 
 Se intentó acceder a la implementación de referencia en el archivo ExceptionExtension.cs del repositorio Cedeira.CedMT.WorkspaceContext, pero la consulta directa a la API de GitHub y la búsqueda web no devolvieron resultados. Se confirma que la issue requiere métodos recursivos similares a los mencionados, pero no se pudo obtener el código fuente exacto. Se procederá a definir la estrategia en base a la descripción de la issue y las prácticas actuales del repositorio (por ejemplo, la extensión FullMessage en ExceptionExtension.cs). 
+
+## 2025-05-13 18:35
+
+Se documenta la estrategia y las firmas propuestas para los métodos de extensión solicitados en la issue 72. Se opta por implementar los métodos en la clase ExceptionExtension, siguiendo el patrón de FullMessage, y se detallan las variantes requeridas (por tipo, nombre y genérica). Próximo paso: avanzar con la implementación de los métodos y registrar cada avance en el journal. 
