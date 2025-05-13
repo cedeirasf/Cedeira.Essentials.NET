@@ -25,3 +25,11 @@ Se implementan los métodos ContainsException y FindException genéricos (T) en 
 ## 2025-05-13 19:15
 
 Se registra el plan de pruebas unitarias para los métodos de extensión de excepciones. El plan cubre escenarios generales (simples, anidados, negativos, nulos) y casos específicos para cada variante (por tipo, nombre y genérica), incluyendo herencia y validación de recursividad. Próximo paso: avanzar con la implementación de los tests unitarios. 
+
+## 2025-05-13 19:25
+
+Se decide seguir el patrón existente en ExceptionExtensionTests.cs, agrupando las pruebas por método (ContainsException y FindException) y documentando cada variante dentro de cada grupo. Se comienza con la implementación de las pruebas unitarias para ContainsException (Type, string, T), cubriendo los escenarios definidos en el plan de pruebas. 
+
+## 2025-05-13 19:35
+
+Se agregan y corrigen las pruebas unitarias para ContainsException (Type, string, T) en ExceptionExtensionTests.cs, asegurando la correcta desambiguación de sobrecargas y cubriendo todos los escenarios del plan de pruebas. Próximo paso: avanzar con las pruebas unitarias para FindException. 
