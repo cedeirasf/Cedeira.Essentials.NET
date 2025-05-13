@@ -47,3 +47,7 @@ Se investiga el incidente reportado sobre la desaparición de las implementacion
 - En el commit `6b7344c` se reintrodujeron las variantes por Type, corrigiendo el error anterior.
 
 La causa probable fue un conflicto o sobrescritura accidental al agregar nuevas variantes, lo que llevó a la pérdida temporal de las implementaciones por Type. Las pruebas unitarias estaban bien planteadas y ayudaron a detectar la ausencia de estas variantes. Se recomienda, para el futuro, revisar cuidadosamente los cambios al agregar sobrecargas similares y validar con tests antes de eliminar código. Este incidente resalta la importancia de los tests y de los commits atómicos y descriptivos. 
+
+## 2025-05-13 20:10
+
+Se da por finalizada la fase de desarrollo de la issue 72. Todas las variantes y pruebas unitarias están implementadas y validadas. Se documentó el incidente detectado y se aprendió sobre la importancia de los tests y la revisión de sobrecargas. Próximo paso: preparar y abrir el pull request para revisión de colaboradores, siguiendo el workflow establecido. 
