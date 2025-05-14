@@ -55,3 +55,7 @@ Se da por finalizada la fase de desarrollo de la issue 72. Todas las variantes y
 ## 2025-05-14 11:00
 
 Se refactorizaron todos los métodos ContainsException y FindException (todas las variantes: genérico, Type, string) en ExceptionExtension para que sean iterativos en vez de recursivos, siguiendo la sugerencia de la review de Copilot. Listo para continuar con la verificación de codificación y comentarios en la PR. 
+
+## 2025-05-14 11:30
+
+Se tradujeron todos los comentarios XML de los métodos públicos en ExceptionExtension.cs al inglés y se agregaron ejemplos de uso en la documentación de los métodos de extensión ContainsException y FindException (todas las variantes). También se corrigieron y tradujeron los comentarios de los tests. Se realizó commit de los cambios para mantener el avance documentado y cumplir con el workflow. 
