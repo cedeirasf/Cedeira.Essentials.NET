@@ -146,7 +146,9 @@
         /// </example>
         public static Exception? FindException(this Exception e, Type exceptionType)
         {
-            while (e != null && exceptionType != null)
+            if (exceptionType == null) return null;
+
+            while (e != null)
             {
                 if (exceptionType.IsInstanceOfType(e)) return e;
                 e = e.InnerException;
