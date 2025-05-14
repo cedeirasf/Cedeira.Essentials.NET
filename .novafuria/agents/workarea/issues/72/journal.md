@@ -51,3 +51,7 @@ La causa probable fue un conflicto o sobrescritura accidental al agregar nuevas 
 ## 2025-05-13 20:10
 
 Se da por finalizada la fase de desarrollo de la issue 72. Todas las variantes y pruebas unitarias están implementadas y validadas. Se documentó el incidente detectado y se aprendió sobre la importancia de los tests y la revisión de sobrecargas. Próximo paso: preparar y abrir el pull request para revisión de colaboradores, siguiendo el workflow establecido. 
+
+## 2025-05-14 11:00
+
+Se refactorizaron todos los métodos ContainsException y FindException (todas las variantes: genérico, Type, string) en ExceptionExtension para que sean iterativos en vez de recursivos, siguiendo la sugerencia de la review de Copilot. Listo para continuar con la verificación de codificación y comentarios en la PR. 

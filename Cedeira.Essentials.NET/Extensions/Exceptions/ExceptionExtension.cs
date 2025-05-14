@@ -1,28 +1,28 @@
 ﻿namespace Cedeira.Essentials.NET.Extensions.Exceptions
 {
     /// <summary>
-    /// Proporciona métodos de extensión para la clase Exception para obtener mensajes completos
+    /// Provides extension methods for the Exception class to obtain complete messages and advanced exception handling.
     /// </summary>
     public static class ExceptionExtension
     {
         private const string DefaultSeparator = ". ";
 
         /// <summary>
-        /// Recupera el mensaje completo de una excepcion
+        /// Retrieves the full message of an exception, including all inner exceptions, separated by the default separator.
         /// </summary>
-        /// <param name="e">La instancia de la excepcion</param>
-        /// <returns>El mensaje completo de la excepcion</returns>
+        /// <param name="e">The exception instance.</param>
+        /// <returns>The full message of the exception.</returns>
         public static string FullMessage(this Exception e)
         {
             return e.FullMessage(DefaultSeparator);
         }
 
         /// <summary>
-        /// Recupera el mensaje completo de una excepcion con un separador especificado
+        /// Retrieves the full message of an exception, including all inner exceptions, using a custom separator.
         /// </summary>
-        /// <param name="e">La instancia de la excepcion</param>
-        /// <param name="separator">el string del separador</param>
-        /// <returns>El mensaje completo de la excepcion</returns>
+        /// <param name="e">The exception instance.</param>
+        /// <param name="separator">The separator string.</param>
+        /// <returns>The full message of the exception.</returns>
         public static string FullMessage(this Exception e, string separator)
         {
             if (e is null) return string.Empty;
@@ -35,10 +35,10 @@
         }
 
         /// <summary>
-        /// Recupera el mensaje de la última excepción anidada
+        /// Retrieves the message of the last nested exception.
         /// </summary>
-        /// <param name="e">La instancia de la excepcion</param>
-        /// <returns>El mensaje de la última excepción anidada</returns>
+        /// <param name="e">The exception instance.</param>
+        /// <returns>The message of the last nested exception.</returns>
         public static string LastExceptionMessage(this Exception e)
         {
             if (e is null) return string.Empty;
@@ -51,81 +51,152 @@
         }
 
         /// <summary>
-        /// Determina si la excepción o alguna de sus InnerException es del tipo genérico especificado.
+        /// Determines whether the exception or any of its InnerExceptions is of the specified generic type.
         /// </summary>
-        /// <typeparam name="T">Tipo de excepción a buscar</typeparam>
-        /// <param name="e">La instancia de la excepción</param>
-        /// <returns>True si se encuentra una excepción del tipo especificado; de lo contrario, false</returns>
+        /// <typeparam name="T">The exception type to search for.</typeparam>
+        /// <param name="e">The exception instance.</param>
+        /// <returns>True if an exception of the specified type is found; otherwise, false.</returns>
+        /// <example>
+        /// <code>
+        /// try {
+        ///     // ...
+        /// } catch (Exception ex) {
+        ///     if (ex.ContainsException<ArgumentNullException>()) {
+        ///         // Handle ArgumentNullException somewhere in the chain
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
         public static bool ContainsException<T>(this Exception e) where T : Exception
         {
-            if (e == null) return false;
-            if (e is T) return true;
-            return e.InnerException != null && e.InnerException.ContainsException<T>();
+            while (e != null)
+            {
+                if (e is T) return true;
+                e = e.InnerException;
+            }
+            return false;
         }
 
         /// <summary>
-        /// Busca la primera excepción anidada que coincide con el tipo genérico especificado.
+        /// Finds the first nested exception that matches the specified generic type.
         /// </summary>
-        /// <typeparam name="T">Tipo de excepción a buscar</typeparam>
-        /// <param name="e">La instancia de la excepción</param>
-        /// <returns>La primera excepción encontrada del tipo especificado, o null si no existe</returns>
+        /// <typeparam name="T">The exception type to search for.</typeparam>
+        /// <param name="e">The exception instance.</param>
+        /// <returns>The first exception found of the specified type, or null if not found.</returns>
+        /// <example>
+        /// <code>
+        /// try {
+        ///     // ...
+        /// } catch (Exception ex) {
+        ///     var argEx = ex.FindException<ArgumentNullException>();
+        ///     if (argEx != null) {
+        ///         // Use argEx
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
         public static T? FindException<T>(this Exception e) where T : Exception
         {
-            if (e == null) return null;
-            if (e is T match) return match;
-            return e.InnerException?.FindException<T>();
+            while (e != null)
+            {
+                if (e is T match) return match;
+                e = e.InnerException;
+            }
+            return null;
         }
 
         /// <summary>
-        /// Determina si la excepción o alguna de sus InnerException es del tipo especificado.
+        /// Determines whether the exception or any of its InnerExceptions is of the specified type.
         /// </summary>
-        /// <param name="e">La instancia de la excepción</param>
-        /// <param name="exceptionType">El tipo de excepción a buscar</param>
-        /// <returns>True si se encuentra una excepción del tipo especificado; de lo contrario, false</returns>
+        /// <param name="e">The exception instance.</param>
+        /// <param name="exceptionType">The exception type to search for.</param>
+        /// <returns>True if an exception of the specified type is found; otherwise, false.</returns>
+        /// <example>
+        /// <code>
+        /// if (ex.ContainsException(typeof(ArgumentNullException))) {
+        ///     // Handle ArgumentNullException somewhere in the chain
+        /// }
+        /// </code>
+        /// </example>
         public static bool ContainsException(this Exception e, Type exceptionType)
         {
-            if (e == null || exceptionType == null) return false;
-            if (exceptionType.IsInstanceOfType(e)) return true;
-            return e.InnerException != null && e.InnerException.ContainsException(exceptionType);
+            while (e != null && exceptionType != null)
+            {
+                if (exceptionType.IsInstanceOfType(e)) return true;
+                e = e.InnerException;
+            }
+            return false;
         }
 
         /// <summary>
-        /// Busca la primera excepción anidada que coincide con el tipo especificado.
+        /// Finds the first nested exception that matches the specified type.
         /// </summary>
-        /// <param name="e">La instancia de la excepción</param>
-        /// <param name="exceptionType">El tipo de excepción a buscar</param>
-        /// <returns>La primera excepción encontrada del tipo especificado, o null si no existe</returns>
+        /// <param name="e">The exception instance.</param>
+        /// <param name="exceptionType">The exception type to search for.</param>
+        /// <returns>The first exception found of the specified type, or null if not found.</returns>
+        /// <example>
+        /// <code>
+        /// var argEx = ex.FindException(typeof(ArgumentNullException));
+        /// if (argEx != null) {
+        ///     // Use argEx
+        /// }
+        /// </code>
+        /// </example>
         public static Exception? FindException(this Exception e, Type exceptionType)
         {
-            if (e == null || exceptionType == null) return null;
-            if (exceptionType.IsInstanceOfType(e)) return e;
-            return e.InnerException?.FindException(exceptionType);
+            while (e != null && exceptionType != null)
+            {
+                if (exceptionType.IsInstanceOfType(e)) return e;
+                e = e.InnerException;
+            }
+            return null;
         }
 
         /// <summary>
-        /// Determina si la excepción o alguna de sus InnerException es del tipo especificado por nombre.
+        /// Determines whether the exception or any of its InnerExceptions is of the specified type name.
         /// </summary>
-        /// <param name="e">La instancia de la excepción</param>
-        /// <param name="exceptionTypeName">El nombre del tipo de excepción a buscar</param>
-        /// <returns>True si se encuentra una excepción del tipo especificado; de lo contrario, false</returns>
+        /// <param name="e">The exception instance.</param>
+        /// <param name="exceptionTypeName">The name of the exception type to search for.</param>
+        /// <returns>True if an exception of the specified type name is found; otherwise, false.</returns>
+        /// <example>
+        /// <code>
+        /// if (ex.ContainsException("ArgumentNullException")) {
+        ///     // Handle ArgumentNullException somewhere in the chain
+        /// }
+        /// </code>
+        /// </example>
         public static bool ContainsException(this Exception e, string exceptionTypeName)
         {
-            if (e == null || string.IsNullOrWhiteSpace(exceptionTypeName)) return false;
-            if (e.GetType().Name == exceptionTypeName) return true;
-            return e.InnerException != null && e.InnerException.ContainsException(exceptionTypeName);
+            while (e != null && !string.IsNullOrWhiteSpace(exceptionTypeName))
+            {
+                if (e.GetType().Name == exceptionTypeName) return true;
+                e = e.InnerException;
+            }
+            return false;
         }
 
         /// <summary>
-        /// Busca la primera excepción anidada que coincide con el nombre de tipo especificado.
+        /// Finds the first nested exception that matches the specified type name.
         /// </summary>
-        /// <param name="e">La instancia de la excepción</param>
-        /// <param name="exceptionTypeName">El nombre del tipo de excepción a buscar</param>
-        /// <returns>La primera excepción encontrada del tipo especificado, o null si no existe</returns>
+        /// <param name="e">The exception instance.</param>
+        /// <param name="exceptionTypeName">The name of the exception type to search for.</param>
+        /// <returns>The first exception found of the specified type name, or null if not found.</returns>
+        /// <example>
+        /// <code>
+        /// var argEx = ex.FindException("ArgumentNullException");
+        /// if (argEx != null) {
+        ///     // Use argEx
+        /// }
+        /// </code>
+        /// </example>
         public static Exception? FindException(this Exception e, string exceptionTypeName)
         {
-            if (e == null || string.IsNullOrWhiteSpace(exceptionTypeName)) return null;
-            if (e.GetType().Name == exceptionTypeName) return e;
-            return e.InnerException?.FindException(exceptionTypeName);
+            while (e != null && !string.IsNullOrWhiteSpace(exceptionTypeName))
+            {
+                if (e.GetType().Name == exceptionTypeName) return e;
+                e = e.InnerException;
+            }
+            return null;
         }
     }
 }

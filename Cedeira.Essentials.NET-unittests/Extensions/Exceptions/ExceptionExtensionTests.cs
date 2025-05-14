@@ -3,14 +3,13 @@ using Cedeira.Essentials.NET.Extensions.Exceptions;
 namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
 {
     /// <summary>
-    /// Contiene pruebas unitarias para la clase <vea cref="ExceptionExtension"/>.
+    /// Contains unit tests for the <see cref="ExceptionExtension"/> class.
     /// </summary>
     [TestClass]
     public class ExceptionExtensionTests
     {
         /// <summary>
-        /// Verifica que el m�todo <vea cref="ExceptionExtension.FullMessage(Exception)"/> 
-        /// devuelve el mensaje correcto cuando no hay excepci�n interna.
+        /// Verifies that the <see cref="ExceptionExtension.FullMessage(Exception)"/> method returns the correct message when there is no inner exception.
         /// </summary>
         [TestMethod]
         public void FullMessage_WithoutInnerException_ReturnsCorrectMessage()
@@ -24,8 +23,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que el m�todo <vea cref="ExceptionExtension.FullMessage(Exception)"/> 
-        /// devuelve el mensaje combinado cuando hay una excepci�n interna.
+        /// Verifies that the <see cref="ExceptionExtension.FullMessage(Exception)"/> method returns the combined message when there is an inner exception.
         /// </summary>
         [TestMethod]
         public void FullMessage_WithOneInnerException_ReturnsCombinedMessage()
@@ -42,8 +40,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que el m�todo <vea cref="ExceptionExtension.FullMessage(Exception)"/> 
-        /// devuelve todos los mensajes combinados cuando hay m�ltiples excepciones internas.
+        /// Verifies that the <see cref="ExceptionExtension.FullMessage(Exception)"/> method returns all combined messages when there are multiple inner exceptions.
         /// </summary>
         [TestMethod]
         public void FullMessage_WithMultipleInnerExceptions_ReturnsAllCombinedMessages()
@@ -68,8 +65,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que el m�todo <vea cref="ExceptionExtension.FullMessage(Exception, string)"/> 
-        /// devuelve los mensajes combinados utilizando separadores personalizados.
+        /// Verifies that the <see cref="ExceptionExtension.FullMessage(Exception, string)"/> method returns the combined messages using custom separators.
         /// </summary>
         [TestMethod]
         public void FullMessage_WithCustomSeparators_ReturnsCombinedMessages()
@@ -100,8 +96,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que el m�todo <vea cref="ExceptionExtension.LastExceptionMessage(Exception)"/> 
-        /// devuelve el mensaje correcto cuando no hay excepci�n interna.
+        /// Verifies that the <see cref="ExceptionExtension.LastExceptionMessage(Exception)"/> method returns the correct message when there is no inner exception.
         /// </summary>
         [TestMethod]
         public void LastExceptionMessage_WithoutInnerException_ReturnsCorrectMessage()
@@ -115,8 +110,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que el m�todo <vea cref="ExceptionExtension.LastExceptionMessage(Exception)"/> 
-        /// devuelve el mensaje de la �ltima excepci�n anidada.
+        /// Verifies that the <see cref="ExceptionExtension.LastExceptionMessage(Exception)"/> method returns the message of the last nested exception.
         /// </summary>
         [TestMethod]
         public void LastExceptionMessage_WithOneInnerException_ReturnsInnerExceptionMessage()
@@ -132,8 +126,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que el m�todo <vea cref="ExceptionExtension.LastExceptionMessage(Exception)"/> 
-        /// devuelve el mensaje de la �ltima excepci�n anidada cuando hay m�ltiples excepciones internas.
+        /// Verifies that the <see cref="ExceptionExtension.LastExceptionMessage(Exception)"/> method returns the message of the last nested exception when there are multiple inner exceptions.
         /// </summary>
         [TestMethod]
         public void LastExceptionMessage_WithMultipleInnerExceptions_ReturnsLastInnerExceptionMessage()
@@ -150,7 +143,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         #region ContainsException Tests
 
         /// <summary>
-        /// Verifica que ContainsException(Type) retorna true si la excepción es del tipo buscado.
+        /// Verifies that ContainsException(Type) returns true if the exception is of the searched type.
         /// </summary>
         [TestMethod]
         public void ContainsException_Type_SimpleMatch_ReturnsTrue()
@@ -160,7 +153,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que ContainsException(Type) retorna true si una InnerException es del tipo buscado.
+        /// Verifies that ContainsException(Type) returns true if an InnerException is of the searched type.
         /// </summary>
         [TestMethod]
         public void ContainsException_Type_InnerMatch_ReturnsTrue()
@@ -171,7 +164,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que ContainsException(Type) retorna false si no hay coincidencia.
+        /// Verifies that ContainsException(Type) returns false if there is no match.
         /// </summary>
         [TestMethod]
         public void ContainsException_Type_NoMatch_ReturnsFalse()
@@ -181,7 +174,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que ContainsException(Type) maneja excepciones nulas y tipo nulo.
+        /// Verifies that ContainsException(Type) handles null exceptions and null type.
         /// </summary>
         [TestMethod]
         public void ContainsException_Type_NullInputs_ReturnsFalse()
@@ -193,7 +186,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que ContainsException(string) retorna true si la excepción es del nombre buscado.
+        /// Verifies that ContainsException(string) returns true if the exception is of the searched name.
         /// </summary>
         [TestMethod]
         public void ContainsException_String_SimpleMatch_ReturnsTrue()
@@ -203,7 +196,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que ContainsException(string) retorna true si una InnerException es del nombre buscado.
+        /// Verifies that ContainsException(string) returns true if an InnerException is of the searched name.
         /// </summary>
         [TestMethod]
         public void ContainsException_String_InnerMatch_ReturnsTrue()
@@ -214,7 +207,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que ContainsException(string) retorna false si no hay coincidencia.
+        /// Verifies that ContainsException(string) returns false if there is no match.
         /// </summary>
         [TestMethod]
         public void ContainsException_String_NoMatch_ReturnsFalse()
@@ -224,7 +217,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que ContainsException(string) maneja excepciones nulas y nombre nulo/vacío.
+        /// Verifies that ContainsException(string) handles null exceptions and null name.
         /// </summary>
         [TestMethod]
         public void ContainsException_String_NullInputs_ReturnsFalse()
@@ -237,7 +230,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que ContainsException<T>() retorna true si la excepción es del tipo genérico buscado.
+        /// Verifies that ContainsException<T>() returns true if the exception is of the searched type.
         /// </summary>
         [TestMethod]
         public void ContainsException_Generic_SimpleMatch_ReturnsTrue()
@@ -247,7 +240,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que ContainsException<T>() retorna true si una InnerException es del tipo genérico buscado.
+        /// Verifies that ContainsException<T>() returns true if an InnerException is of the searched type.
         /// </summary>
         [TestMethod]
         public void ContainsException_Generic_InnerMatch_ReturnsTrue()
@@ -258,7 +251,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que ContainsException<T>() retorna false si no hay coincidencia.
+        /// Verifies that ContainsException<T>() returns false if there is no match.
         /// </summary>
         [TestMethod]
         public void ContainsException_Generic_NoMatch_ReturnsFalse()
@@ -268,7 +261,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que ContainsException<T>() maneja excepciones nulas.
+        /// Verifies that ContainsException<T>() handles null exceptions.
         /// </summary>
         [TestMethod]
         public void ContainsException_Generic_NullInput_ReturnsFalse()
@@ -278,7 +271,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que ContainsException funciona con jerarquía de herencia.
+        /// Verifies that ContainsException works with inheritance hierarchy.
         /// </summary>
         [TestMethod]
         public void ContainsException_InheritanceHierarchy_ReturnsTrueForBaseAndDerived()
@@ -294,7 +287,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         #region FindException Tests
 
         /// <summary>
-        /// Verifica que FindException(Type) retorna la excepción si es del tipo buscado.
+        /// Verifies that FindException(Type) returns the exception if it is of the searched type.
         /// </summary>
         [TestMethod]
         public void FindException_Type_SimpleMatch_ReturnsException()
@@ -306,7 +299,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que FindException(Type) retorna la InnerException si es del tipo buscado.
+        /// Verifies that FindException(Type) returns the InnerException if it is of the searched type.
         /// </summary>
         [TestMethod]
         public void FindException_Type_InnerMatch_ReturnsException()
@@ -319,7 +312,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que FindException(Type) retorna null si no hay coincidencia.
+        /// Verifies that FindException(Type) returns null if there is no match.
         /// </summary>
         [TestMethod]
         public void FindException_Type_NoMatch_ReturnsNull()
@@ -330,7 +323,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que FindException(Type) maneja excepciones nulas y tipo nulo.
+        /// Verifies that FindException(Type) handles null exceptions and null type.
         /// </summary>
         [TestMethod]
         public void FindException_Type_NullInputs_ReturnsNull()
@@ -344,7 +337,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que FindException(string) retorna la excepción si es del nombre buscado.
+        /// Verifies that FindException(string) returns the exception if it is of the searched name.
         /// </summary>
         [TestMethod]
         public void FindException_String_SimpleMatch_ReturnsException()
@@ -356,7 +349,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que FindException(string) retorna la InnerException si es del nombre buscado.
+        /// Verifies that FindException(string) returns the InnerException if it is of the searched name.
         /// </summary>
         [TestMethod]
         public void FindException_String_InnerMatch_ReturnsException()
@@ -369,7 +362,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que FindException(string) retorna null si no hay coincidencia.
+        /// Verifies that FindException(string) returns null if there is no match.
         /// </summary>
         [TestMethod]
         public void FindException_String_NoMatch_ReturnsNull()
@@ -380,7 +373,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que FindException(string) maneja excepciones nulas y nombre nulo/vacío.
+        /// Verifies that FindException(string) handles null exceptions and null name.
         /// </summary>
         [TestMethod]
         public void FindException_String_NullInputs_ReturnsNull()
@@ -396,7 +389,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que FindException<T>() retorna la excepción si es del tipo genérico buscado.
+        /// Verifies that FindException<T>() returns the exception if it is of the searched type.
         /// </summary>
         [TestMethod]
         public void FindException_Generic_SimpleMatch_ReturnsException()
@@ -408,7 +401,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que FindException<T>() retorna la InnerException si es del tipo genérico buscado.
+        /// Verifies that FindException<T>() returns the InnerException if it is of the searched type.
         /// </summary>
         [TestMethod]
         public void FindException_Generic_InnerMatch_ReturnsException()
@@ -421,7 +414,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que FindException<T>() retorna null si no hay coincidencia.
+        /// Verifies that FindException<T>() returns null if there is no match.
         /// </summary>
         [TestMethod]
         public void FindException_Generic_NoMatch_ReturnsNull()
@@ -432,7 +425,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que FindException<T>() maneja excepciones nulas.
+        /// Verifies that FindException<T>() handles null exceptions.
         /// </summary>
         [TestMethod]
         public void FindException_Generic_NullInput_ReturnsNull()
@@ -443,7 +436,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que FindException funciona con jerarquía de herencia.
+        /// Verifies that FindException works with inheritance hierarchy.
         /// </summary>
         [TestMethod]
         public void FindException_InheritanceHierarchy_ReturnsFirstMatch()
