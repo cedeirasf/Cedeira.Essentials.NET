@@ -120,7 +120,9 @@
         /// </example>
         public static bool ContainsException(this Exception e, Type exceptionType)
         {
-            while (e != null && exceptionType != null)
+            if (exceptionType == null) return false;
+
+            while (e != null)
             {
                 if (exceptionType.IsInstanceOfType(e)) return true;
                 e = e.InnerException;
