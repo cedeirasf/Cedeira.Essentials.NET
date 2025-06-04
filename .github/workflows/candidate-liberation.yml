@@ -1,9 +1,9 @@
-name: Liberation
+name: Candidate-liberation
 
 on:
-  push:
-    branches:
-      - "main"
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize]
 
 permissions:
   contents: write
@@ -23,8 +23,8 @@ permissions:
   security-events: write
 
 jobs:
-  call-liberation-workflow:
-    uses: cedeirasf/Cedeira.CedMT.Devops.Workflows/.github/workflows/liberation.yml@main
+  call-candidate-liberation-workflow:
+    uses: cedeirasf/Cedeira.CedMT.Devops.Workflows/.github/workflows/candidate-liberation.yml@main
     secrets:
       github-token: ${{ secrets.GH_PROJECT_AUTOMATION || secrets.github-token || secrets.GITHUB_TOKEN }}
       GH_PACKAGES_USERNAME: ${{ secrets.GH_PACKAGES_USERNAME || 'matchingtool-cedeirasf' }}
