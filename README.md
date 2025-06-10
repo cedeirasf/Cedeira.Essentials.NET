@@ -115,7 +115,7 @@ docker build -t <image name>:latest -f ./docs/Dockerfile .
 
 ## 🚀 Upcoming Features
 
-Upcoming...
+Upcoming..
 
 &nbsp;
 
