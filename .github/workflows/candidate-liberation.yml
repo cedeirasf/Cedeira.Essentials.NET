@@ -1,18 +1,18 @@
-name: Liberation
+name: Candidate Liberation
 
 on:
-  push:
-    branches:
-      - "main"
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize]
   workflow_call:
     inputs:
-      branch: 
+      branch:
         type: string
-        description: Branch to release
-        default: "main" 
+        description: "Branch to release"
+        default: main
     secrets:
       github-token:
-        description: 'The Github token'
+        description: "The Github token"
         required: true
       GH_PACKAGES_USERNAME:
         required: false
@@ -20,6 +20,10 @@ on:
       GH_PACKAGES_TOKEN:
         required: false
         description: Cedeirasf GitHub Packages token
+    outputs:
+      candidate:
+        description: "The candidate tag"
+        value: ${{ jobs.call-versioning-workflow-stable.outputs.candidate }}
 
 permissions:
   contents: write
@@ -38,7 +42,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: 'main'
+          ref: ${{ github.ref }}
           token: ${{ secrets.GH_PROJECT_AUTOMATION || secrets.github-token || secrets.GITHUB_TOKEN }}
 
       - name: Check commit author
@@ -52,43 +56,39 @@ jobs:
           fi
 
   call-versioning-workflow-stable:
+    uses: cedeirasf/Cedeira.Essentials.NET/.github/workflows/candidate-versioning.yml@main
     needs: skip-if-author
-    if: needs.skip-if-author.outputs.skip_versioning != 'true' && github.event_name != 'pull_request'
-    uses: cedeirasf/Cedeira.Essentials.NET/.github/workflows/versioning.yml@main
+    if: needs.skip-if-author.outputs.skip_versioning != 'true' && github.event_name == 'pull_request'
     secrets:
       github-token: ${{ secrets.GH_PROJECT_AUTOMATION || secrets.github-token || secrets.GITHUB_TOKEN }}
 
+  # Siempre correrá el workflow unit tests. REQUIRED: branch
   call-unit-tests-workflow-stable:
     needs: call-versioning-workflow-stable
-    if: github.event_name != 'pull_request'
     uses: cedeirasf/Cedeira.Essentials.NET/.github/workflows/unit-tests.yml@main
     with:
-      branch: ${{ inputs.branch }}
-    secrets:
-      GH_PACKAGES_USERNAME: ${{ secrets.GH_PACKAGES_USERNAME || 'matchingtool-cedeirasf' }}
-      GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
+      branch: RC-${{ github.head_ref }}
 
   call-release-github-workflow-stable:
-    needs: 
+    needs:
       - call-versioning-workflow-stable
       - call-unit-tests-workflow-stable
-    if: github.event_name != 'pull_request'
+    if: github.event_name == 'pull_request'
     uses: cedeirasf/Cedeira.Essentials.NET/.github/workflows/release-gh.yml@main
     with:
-      next: ${{ needs.call-versioning-workflow-stable.outputs.next-patch }}
+      next: ${{ needs.call-versioning-workflow-stable.outputs.candidate }}
       include-artifacts: false
-    secrets:  
+    secrets:
       github-token: ${{ secrets.GH_PROJECT_AUTOMATION || secrets.github-token || secrets.GITHUB_TOKEN }}
 
-  # Siempre correrá el workflow releases. REQUIRED: tag
+  # Siempre correrá el workflow releases. REQUIRED: branch y tag
   call-releases-workflow-stable:
     needs:
       - call-versioning-workflow-stable
       - call-unit-tests-workflow-stable
     uses: cedeirasf/Cedeira.Essentials.NET/.github/workflows/release-nuget.yml@main
     with:
-      branch: main
-      tag: ${{ needs.call-versioning-workflow-stable.outputs.next-patch }}
+      branch: RC-${{ github.head_ref }}
     secrets:
       GH_PACKAGES_USERNAME: ${{ secrets.GH_PACKAGES_USERNAME || 'matchingtool-cedeirasf' }}
       GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN || secrets.github-token || secrets.GITHUB_TOKEN }}

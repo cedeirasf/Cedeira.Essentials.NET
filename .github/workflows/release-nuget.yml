@@ -1,8 +1,21 @@
+
 name: Release nuget
 
 on:
-  release:
-    types: [published]
+  workflow_call:
+    inputs:
+      branch: 
+        type: string
+        required: true
+        description: Branch to release
+        default: "main"
+    secrets:
+      GH_PACKAGES_USERNAME:
+        required: false
+        description: Cedeirasf GitHub Packages username
+      GH_PACKAGES_TOKEN:
+        required: false
+        description: Cedeirasf GitHub Packages token
 
 jobs:
   deploy-debug:
@@ -19,7 +32,7 @@ jobs:
         id: checkout
         with:
           fetch-depth: 0
-          ref: ${{ github.event.release.target_commitish }}
+          ref: ${{ inputs.branch }}
 
       - name: Setup .NET
         id: setup-dotnet
@@ -31,10 +44,9 @@ jobs:
         id: find-projects
         run: |
           #!/bin/bash
-
           # Find all projects files and discard testing projects
           echo "$(find . -name '*.csproj' | grep -v 'unittests')"
-
+      
       - name: Add source to GitHub NuGet
         id: add-github-registry-source
         run: dotnet nuget add source --username ${{ env.GH_PACKAGES_USERNAME }} --password ${{ env.GH_PACKAGES_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/cedeirasf/index.json"
@@ -54,7 +66,7 @@ jobs:
       - name: Find Symbols package
         id: find-symbols
         run: echo "SYMBOLS_PATH=$(find ${{ github.workspace }}/${{ env.PROJECT_NAME }}/bin/Debug/ -name '*.symbols.nupkg')" >> $GITHUB_ENV
-        
+
       - name: Push Symbols package
         id: push-symbols
         run: dotnet nuget push "${{ env.SYMBOLS_PATH }}" --api-key ${{ env.GH_PACKAGES_TOKEN }} --source "github" --skip-duplicate

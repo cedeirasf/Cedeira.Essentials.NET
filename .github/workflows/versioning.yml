@@ -1,0 +1,183 @@
+name: Versioning
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        description: 'The branch where the versioning will be executed'
+        type: string
+        required: false
+        default: 'main'
+      majorList:
+        description: 'List of the nouns that will be considered as major version'
+        type: string
+        required: false
+        default: 'BREAKING CHANGE, BREAKING, MAJOR'
+      minorList:
+        description: 'List of the nouns that will be considered as minor version'
+        type: string
+        required: false
+        default: 'FEATURE, Feature, feature, FEAT, Feat, feat'
+      patchList:
+        description: 'List of the nouns that will be considered as patch version'
+        type: string
+        required: false
+        default: 'FIX, Fix, fix, FIXED, Fixed, fixed, Refactor, Refact, Refac, refac, refact, refactor, REFAC, REFACT, REFACTOR, refacs, refacts, refactors, REFACS, REFACTS, REFACTORS, config, conf, configs, confs, cofiguration, cofigurations, configure, doc, docs, docu, document, documentation, dependencies, dependencie, depends, depend, deps, dep, chore, build, rebuild, build(deps), build(deps-dev), ci, CI, test, tests, testing, wip, WIP, Wip'
+    secrets:
+      github-token:
+        description: 'The Github token'
+        required: true
+    outputs:
+      current:
+        description: 'The current version'
+        value: ${{ jobs.versioning.outputs.current }}
+      next-patch:
+        description: 'The next version with format v0.0.0'
+        value: ${{ jobs.versioning.outputs.next-patch }}
+      next-minor:
+        description: 'The minor version with format v0.0'
+        value: ${{ jobs.versioning.outputs.next-minor }}
+      next-major:
+        description: 'The major version with format v0'
+        value: ${{ jobs.versioning.outputs.next-major }}
+
+env:
+  GH_TOKEN: ${{ secrets.github-token || secrets.GH_PROJECT_AUTOMATION  ||  secrets.GITHUB_TOKEN }} 
+
+jobs:
+  versioning:
+    name: Versioning
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    permissions:
+      contents: write
+    outputs:
+      current: ${{ steps.semver.outputs.current }}
+      next-patch: ${{ steps.semver.outputs.next }}
+      next-minor: ${{ steps.push.outputs.minor }}
+      next-major: ${{ steps.push.outputs.major }}
+    steps:
+      - name: Set up repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref }}
+          token: ${{ secrets.github-token || secrets.GH_PROJECT_AUTOMATION  ||  secrets.GITHUB_TOKEN }} 
+
+      - name: Configure git
+        run: |
+          git config --global user.email "matchingtool@cedeira.com.ar"
+          git config --global user.name "Matching Tool"
+
+      - name: Get next version
+        id: semver
+        uses: ietf-tools/semver-action@v1
+        with:
+          token: ${{ secrets.github-token || secrets.GH_PROJECT_AUTOMATION  ||  secrets.GITHUB_TOKEN }} 
+          branch: ${{ github.event.inputs.branch || 'main' }}
+          majorList: ${{ github.event.inputs.majorList || 'BREAKING CHANGE, BREAKING, MAJOR' }}
+          minorList: ${{ github.event.inputs.minorList || 'FEATURE, Feature, feature, FEAT, Feat, feat' }}
+          patchList: ${{ github.event.inputs.patchList || 'FIX, Fix, fix, FIXED, Fixed, fixed, Refactor, Refact, Refac, refac, refact, refactor, REFAC, REFACT, REFACTOR, refacs, refacts, refactors, REFACS, REFACTS, REFACTORS, config, conf, configs, confs, cofiguration, cofigurations, configure, doc, docs, docu, document, documentation, dependencies, dependencie, depends, depend, deps, dep, chore, build, rebuild, build(deps), build(deps-dev), ci, CI, test, tests, testing, wip, WIP, Wip' }}
+          patchAll: false
+          skipInvalidTags: true
+          maxTagsToFetch: 100
+          tagFilter: "^v\\d+\\.\\d+\\.\\d+$"
+
+      - name: Scan versioning sources
+        id: scan
+        run: |
+          #!/bin/bash
+
+          # Eval if exists a version.txt file to update, store true or false
+          if [ -n "$(find . -name 'version.txt')" ]; then
+            updateVersionTxt="true"
+          else
+            updateVersionTxt="false"
+          fi
+
+          # Find the package.json file
+          if [ -n "$(find . -name 'package.json')" ]; then
+            updatePackageJson="true"
+          else
+            updatePackageJson="false"
+          fi
+
+          # Find the .csproj files
+          if [ -n "$(find . -name '*.csproj')" ]; then
+            updateCsproj="true"
+          else
+            updateCsproj="false"
+          fi
+
+          echo "UPDATE_VERSION_TXT=$updateVersionTxt" >> $GITHUB_ENV
+          echo "UPDATE_PACKAGE_JSON=$updatePackageJson" >> $GITHUB_ENV
+          echo "UPDATE_CSPROJ=$updateCsproj" >> $GITHUB_ENV
+
+      - name: Update version number in version.txt
+        if: ${{ env.UPDATE_VERSION_TXT == 'true' }}
+        run: |
+          #!/bin/bash
+
+          # update the version for each file
+          sed -i "s/.*$/${{ steps.semver.outputs.next }}/g" $(find . -name 'version.txt')
+
+      - name: Update version number in package.json
+        if: ${{ env.UPDATE_PACKAGE_JSON == 'true' }}
+        run: |
+          #!/bin/bash
+
+          # update the version for each file found
+          sed -i "s/\"version\": \".*\"/\"version\": \"${{ steps.semver.outputs.next }}\"/g" $(find . -name 'package.json')
+
+      - name: Update version number in .Net projects
+        if: ${{ env.UPDATE_CSPROJ == 'true' }}
+        run: |
+          #!/bin/bash
+
+          # find all .csproj files and store them in a variable for iteration
+          files=()
+          while IFS= read -r -d $'\0' file; do
+            files+=("$file")
+          done < <(find . -name "*.csproj" -print0)
+
+          versionWithoutPrefix=$(echo ${{ steps.semver.outputs.next }} | sed 's/v//g')
+          
+          # iterate over each file
+          for file in "${files[@]}"; do
+            echo "Procesando archivo: $file"
+            sed -i "s/<Version>.*<\/Version>/<Version>$versionWithoutPrefix<\/Version>/g" "$file"
+          done
+
+      - name: Amend last user commit
+        if: ${{ env.UPDATE_VERSION_TXT == 'true' || env.UPDATE_PACKAGE_JSON == 'true' || env.UPDATE_CSPROJ == 'true' }}
+        run: |
+          git add .
+          git commit --amend --no-edit
+
+      - name: Push changes
+        if: ${{ env.UPDATE_VERSION_TXT == 'true' || env.UPDATE_PACKAGE_JSON == 'true' || env.UPDATE_CSPROJ == 'true' }}
+        run: |
+          git push --force
+
+      - name: Push tags
+        id: push
+        run: |
+          #!/bin/bash
+          # Get minor tag
+          minor=$(echo ${{ steps.semver.outputs.next }} | sed 's/.[0-9]\{1,\}$//')
+          # Get major tag
+          major=$(echo ${{ steps.semver.outputs.next }} | sed 's/.[0-9]\{1,\}.[0-9]\{1,\}$//')
+
+          # Set new tags and force update
+          git tag ${{ steps.semver.outputs.next }}
+          git tag --force $minor
+          git tag --force $major
+
+          # Push new tag forcing the update of the minor and major tag
+          git push --tag --force
+
+          # output major and minor tags
+          echo "major=$major" >> $GITHUB_OUTPUT
+          echo "minor=$minor" >> $GITHUB_OUTPUT
