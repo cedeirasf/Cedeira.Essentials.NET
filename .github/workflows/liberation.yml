@@ -88,7 +88,6 @@ jobs:
     uses: cedeirasf/Cedeira.Essentials.NET/.github/workflows/release-nuget.yml@main
     with:
       branch: main
-      tag: ${{ needs.call-versioning-workflow-stable.outputs.next-patch }}
     secrets:
       GH_PACKAGES_USERNAME: ${{ secrets.GH_PACKAGES_USERNAME || 'matchingtool-cedeirasf' }}
       GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN || secrets.github-token || secrets.GITHUB_TOKEN }}
