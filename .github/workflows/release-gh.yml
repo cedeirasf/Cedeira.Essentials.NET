@@ -1,0 +1,81 @@
+name: Release in GitHub
+
+on:
+  workflow_call:
+    inputs:
+      next:
+        description: 'The next version with format v0.0.0'
+        type: string
+        required: true
+      include-artifacts:
+        description: 'Boolean flag. False by default. Should create a release with the artifacts.'
+        type: boolean
+        required: false
+        default: false
+      artifacts-name:
+        description: 'The artifacts name to be downloaded. It must be the same name used in the upload artifacts action. If not informed, all artifacts for the run will be downloaded.'
+        type: string
+        required: false
+        default: ''
+    secrets:
+      github-token:
+        description: 'The Github token'
+        required: true
+
+jobs:
+  release:
+    name: Release in github
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Set up repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref }}
+          token: ${{ secrets.github-token || secrets.GH_PROJECT_AUTOMATION  ||  secrets.GITHUB_TOKEN }} 
+
+      - name: Download artifacts
+        id: download-artifacts
+        if: inputs.include-artifacts == true
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.github-token || secrets.GH_PROJECT_AUTOMATION  ||  secrets.GITHUB_TOKEN }} 
+          name: ${{ inputs.artifacts-name || '' }}
+          path: './artifacts'
+      
+      - name: Create Release with Artifacts
+        id: create-release-with-artifacts
+        if: inputs.include-artifacts == true
+        env:
+          GH_TOKEN: ${{ secrets.github-token || secrets.GH_PROJECT_AUTOMATION  ||  secrets.GITHUB_TOKEN }} 
+        run: |
+          #!/bin/sh
+
+          if [ "${{ github.event.head_commit.committer.username }}" != "web-flow" ]; then
+            echo "::warning ::There were no pull requests associated with the commits included in this release. Automatically-generated notes were not generated."
+          fi
+
+          gh release create ${{ inputs.next }} \
+          --title 'Release ${{ inputs.next }}' \
+          --notes "Changelog Contents :sunglasses:" \
+          --generate-notes \
+          $(find ./artifacts -maxdepth 1 -type f -print0 | xargs -0 echo)
+  
+      - name: Create Release without Artifacts
+        id: create-release-without-artifacts
+        if: inputs.include-artifacts == false
+        env:
+          GH_TOKEN: ${{ secrets.github-token || secrets.GH_PROJECT_AUTOMATION  ||  secrets.GITHUB_TOKEN }} 
+        run: |
+          #!/bin/sh
+
+          if [ "${{ github.event.head_commit.committer.username }}" = "web-flow" ]; then
+            echo "::warning ::There were no pull requests associated with the commits included in this release. Automatically-generated notes were not generated."
+          fi
+  
+          gh release create ${{ inputs.next }} \
+          --title 'Release ${{ inputs.next }}' \
+          --notes "Changelog Contents :sunglasses:" \
+          --generate-notes
