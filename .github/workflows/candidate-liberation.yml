@@ -26,6 +26,17 @@ on:
         value: ${{ jobs.call-versioning-workflow-stable.outputs.candidate }}
 
 permissions:
+  attestations: write
+  checks: write
+  deployments: write
+  discussions: write
+  issues: write
+  models: read
+  pages: write
+  pull-requests: write
+  repository-projects: write
+  statuses: write
+  security-events: write
   contents: write
   packages: write
   actions: write
