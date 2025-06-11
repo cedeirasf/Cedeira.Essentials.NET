@@ -20,6 +20,9 @@ on:
       GH_PACKAGES_TOKEN:
         required: false
         description: Cedeirasf GitHub Packages token
+      CODECOV_TOKEN:
+        description: "Codecov token for uploading coverage reports"
+        required: true
 
 permissions:
   attestations: write
@@ -76,8 +79,7 @@ jobs:
     with:
       branch: ${{ inputs.branch }}
     secrets:
-      GH_PACKAGES_USERNAME: ${{ secrets.GH_PACKAGES_USERNAME || 'matchingtool-cedeirasf' }}
-      GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   call-release-github-workflow-stable:
     needs: 

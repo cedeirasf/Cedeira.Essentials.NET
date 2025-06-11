@@ -20,6 +20,9 @@ on:
       GH_PACKAGES_TOKEN:
         required: false
         description: Cedeirasf GitHub Packages token
+      CODECOV_TOKEN:
+        description: "Codecov token for uploading coverage reports"
+        required: true
     outputs:
       candidate:
         description: "The candidate tag"
@@ -79,6 +82,8 @@ jobs:
     uses: cedeirasf/Cedeira.Essentials.NET/.github/workflows/unit-tests.yml@main
     with:
       branch: RC-${{ github.head_ref }}
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   call-release-github-workflow-stable:
     needs:
