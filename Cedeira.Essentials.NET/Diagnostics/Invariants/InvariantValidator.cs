@@ -215,7 +215,63 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             }
             return this;
         }
+        /// <summary>
+        /// Verifica que el valor no sea menor a cero.
+        /// Lanza una FormatException si el valor es menor a cero.
+        /// </summary>
+        /// <param name="expected">El patrón de expresión regular con el que se debe comparar el valor.</param>
+        /// <returns>El propio InvariantValidator para permitir chaining.</returns>
+        public InvariantValidator<T> LessThan(T expected)
+        {
+            if (_value == null)
+                throw new ArgumentNullException(nameof(_value), "Value to compare cannot be null.");
 
+            if (expected == null)
+                throw new ArgumentNullException(nameof(expected), "Expected value cannot be null.");
+
+            if (_value is IComparable<T> comparable)
+            {
+                if (comparable.CompareTo(expected) > 0)
+                {
+                    throw new ArgumentException("value can not be higher than expected");
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException($"Type {typeof(T).Name} does not support comparison.");
+            }
+
+            return this;
+        }
+        /// <summary>
+        /// Verifica que el valor no sea mayor a cero.
+        /// Lanza una FormatException si el valor es mayor a cero.
+        /// </summary>
+        /// <param name="expected">El patrón de expresión regular con el que se debe comparar el valor.</param>
+        /// <returns>El propio InvariantValidator para permitir chaining.</returns>
+        public InvariantValidator<T> GreaterThan(T expected)
+        {
+            if (_value == null)
+                throw new ArgumentNullException(nameof(_value), "Value to compare cannot be null.");
+
+            if (expected == null)
+                throw new ArgumentNullException(nameof(expected), "Expected value cannot be null.");
+
+            if (_value is IComparable<T> comparable)
+            {
+                if (comparable.CompareTo(expected) < 0)
+                {
+                    throw new ArgumentException("value can not be less than expected");
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException($"Type {typeof(T).Name} does not support comparison.");
+            }
+
+            return this;
+        }
+        
         /// <summary>
         /// Método Helper Privado para validar mensajes de error
         /// </summary>

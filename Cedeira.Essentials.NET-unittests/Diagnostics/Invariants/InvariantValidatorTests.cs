@@ -171,6 +171,32 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             , "Value must be positive.");
         }
 
+        [TestMethod]
+        public void LessThan_ShouldPass_WhenValueIsLessThanMax()
+        {
+            Invariants.For(5).LessThan(10);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void LessThan_ShouldPass_WhenValueIsLessThanMax()
+        {
+            Invariants.For(10).LessThan(5);
+        }
+
+        [TestMethod]
+        public void GreaterThan_ShouldPass_WhenValueIsLessThanMax()
+        {
+            Invariants.For(10).GreaterThan(5);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GreaterThan_ShouldPass_WhenValueIsLessThanMax()
+        {
+            Invariants.For(5).GreaterThan(10);
+        }
+
     }
 }
 
