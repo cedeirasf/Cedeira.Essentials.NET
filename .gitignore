@@ -408,3 +408,6 @@ docs/
 
 # Novafuria Agents
 .novafuria/**/tmp
+
+# NuGet configuration files
+nuget.config
