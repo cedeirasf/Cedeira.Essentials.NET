@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace Cedeira.Essentials.NET.Diagnostics.Invariants
 {
@@ -216,11 +217,14 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             return this;
         }
         /// <summary>
-        /// Verifica que el valor no sea menor a cero.
-        /// Lanza una FormatException si el valor es menor a cero.
+        /// Compara _value con expected.
+        /// Lanza una FormatException Si _value > expected.
+        /// Si no es comparable, lanza excepción de tipo.
+        /// Si ambos son comparables y válidos, retorna this para permitir encadenamiento
         /// </summary>
         /// <param name="expected">El patrón de expresión regular con el que se debe comparar el valor.</param>
         /// <returns>El propio InvariantValidator para permitir chaining.</returns>
+ 
         public InvariantValidator<T> LessThan(T expected)
         {
             if (_value == null)
@@ -244,8 +248,10 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             return this;
         }
         /// <summary>
-        /// Verifica que el valor no sea mayor a cero.
-        /// Lanza una FormatException si el valor es mayor a cero.
+        /// Compara _value con expected.
+        /// Lanza una FormatException Si _value < expected.
+        /// Si no es comparable, lanza excepción de tipo.
+        /// Si ambos son comparables y válidos, retorna this para permitir encadenamiento.
         /// </summary>
         /// <param name="expected">El patrón de expresión regular con el que se debe comparar el valor.</param>
         /// <returns>El propio InvariantValidator para permitir chaining.</returns>
