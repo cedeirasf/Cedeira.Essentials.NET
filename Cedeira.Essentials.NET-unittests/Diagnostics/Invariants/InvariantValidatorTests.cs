@@ -5,6 +5,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
     [TestClass]
     public class InvariantValidatorTests
     {
+       
         [TestMethod]
         public void IsEqual_ShouldPass_WhenValuesAreEqual()
         {
@@ -174,29 +175,85 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         [TestMethod]
         public void LessThan_ShouldPass_WhenValueIsLessThanMax()
         {
-            Invariants.For(5).LessThan(10);
+            Invariants.For(-1).LessThan(0);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void LessThan_ShouldPass_WhenValueIsLessThanMax()
+        public void LessThan_ShouldPass_WhenValueIsLessThanMaxFail()
         {
             Invariants.For(10).LessThan(5);
         }
 
         [TestMethod]
-        public void GreaterThan_ShouldPass_WhenValueIsLessThanMax()
+        public void GreaterThan_ShouldPass_WhenValueIsGreaterThanMax()
         {
             Invariants.For(10).GreaterThan(5);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void GreaterThan_ShouldPass_WhenValueIsLessThanMax()
+        public void GreaterThan_ShouldPass_WhenValueIsGreaterThanMaxFail()
         {
-            Invariants.For(5).GreaterThan(10);
+            Invariants.For(-1).GreaterThan(0);
         }
 
+        [TestMethod]
+        public void LessThanShouldPass_WhenValueDatetime()
+        {
+            var today = DateTime.Now.Date;
+            Invariants.For(today).LessThan(today.AddDays(1));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void LessThanShouldPass_WhenValueDatetimeFail()
+        {
+            var today = DateTime.Now.Date;
+            Invariants.For(today.AddDays(1)).LessThan(today);
+        }
+
+
+        [TestMethod]
+        public void LessThanShouldPass_WhenValueString()
+        {
+            Invariants.For("A").LessThan("B");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void LessThanShouldPass_WhenValueStringFail()
+        {
+            Invariants.For("B").LessThan("A");
+        }
+
+        [TestMethod]
+        public void GreaterThanShouldPass_WhenValueDatetime()
+        {
+            var today = DateTime.Now.Date;
+            Invariants.For(today.AddDays(1)).GreaterThan(today); 
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GreaterThanShouldPass_WhenValueDatetimeFail()
+        {
+            var today = DateTime.Now.Date;
+            Invariants.For(today).GreaterThan(today.AddDays(1));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GreaterThanShouldPass_WhenValueStringFail()
+        {
+            Invariants.For("A").GreaterThan("B");
+        }
+
+        [TestMethod]
+        public void GreaterThanShouldPass_WhenValueString()
+        {
+            Invariants.For("B").GreaterThan("A");
+        }
     }
 }
 
