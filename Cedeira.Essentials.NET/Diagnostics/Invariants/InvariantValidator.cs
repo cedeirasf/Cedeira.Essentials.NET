@@ -233,18 +233,12 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             if (expected == null)
                 throw new ArgumentNullException(nameof(expected), "Expected value cannot be null.");
 
-            if (_value is IComparable<T> comparable)
-            {
-                if (comparable.CompareTo(expected) > 0)
-                {
-                    throw new ArgumentException("value can not be higher than expected");
-                }
-            }
-            else
-            {
+            if (!(_value is IComparable<T> comparable))
                 throw new InvalidOperationException($"Type {typeof(T).Name} does not support comparison.");
+            if (comparable.CompareTo(expected) > 0)
+            {
+                throw new ArgumentException("value can not be higher than expected");
             }
-
             return this;
         }
 
@@ -264,18 +258,12 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             if (expected == null)
                 throw new ArgumentNullException(nameof(expected), "Expected value cannot be null.");
 
-            if (_value is IComparable<T> comparable)
-            {
-                if (comparable.CompareTo(expected) < 0)
-                {
-                    throw new ArgumentException("value can not be less than expected");
-                }
-            }
-            else
-            {
+            if (!(_value is IComparable<T> comparable))
                 throw new InvalidOperationException($"Type {typeof(T).Name} does not support comparison.");
+            if (comparable.CompareTo(expected) < 0)
+            {
+                throw new ArgumentException("value can not be less than expected");
             }
-
             return this;
         }
         
