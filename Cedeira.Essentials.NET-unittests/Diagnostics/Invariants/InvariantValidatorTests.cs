@@ -305,7 +305,6 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-
         public void LessThanShouldPass_WhenEspectNull()
         {
 
@@ -331,6 +330,37 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         {
             Invariants.For("B").GreaterThan("A");
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void LessThanShouldPass_WhenValueIsObject()
+        {
+            object Objeto = new object();
+            Invariants.For<object?>(Objeto).LessThan(10);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void GreaterThanShouldPass_WhenValueIsObject()
+        {
+            object Objeto = new object();
+            Invariants.For(Objeto).LessThan(10);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void LessThanShouldPass_WhenEspectIsObject()
+        {
+            object Objeto = new object();
+            Invariants.For<object?>(5).LessThan(Objeto);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void GreaterThanShouldPass_WhenEspectIsObject()
+        {
+            object Objeto = new object();
+            Invariants.For <object?>(5).LessThan(Objeto);
+        }
     }
 }
-
