@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace Cedeira.Essentials.NET.Diagnostics.Invariants
 {
@@ -215,7 +216,57 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             }
             return this;
         }
+        /// <summary>
+        /// Compara _value con expected.
+        /// Lanza una FormatException Si _value > expected.
+        /// Si no es comparable, lanza excepción de tipo.
+        /// Si ambos son comparables y válidos, retorna this para permitir encadenamiento
+        /// </summary>
+        /// <param name="expected">El patrón de expresión regular con el que se debe comparar el valor.</param>
+        /// <returns>El propio InvariantValidator para permitir chaining.</returns>
+ 
+        public InvariantValidator<T> LessThan(T expected)
+        {
+            if (_value == null)
+                throw new ArgumentNullException(nameof(_value), "Value to compare cannot be null.");
 
+            if (expected == null)
+                throw new ArgumentNullException(nameof(expected), "Expected value cannot be null.");
+
+            if (!(_value is IComparable<T> comparable))
+                throw new InvalidOperationException($"Type {typeof(T).Name} does not support comparison.");
+            if (comparable.CompareTo(expected) > 0)
+            {
+                throw new ArgumentException("value can not be higher than expected");
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Compara el valor actual (_value) con el valor esperado.
+        /// Lanza una ArgumentException si _value es menor que expected.
+        /// Si el tipo T no implementa IComparable,lanza InvalidOperationException.
+        /// Si ambos valores son válidos y comparables, retorna la instancia actual para permitir encadenamiento.
+        /// </summary>
+        /// <param name="expected">El valor con el que se debe comparar el valor actual.</param>
+        /// <returns>La instancia actual de InvariantValidator para permitir encadenamiento (chaining).</returns>
+        public InvariantValidator<T> GreaterThan(T expected)
+        {
+            if (_value == null)
+                throw new ArgumentNullException(nameof(_value), "Value to compare cannot be null.");
+
+            if (expected == null)
+                throw new ArgumentNullException(nameof(expected), "Expected value cannot be null.");
+
+            if (!(_value is IComparable<T> comparable))
+                throw new InvalidOperationException($"Type {typeof(T).Name} does not support comparison.");
+            if (comparable.CompareTo(expected) < 0)
+            {
+                throw new ArgumentException("value can not be less than expected");
+            }
+            return this;
+        }
+        
         /// <summary>
         /// Método Helper Privado para validar mensajes de error
         /// </summary>

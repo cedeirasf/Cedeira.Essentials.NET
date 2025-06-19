@@ -5,6 +5,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
     [TestClass]
     public class InvariantValidatorTests
     {
+       
         [TestMethod]
         public void IsEqual_ShouldPass_WhenValuesAreEqual()
         {
@@ -171,6 +172,195 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             , "Value must be positive.");
         }
 
+        [TestMethod]
+        public void LessThan_ShouldPass_WhenValueIsLessThanMax()
+        {
+            Invariants.For(-1).LessThan(0);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void LessThan_ShouldPass_WhenValueIsLessThanMaxFail()
+        {
+            Invariants.For(10).LessThan(5);
+        }
+
+        [TestMethod]
+        public void GreaterThan_ShouldPass_WhenValueIsGreaterThanMax()
+        {
+            Invariants.For(10).GreaterThan(5);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GreaterThan_ShouldPass_WhenValueIsGreaterThanMaxFail()
+        {
+            Invariants.For(-1).GreaterThan(0);
+        }
+
+        [TestMethod]
+        public void LessThanShouldPass_WhenValueDatetime()
+        {
+            var today = DateTime.Now.Date;
+            Invariants.For(today).LessThan(today.AddDays(1));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void LessThanShouldPass_WhenValueDatetimeFail()
+        {
+            var today = DateTime.Now.Date;
+            Invariants.For(today.AddDays(1)).LessThan(today);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void LessThanShouldPass_WhenValueDatetimeNull()
+        {
+            var today = DateTime.Now.Date;
+            Invariants.For<DateTime?>(null).GreaterThan(today.AddDays(1));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void LessThanShouldPass_WhenEspectDatetimeNull()
+        {
+            var today = DateTime.Now.Date;
+            Invariants.For<DateTime?>(today).LessThan(null);
+        }
+
+        [TestMethod]
+        public void LessThanShouldPass_WhenValueString()
+        {
+            Invariants.For("A").LessThan("B");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void LessThanShouldPass_WhenValueStringFail()
+        {
+            Invariants.For("B").LessThan("A");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void LessThanShouldPass_WhenExpectedStringNull()
+        {
+            Invariants.For("A").LessThan(null);
+        }
+
+        [TestMethod]
+        public void GreaterThanShouldPass_WhenValueDatetime()
+        {
+            var today = DateTime.Now.Date;
+            Invariants.For(today.AddDays(1)).GreaterThan(today); 
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GreaterThanShouldPass_WhenValueDatetimeFail()
+        {
+            var today = DateTime.Now.Date;
+            Invariants.For(today).GreaterThan(today.AddDays(1));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GreaterThanShouldPass_WhenValueDatetimeNull()
+        {
+            var today = DateTime.Now.Date;
+            Invariants.For<DateTime?>(null).GreaterThan(today.AddDays(1));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GreaterThanShouldPass_WhenEspectDatetimeNull()
+        {
+            var today = DateTime.Now.Date;
+            Invariants.For<DateTime?>(today).GreaterThan(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GreaterThanShouldPass_WhenValueStringFail()
+        {
+            Invariants.For("A").GreaterThan("B");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        
+        public void LessThanShouldPass_WhenValueNull()
+        {
+            
+            Invariants.For<int?>(null).LessThan(0);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GreaterThanShouldPass_WhenValueNull()
+        {
+            Invariants.For<int?>(null).GreaterThan(0);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void LessThanShouldPass_WhenEspectNull()
+        {
+
+            Invariants.For<int?>(5).LessThan(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GreaterThanShouldPass_WhenEspectNull()
+        {
+            Invariants.For<int?>(10).GreaterThan(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GreaterThanShouldPass_WhenExpectedStringNull()
+        {
+            Invariants.For("A").GreaterThan(null);
+        }
+
+        [TestMethod]
+        public void GreaterThanShouldPass_WhenValueString()
+        {
+            Invariants.For("B").GreaterThan("A");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void LessThanShouldPass_WhenValueIsObject()
+        {
+            object Objeto = new object();
+            Invariants.For<object?>(Objeto).LessThan(10);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void GreaterThanShouldPass_WhenValueIsObject()
+        {
+            object Objeto = new object();
+            Invariants.For(Objeto).LessThan(10);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void LessThanShouldPass_WhenEspectIsObject()
+        {
+            object Objeto = new object();
+            Invariants.For<object?>(5).LessThan(Objeto);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void GreaterThanShouldPass_WhenEspectIsObject()
+        {
+            object Objeto = new object();
+            Invariants.For <object?>(5).LessThan(Objeto);
+        }
     }
 }
-
