@@ -1,0 +1,76 @@
+name: Generate and Deploy Documentation
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+       
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_TOKEN }}
+
+    - name: Setup docker tags
+      run: |
+        tag=${{ github.event.release.tag_name }}
+        echo "Release tag: $tag"
+        
+        # split the tag into its components
+        IFS='.' read -r -a tag_parts <<< "$tag"
+        MAJOR_COMPONENT=${tag_parts[0]}
+        MINOR_COMPONENT=${tag_parts[1]}
+        PATCH_COMPONENT=${tag_parts[2]}
+
+        # Remove prefix 'v' from major version if present
+        MAJOR_COMPONENT=${MAJOR_COMPONENT#"v"}
+
+        if [ -z "$major" ]; then
+          echo "Major component version is missing"
+          MAJOR_COMPONENT=0
+        fi
+
+        if [ -z "$minor" ]; then
+          echo "Minor component version is missing"
+          MINOR_COMPONENT=0
+        fi
+
+        if [ -z "$patch" ]; then
+          echo "Patch component version is missing"
+          PATCH_COMPONENT=0
+        fi
+        
+        echo "Tag components: $MAJOR_COMPONENT, $MINOR_COMPONENT, $PATCH_COMPONENT"
+
+        DOCKER_LATEST_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:latest
+        DOCKER_MAJOR_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:$MAJOR_COMPONENT
+        DOCKER_MINOR_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:$MAJOR_COMPONENT.$MINOR_COMPONENT
+        DOCKER_PATCH_TAG=${{ secrets.DOCKER_USERNAME }}/cedeira.essentials.net.documentation:$MAJOR_COMPONENT.$MINOR_COMPONENT.$PATCH_COMPONENT
+
+        echo "Docker latest tag: $DOCKER_LATEST_TAG"
+        echo "Docker major tag: $DOCKER_MAJOR_TAG"
+        echo "Docker minor tag: $DOCKER_MINOR_TAG"
+        echo "Docker patch tag: $DOCKER_PATCH_TAG"
+
+        echo "DOCKER_LATEST_TAG=$DOCKER_LATEST_TAG" >> $GITHUB_ENV
+        echo "DOCKER_MAJOR_TAG=$DOCKER_MAJOR_TAG" >> $GITHUB_ENV
+        echo "DOCKER_MINOR_TAG=$DOCKER_MINOR_TAG" >> $GITHUB_ENV
+        echo "DOCKER_PATCH_TAG=$DOCKER_PATCH_TAG" >> $GITHUB_ENV
+
+    - name: Build and push Docker image with tags
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        file: ./docs/Dockerfile
+        push: true
+        tags: ${{ env.DOCKER_LATEST_TAG }},${{ env.DOCKER_MAJOR_TAG }},${{ env.DOCKER_MINOR_TAG }},${{ env.DOCKER_PATCH_TAG }}

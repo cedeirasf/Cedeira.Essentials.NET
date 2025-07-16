@@ -1,0 +1,110 @@
+name: Candidate Liberation
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize]
+  workflow_call:
+    inputs:
+      branch:
+        type: string
+        description: "Branch to release"
+        default: main
+    secrets:
+      github-token:
+        description: "The Github token"
+        required: true
+      GH_PACKAGES_USERNAME:
+        required: false
+        description: Cedeirasf GitHub Packages username
+      GH_PACKAGES_TOKEN:
+        required: false
+        description: Cedeirasf GitHub Packages token
+      CODECOV_TOKEN:
+        description: "Codecov token for uploading coverage reports"
+        required: true
+    outputs:
+      candidate:
+        description: "The candidate tag"
+        value: ${{ jobs.call-versioning-workflow-stable.outputs.candidate }}
+
+permissions:
+  attestations: write
+  checks: write
+  deployments: write
+  discussions: write
+  issues: write
+  models: read
+  pages: write
+  pull-requests: write
+  repository-projects: write
+  statuses: write
+  security-events: write
+  contents: write
+  packages: write
+  actions: write
+  id-token: write
+
+jobs:
+  skip-if-author:
+    name: Check Commit Author
+    runs-on: ubuntu-latest
+    outputs:
+      skip_versioning: ${{ steps.check_commit_author.outputs.skip_versioning }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref }}
+          token: ${{ secrets.GH_PROJECT_AUTOMATION || secrets.github-token || secrets.GITHUB_TOKEN }}
+
+      - name: Check commit author
+        id: check_commit_author
+        run: |
+          commit_author=$(git log -1 --pretty=format:'%ae')
+          if [ "${GITHUB_ACTOR}" = "matchingtool-cedeirasf" ] || [ "$commit_author" = "matchingtool-cedeirasf" ]; then
+            echo "skip_versioning=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip_versioning=false" >> $GITHUB_OUTPUT
+          fi
+
+  call-versioning-workflow-stable:
+    uses: cedeirasf/Cedeira.Essentials.NET/.github/workflows/candidate-versioning.yml@main
+    needs: skip-if-author
+    if: needs.skip-if-author.outputs.skip_versioning != 'true' && github.event_name == 'pull_request'
+    secrets:
+      github-token: ${{ secrets.GH_PROJECT_AUTOMATION || secrets.github-token || secrets.GITHUB_TOKEN }}
+
+  # Siempre correrá el workflow unit tests. REQUIRED: branch
+  call-unit-tests-workflow-stable:
+    needs: call-versioning-workflow-stable
+    uses: cedeirasf/Cedeira.Essentials.NET/.github/workflows/unit-tests.yml@main
+    with:
+      branch: RC-${{ github.head_ref }}
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  call-release-github-workflow-stable:
+    needs:
+      - call-versioning-workflow-stable
+      - call-unit-tests-workflow-stable
+    if: github.event_name == 'pull_request'
+    uses: cedeirasf/Cedeira.Essentials.NET/.github/workflows/release-gh.yml@main
+    with:
+      next: ${{ needs.call-versioning-workflow-stable.outputs.candidate }}
+      include-artifacts: false
+    secrets:
+      github-token: ${{ secrets.GH_PROJECT_AUTOMATION || secrets.github-token || secrets.GITHUB_TOKEN }}
+
+  # Siempre correrá el workflow releases. REQUIRED: branch y tag
+  call-releases-workflow-stable:
+    needs:
+      - call-versioning-workflow-stable
+      - call-unit-tests-workflow-stable
+    uses: cedeirasf/Cedeira.Essentials.NET/.github/workflows/release-nuget.yml@main
+    with:
+      branch: RC-${{ github.head_ref }}
+    secrets:
+      GH_PACKAGES_USERNAME: ${{ secrets.GH_PACKAGES_USERNAME || 'matchingtool-cedeirasf' }}
+      GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN || secrets.github-token || secrets.GITHUB_TOKEN }}

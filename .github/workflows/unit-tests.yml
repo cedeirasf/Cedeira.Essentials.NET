@@ -1,0 +1,54 @@
+name: Unit Tests
+
+on:
+  workflow_call:
+    inputs:
+      branch: 
+        type: string
+        required: true
+        description: Branch to release
+        default: "main"
+    secrets:
+      CODECOV_TOKEN:
+        description: "Codecov token for uploading coverage reports"
+        required: true
+
+jobs:
+  unit-tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.branch }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Run unit tests
+        run: |
+          dotnet test --collect:"XPlat Code Coverage;Format=lcov" --results-directory ./tests-results         
+      
+      - name: Publish test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: "./tests-results/*/*.info"
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          name: Essentials.NET-codecov # 'Custom defined name of the upload. Visible in the Codecov UI'
+          flags: UnitTests
+          files: "./tests-results/*/*.info"
+          verbose: true
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}

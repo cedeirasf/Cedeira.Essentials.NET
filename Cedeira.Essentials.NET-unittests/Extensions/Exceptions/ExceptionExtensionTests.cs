@@ -3,14 +3,13 @@ using Cedeira.Essentials.NET.Extensions.Exceptions;
 namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
 {
     /// <summary>
-    /// Contiene pruebas unitarias para la clase <vea cref="ExceptionExtension"/>.
+    /// Contains unit tests for the <see cref="ExceptionExtension"/> class.
     /// </summary>
     [TestClass]
     public class ExceptionExtensionTests
     {
         /// <summary>
-        /// Verifica que el método <vea cref="ExceptionExtension.FullMessage(Exception)"/> 
-        /// devuelve el mensaje correcto cuando no hay excepción interna.
+        /// Verifies that the <see cref="ExceptionExtension.FullMessage(Exception)"/> method returns the correct message when there is no inner exception.
         /// </summary>
         [TestMethod]
         public void FullMessage_WithoutInnerException_ReturnsCorrectMessage()
@@ -24,8 +23,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que el método <vea cref="ExceptionExtension.FullMessage(Exception)"/> 
-        /// devuelve el mensaje combinado cuando hay una excepción interna.
+        /// Verifies that the <see cref="ExceptionExtension.FullMessage(Exception)"/> method returns the combined message when there is an inner exception.
         /// </summary>
         [TestMethod]
         public void FullMessage_WithOneInnerException_ReturnsCombinedMessage()
@@ -42,8 +40,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que el método <vea cref="ExceptionExtension.FullMessage(Exception)"/> 
-        /// devuelve todos los mensajes combinados cuando hay múltiples excepciones internas.
+        /// Verifies that the <see cref="ExceptionExtension.FullMessage(Exception)"/> method returns all combined messages when there are multiple inner exceptions.
         /// </summary>
         [TestMethod]
         public void FullMessage_WithMultipleInnerExceptions_ReturnsAllCombinedMessages()
@@ -68,8 +65,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que el método <vea cref="ExceptionExtension.FullMessage(Exception, string)"/> 
-        /// devuelve los mensajes combinados utilizando separadores personalizados.
+        /// Verifies that the <see cref="ExceptionExtension.FullMessage(Exception, string)"/> method returns the combined messages using custom separators.
         /// </summary>
         [TestMethod]
         public void FullMessage_WithCustomSeparators_ReturnsCombinedMessages()
@@ -100,8 +96,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que el método <vea cref="ExceptionExtension.LastExceptionMessage(Exception)"/> 
-        /// devuelve el mensaje correcto cuando no hay excepción interna.
+        /// Verifies that the <see cref="ExceptionExtension.LastExceptionMessage(Exception)"/> method returns the correct message when there is no inner exception.
         /// </summary>
         [TestMethod]
         public void LastExceptionMessage_WithoutInnerException_ReturnsCorrectMessage()
@@ -115,8 +110,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que el método <vea cref="ExceptionExtension.LastExceptionMessage(Exception)"/> 
-        /// devuelve el mensaje de la última excepción anidada.
+        /// Verifies that the <see cref="ExceptionExtension.LastExceptionMessage(Exception)"/> method returns the message of the last nested exception.
         /// </summary>
         [TestMethod]
         public void LastExceptionMessage_WithOneInnerException_ReturnsInnerExceptionMessage()
@@ -132,8 +126,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
         }
 
         /// <summary>
-        /// Verifica que el método <vea cref="ExceptionExtension.LastExceptionMessage(Exception)"/> 
-        /// devuelve el mensaje de la última excepción anidada cuando hay múltiples excepciones internas.
+        /// Verifies that the <see cref="ExceptionExtension.LastExceptionMessage(Exception)"/> method returns the message of the last nested exception when there are multiple inner exceptions.
         /// </summary>
         [TestMethod]
         public void LastExceptionMessage_WithMultipleInnerExceptions_ReturnsLastInnerExceptionMessage()
@@ -146,5 +139,321 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
 
             Assert.AreEqual(lastInnerExceptionMessage, result);
         }
+
+        #region ContainsException Tests
+
+        /// <summary>
+        /// Verifies that ContainsException(Type) returns true if the exception is of the searched type.
+        /// </summary>
+        [TestMethod]
+        public void ContainsException_Type_SimpleMatch_ReturnsTrue()
+        {
+            var ex = new ArgumentNullException();
+            Assert.IsTrue(ExceptionExtension.ContainsException(ex, typeof(ArgumentNullException)));
+        }
+
+        /// <summary>
+        /// Verifies that ContainsException(Type) returns true if an InnerException is of the searched type.
+        /// </summary>
+        [TestMethod]
+        public void ContainsException_Type_InnerMatch_ReturnsTrue()
+        {
+            var inner = new ArgumentOutOfRangeException();
+            var ex = new Exception("outer", inner);
+            Assert.IsTrue(ExceptionExtension.ContainsException(ex, typeof(ArgumentOutOfRangeException)));
+        }
+
+        /// <summary>
+        /// Verifies that ContainsException(Type) returns false if there is no match.
+        /// </summary>
+        [TestMethod]
+        public void ContainsException_Type_NoMatch_ReturnsFalse()
+        {
+            var ex = new Exception();
+            Assert.IsFalse(ExceptionExtension.ContainsException(ex, typeof(ArgumentException)));
+        }
+
+        /// <summary>
+        /// Verifies that ContainsException(Type) handles null exceptions and null type.
+        /// </summary>
+        [TestMethod]
+        public void ContainsException_Type_NullInputs_ReturnsFalse()
+        {
+            Exception? ex = null;
+            Assert.IsFalse(ExceptionExtension.ContainsException(ex, typeof(Exception)));
+            var ex2 = new Exception();
+            Assert.IsFalse(ExceptionExtension.ContainsException(ex2, (Type)null));
+        }
+
+        /// <summary>
+        /// Verifies that ContainsException(string) returns true if the exception is of the searched name.
+        /// </summary>
+        [TestMethod]
+        public void ContainsException_String_SimpleMatch_ReturnsTrue()
+        {
+            var ex = new ArgumentNullException();
+            Assert.IsTrue(ex.ContainsException("ArgumentNullException"));
+        }
+
+        /// <summary>
+        /// Verifies that ContainsException(string) returns true if an InnerException is of the searched name.
+        /// </summary>
+        [TestMethod]
+        public void ContainsException_String_InnerMatch_ReturnsTrue()
+        {
+            var inner = new ArgumentOutOfRangeException();
+            var ex = new Exception("outer", inner);
+            Assert.IsTrue(ex.ContainsException("ArgumentOutOfRangeException"));
+        }
+
+        /// <summary>
+        /// Verifies that ContainsException(string) returns false if there is no match.
+        /// </summary>
+        [TestMethod]
+        public void ContainsException_String_NoMatch_ReturnsFalse()
+        {
+            var ex = new Exception();
+            Assert.IsFalse(ex.ContainsException("ArgumentException"));
+        }
+
+        /// <summary>
+        /// Verifies that ContainsException(string) handles null exceptions and null name.
+        /// </summary>
+        [TestMethod]
+        public void ContainsException_String_NullInputs_ReturnsFalse()
+        {
+            Exception? ex = null;
+            Assert.IsFalse(ExceptionExtension.ContainsException(ex, "Exception"));
+            var ex2 = new Exception();
+            Assert.IsFalse(ExceptionExtension.ContainsException(ex2, (string)null));
+            Assert.IsFalse(ExceptionExtension.ContainsException(ex2, ""));
+        }
+
+        /// <summary>
+        /// Verifies that ContainsException<T>() returns true if the exception is of the searched type.
+        /// </summary>
+        [TestMethod]
+        public void ContainsException_Generic_SimpleMatch_ReturnsTrue()
+        {
+            var ex = new ArgumentNullException();
+            Assert.IsTrue(ex.ContainsException<ArgumentNullException>());
+        }
+
+        /// <summary>
+        /// Verifies that ContainsException<T>() returns true if an InnerException is of the searched type.
+        /// </summary>
+        [TestMethod]
+        public void ContainsException_Generic_InnerMatch_ReturnsTrue()
+        {
+            var inner = new ArgumentOutOfRangeException();
+            var ex = new Exception("outer", inner);
+            Assert.IsTrue(ex.ContainsException<ArgumentOutOfRangeException>());
+        }
+
+        /// <summary>
+        /// Verifies that ContainsException<T>() returns false if there is no match.
+        /// </summary>
+        [TestMethod]
+        public void ContainsException_Generic_NoMatch_ReturnsFalse()
+        {
+            var ex = new Exception();
+            Assert.IsFalse(ex.ContainsException<ArgumentException>());
+        }
+
+        /// <summary>
+        /// Verifies that ContainsException<T>() handles null exceptions.
+        /// </summary>
+        [TestMethod]
+        public void ContainsException_Generic_NullInput_ReturnsFalse()
+        {
+            Exception? ex = null;
+            Assert.IsFalse(ex.ContainsException<Exception>());
+        }
+
+        /// <summary>
+        /// Verifies that ContainsException works with inheritance hierarchy.
+        /// </summary>
+        [TestMethod]
+        public void ContainsException_InheritanceHierarchy_ReturnsTrueForBaseAndDerived()
+        {
+            var ex = new ArgumentOutOfRangeException();
+            Assert.IsTrue(ExceptionExtension.ContainsException(ex, typeof(ArgumentException)));
+            Assert.IsTrue(ex.ContainsException<ArgumentException>());
+            Assert.IsTrue(ex.ContainsException("ArgumentOutOfRangeException"));
+        }
+
+        #endregion
+
+        #region FindException Tests
+
+        /// <summary>
+        /// Verifies that FindException(Type) returns the exception if it is of the searched type.
+        /// </summary>
+        [TestMethod]
+        public void FindException_Type_SimpleMatch_ReturnsException()
+        {
+            var ex = new ArgumentNullException();
+            var result = ExceptionExtension.FindException(ex, typeof(ArgumentNullException));
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ArgumentNullException));
+        }
+
+        /// <summary>
+        /// Verifies that FindException(Type) returns the InnerException if it is of the searched type.
+        /// </summary>
+        [TestMethod]
+        public void FindException_Type_InnerMatch_ReturnsException()
+        {
+            var inner = new ArgumentOutOfRangeException();
+            var ex = new Exception("outer", inner);
+            var result = ExceptionExtension.FindException(ex, typeof(ArgumentOutOfRangeException));
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ArgumentOutOfRangeException));
+        }
+
+        /// <summary>
+        /// Verifies that FindException(Type) returns null if there is no match.
+        /// </summary>
+        [TestMethod]
+        public void FindException_Type_NoMatch_ReturnsNull()
+        {
+            var ex = new Exception();
+            var result = ExceptionExtension.FindException(ex, typeof(ArgumentException));
+            Assert.IsNull(result);
+        }
+
+        /// <summary>
+        /// Verifies that FindException(Type) handles null exceptions and null type.
+        /// </summary>
+        [TestMethod]
+        public void FindException_Type_NullInputs_ReturnsNull()
+        {
+            Exception? ex = null;
+            var result1 = ExceptionExtension.FindException(ex, typeof(Exception));
+            Assert.IsNull(result1);
+            var ex2 = new Exception();
+            var result2 = ExceptionExtension.FindException(ex2, (Type)null);
+            Assert.IsNull(result2);
+        }
+
+        /// <summary>
+        /// Verifies that FindException(string) returns the exception if it is of the searched name.
+        /// </summary>
+        [TestMethod]
+        public void FindException_String_SimpleMatch_ReturnsException()
+        {
+            var ex = new ArgumentNullException();
+            var result = ExceptionExtension.FindException(ex, "ArgumentNullException");
+            Assert.IsNotNull(result);
+            Assert.AreEqual("ArgumentNullException", result.GetType().Name);
+        }
+
+        /// <summary>
+        /// Verifies that FindException(string) returns the InnerException if it is of the searched name.
+        /// </summary>
+        [TestMethod]
+        public void FindException_String_InnerMatch_ReturnsException()
+        {
+            var inner = new ArgumentOutOfRangeException();
+            var ex = new Exception("outer", inner);
+            var result = ExceptionExtension.FindException(ex, "ArgumentOutOfRangeException");
+            Assert.IsNotNull(result);
+            Assert.AreEqual("ArgumentOutOfRangeException", result.GetType().Name);
+        }
+
+        /// <summary>
+        /// Verifies that FindException(string) returns null if there is no match.
+        /// </summary>
+        [TestMethod]
+        public void FindException_String_NoMatch_ReturnsNull()
+        {
+            var ex = new Exception();
+            var result = ExceptionExtension.FindException(ex, "ArgumentException");
+            Assert.IsNull(result);
+        }
+
+        /// <summary>
+        /// Verifies that FindException(string) handles null exceptions and null name.
+        /// </summary>
+        [TestMethod]
+        public void FindException_String_NullInputs_ReturnsNull()
+        {
+            Exception? ex = null;
+            var result1 = ExceptionExtension.FindException(ex, "Exception");
+            Assert.IsNull(result1);
+            var ex2 = new Exception();
+            var result2 = ExceptionExtension.FindException(ex2, (string)null);
+            Assert.IsNull(result2);
+            var result3 = ExceptionExtension.FindException(ex2, "");
+            Assert.IsNull(result3);
+        }
+
+        /// <summary>
+        /// Verifies that FindException<T>() returns the exception if it is of the searched type.
+        /// </summary>
+        [TestMethod]
+        public void FindException_Generic_SimpleMatch_ReturnsException()
+        {
+            var ex = new ArgumentNullException();
+            var result = ex.FindException<ArgumentNullException>();
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ArgumentNullException));
+        }
+
+        /// <summary>
+        /// Verifies that FindException<T>() returns the InnerException if it is of the searched type.
+        /// </summary>
+        [TestMethod]
+        public void FindException_Generic_InnerMatch_ReturnsException()
+        {
+            var inner = new ArgumentOutOfRangeException();
+            var ex = new Exception("outer", inner);
+            var result = ex.FindException<ArgumentOutOfRangeException>();
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ArgumentOutOfRangeException));
+        }
+
+        /// <summary>
+        /// Verifies that FindException<T>() returns null if there is no match.
+        /// </summary>
+        [TestMethod]
+        public void FindException_Generic_NoMatch_ReturnsNull()
+        {
+            var ex = new Exception();
+            var result = ex.FindException<ArgumentException>();
+            Assert.IsNull(result);
+        }
+
+        /// <summary>
+        /// Verifies that FindException<T>() handles null exceptions.
+        /// </summary>
+        [TestMethod]
+        public void FindException_Generic_NullInput_ReturnsNull()
+        {
+            Exception? ex = null;
+            var result = ExceptionExtension.FindException<Exception>(ex);
+            Assert.IsNull(result);
+        }
+
+        /// <summary>
+        /// Verifies that FindException works with inheritance hierarchy.
+        /// </summary>
+        [TestMethod]
+        public void FindException_InheritanceHierarchy_ReturnsFirstMatch()
+        {
+            var inner = new ArgumentOutOfRangeException();
+            var ex = new Exception("outer", inner);
+            var resultType = ExceptionExtension.FindException(ex, typeof(ArgumentException));
+            Assert.IsNotNull(resultType);
+            Assert.IsInstanceOfType(resultType, typeof(ArgumentOutOfRangeException));
+            var resultGeneric = ex.FindException<ArgumentException>();
+            Assert.IsNotNull(resultGeneric);
+            Assert.IsInstanceOfType(resultGeneric, typeof(ArgumentOutOfRangeException));
+            var resultString = ExceptionExtension.FindException(ex, "ArgumentOutOfRangeException");
+            Assert.IsNotNull(resultString);
+            Assert.AreEqual("ArgumentOutOfRangeException", resultString.GetType().Name);
+        }
+
+        #endregion
     }
 }

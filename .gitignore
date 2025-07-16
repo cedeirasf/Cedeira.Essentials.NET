@@ -402,3 +402,12 @@ docs/
 !docs/docfx.json
 !docs/index.md
 !docs/toc.yml
+
+# Cursor
+.cursor
+
+# Novafuria Agents
+.novafuria/**/tmp
+
+# NuGet configuration files
+nuget.config

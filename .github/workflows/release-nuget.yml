@@ -1,0 +1,72 @@
+
+name: Release nuget
+
+on:
+  workflow_call:
+    inputs:
+      branch: 
+        type: string
+        required: true
+        description: Branch to release
+        default: "main"
+    secrets:
+      GH_PACKAGES_USERNAME:
+        required: false
+        description: Cedeirasf GitHub Packages username
+      GH_PACKAGES_TOKEN:
+        required: false
+        description: Cedeirasf GitHub Packages token
+
+jobs:
+  deploy-debug:
+    name: Deploy debug
+    if: github.event.release.draft == false
+    runs-on: ubuntu-latest
+    permissions: write-all
+    env:
+      PROJECT_NAME: "Cedeira.Essentials.NET"
+      GH_PACKAGES_USERNAME: ${{ secrets.GH_PACKAGES_USERNAME || 'matchingtool-cedeirasf' }}
+      GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        id: checkout
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.branch }}
+
+      - name: Setup .NET
+        id: setup-dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      - name: Find projects files and discard testing projects
+        id: find-projects
+        run: |
+          #!/bin/bash
+          # Find all projects files and discard testing projects
+          echo "$(find . -name '*.csproj' | grep -v 'unittests')"
+      
+      - name: Add source to GitHub NuGet
+        id: add-github-registry-source
+        run: dotnet nuget add source --username ${{ env.GH_PACKAGES_USERNAME }} --password ${{ env.GH_PACKAGES_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/cedeirasf/index.json"
+
+      - name: Install dependencies
+        id: restore
+        run: dotnet restore
+
+      - name: Build project
+        id: build-project
+        run: dotnet build --configuration Debug
+
+      - name: Pack NuGet packages with symbols and source
+        id: pack-nugets
+        run: dotnet pack --configuration Debug --include-symbols --include-source
+
+      - name: Find Symbols package
+        id: find-symbols
+        run: echo "SYMBOLS_PATH=$(find ${{ github.workspace }}/${{ env.PROJECT_NAME }}/bin/Debug/ -name '*.symbols.nupkg')" >> $GITHUB_ENV
+
+      - name: Push Symbols package
+        id: push-symbols
+        run: dotnet nuget push "${{ env.SYMBOLS_PATH }}" --api-key ${{ env.GH_PACKAGES_TOKEN }} --source "github" --skip-duplicate
