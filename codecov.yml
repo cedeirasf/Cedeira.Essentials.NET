@@ -12,11 +12,13 @@ coverage:
         informational: true
 
 comment:
-  layout: "reach,diff,flags,tree"
+  layout: "header, files, footer, reach, diff, flags, tree"
   behavior: default
   require_changes: true
+  require_base: false        
+  require_head: true       
+  hide_project_coverage: false
   show_carryforward_flags: true
-  after_n_builds: 1 
 
 github_checks:
   annotations: true 
