@@ -266,7 +266,42 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             }
             return this;
         }
-        
+
+        /// <summary>
+        /// Verifica que el valor no sea nulo, vacío o contenga únicamente espacios en blanco.
+        /// Lanza una ArgumentNullException si el valor es nulo,
+        /// o una ArgumentException si el valor es una cadena vacía o compuesta solo por espacios.
+        /// </summary>
+        /// <param name="errorMessage">El mensaje de error a lanzar si la validación falla.</param>
+        /// <returns>El propio InvariantValidator para permitir chaining.</returns>
+        public InvariantValidator<T> IsNotNullOrWhiteSpace(string errorMessage)
+        {
+            ValidateErrorMessage(errorMessage);
+
+            if (_value == null)
+            {
+                throw new ArgumentNullException(errorMessage);
+            }
+
+            if (_value is string stringValue && string.IsNullOrWhiteSpace(stringValue))
+            {
+                throw new ArgumentException(errorMessage);
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Verifica que el valor no sea nulo, vacío o contenga únicamente espacios en blanco.
+        /// Lanza una ArgumentNullException si el valor es nulo,
+        /// o una ArgumentException si el valor es una cadena vacía o compuesta solo por espacios.
+        /// </summary>
+        /// <returns>El propio InvariantValidator para permitir chaining.</returns>
+        public InvariantValidator<T> IsNotNullOrWhiteSpace()
+        {
+            return this.IsNotNullOrWhiteSpace(DefaultNullErrorMessage);
+        }
+
         /// <summary>
         /// Método Helper Privado para validar mensajes de error
         /// </summary>
