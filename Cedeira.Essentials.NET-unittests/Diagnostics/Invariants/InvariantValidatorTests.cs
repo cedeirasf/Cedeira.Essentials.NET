@@ -362,5 +362,54 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             object Objeto = new object();
             Invariants.For <object?>(5).LessThan(Objeto);
         }
+
+        [TestMethod]
+        public void IsNotNullOrWhiteSpace_ShouldPass_WhenValueIsValid()
+        {
+            var validator = Invariants.For("Hola mundo");
+            validator.IsNotNullOrWhiteSpace();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void IsNotNullOrWhiteSpace_ShouldThrow_WhenValueIsNull()
+        {
+            string? primitiveString = null;
+            var validator = Invariants.For(primitiveString);
+            validator.IsNotNullOrWhiteSpace();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void IsNotNullOrWhiteSpace_ShouldThrow_WhenValueIsEmpty()
+        {
+            var validator = Invariants.For("");
+            validator.IsNotNullOrWhiteSpace();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void IsNotNullOrWhiteSpace_ShouldThrow_WhenValueIsWhiteSpace()
+        {
+            var validator = Invariants.For("   ");
+            validator.IsNotNullOrWhiteSpace();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void IsNotNullOrWhiteSpace_ShouldThrow_WhenErrorMessageIsNull()
+        {
+            var validator = Invariants.For("Hola");
+            validator.IsNotNullOrWhiteSpace(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void IsNotNullOrWhiteSpace_ShouldThrow_WhenErrorMessageIsEmpty()
+        {
+            var validator = Invariants.For("Hola");
+            validator.IsNotNullOrWhiteSpace("");
+        }
+
     }
 }
