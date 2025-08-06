@@ -7,6 +7,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
     {
         private readonly T _value;
         private const string DefaultNullErrorMessage = "Value cannot be null or empty.";
+        private const string DefaultNullOrWhiteSpaceMessage = "Value cannot be null, empty or whitespace.";
         private const string DefaultSpecialCharactersMessage = "Value cannot contain special characters";
         private const string ErrorMessageParamName = "errorMessage";
 
@@ -299,7 +300,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         /// <returns>El propio InvariantValidator para permitir chaining.</returns>
         public InvariantValidator<T> IsNotNullOrWhiteSpace()
         {
-            return this.IsNotNullOrWhiteSpace(DefaultNullErrorMessage);
+            return this.IsNotNullOrWhiteSpace(DefaultNullOrWhiteSpaceMessage);
         }
 
         /// <summary>
