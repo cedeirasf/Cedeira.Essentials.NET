@@ -1,8 +1,5 @@
 ﻿using Cedeira.Essentials.NET.System.ResultPattern;
 using Cedeira.Essentials.NET.TDD;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 
 namespace Cedeira.Essentials.NET_unittests.TDD
 {
