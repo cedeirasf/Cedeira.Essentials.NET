@@ -30,7 +30,7 @@ namespace Cedeira.Essentials.NET.TDD
         public static TestCase<P, R> Create(string title, P parameters, IResult<R, Type> result)
         {
             Invariants.For(title).IsNotNull("Title is required");
-            Invariants.For(parameters).IsNotNull("Parameters are required");
+            //Invariants.For(parameters).IsNotNull("Parameters are required");
             Invariants.For(result).IsNotNull("Result is required");
 
             return new TestCase<P, R>(title, parameters, result);
