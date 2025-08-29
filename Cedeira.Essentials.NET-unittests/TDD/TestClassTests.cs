@@ -9,7 +9,6 @@ namespace Cedeira.Essentials.NET_unittests.TDD
 
         public static IEnumerable<object[]> IntAdd_AllCases()
         {
-            // no-nullables (pero el parámetro es int? para unificar)
             yield return new object[] {
                 TestCase<(int? A, int? B), int>.Create(
                     "int?/int add: 2 + 3 = 5",
@@ -335,8 +334,8 @@ namespace Cedeira.Essentials.NET_unittests.TDD
 
         private static async Task<int> AddAsync(int a, int b)
         {
-            await Task.Yield(); // simulate async work
-            checked { return a + b; } // may throw OverflowException
+            await Task.Yield();
+            checked { return a + b; }
         }
 
         public static IEnumerable<object[]> TaskAdd_AllCases()
@@ -365,6 +364,138 @@ namespace Cedeira.Essentials.NET_unittests.TDD
                 if (!tc.Result.IsSuccess()) Assert.Fail(tc.FailResponse("Expected failure, but got success"));
                 Assert.AreEqual(tc.Result.SuccessValue, actual,
                     tc.FailResponse("Task add result mismatch", tc.Result.SuccessValue, actual));
+            }
+            catch (Exception ex)
+            {
+                if (!tc.Result.IsFailure()) Assert.Fail(tc.FailResponse("Expected success, but got failure", ex));
+                Assert.IsInstanceOfType(ex, (Type)tc.Result.FailureValue,
+                    tc.FailResponse("Exception type mismatch", tc.Result.FailureValue!, ex.GetType(), ex));
+            }
+        }
+
+        private static async Task<string> ProcessTwoObjectsAsync(object objA, object objB)
+        {
+            await Task.Yield();
+            if (objA == null) throw new ArgumentNullException(nameof(objA));
+            if (objB == null) throw new ArgumentNullException(nameof(objB));
+            return $"{objA}-{objB}";
+        }
+
+        public static IEnumerable<object[]> TaskTwoObjects_AllCases()
+        {
+            yield return new object[] {
+                TestCase<(object A, object B), string>.Create(
+                    "Task<string> process two objects ok - string inputs",
+                    ("Hello", "World"),
+                    new SuccessResult<string, Type>("Hello-World"))
+            };
+            yield return new object[] {
+                TestCase<(object A, object B), string>.Create(
+                    "Task<string> process two objects ok - mixed types",
+                    (42, "Test"),
+                    new SuccessResult<string, Type>("42-Test"))
+            };
+            yield return new object[] {
+                TestCase<(object A, object B), string>.Create(
+                    "Task<string> process two objects ok - anonymous objects",
+                    (new { Id = 1 }, new { Name = "Test" }),
+                    new SuccessResult<string, Type>("{ Id = 1 }-{ Name = Test }"))
+            };
+            yield return new object[] {
+                TestCase<(object A, object B), string>.Create(
+                    "Task<string> process two objects fails when A is null",
+                    (null, "World"),
+                    new FailureResult<string, Type>(typeof(ArgumentNullException), "Operation failed."))
+            };
+            yield return new object[] {
+                TestCase<(object A, object B), string>.Create(
+                    "Task<string> process two objects fails when B is null",
+                    ("Hello", null),
+                    new FailureResult<string, Type>(typeof(ArgumentNullException), "Operation failed."))
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(TaskTwoObjects_AllCases), DynamicDataSourceType.Method)]
+        public async Task TaskTwoObjects_Test(TestCase<(object A, object B), string> tc)
+        {
+            try
+            {
+                var actual = await ProcessTwoObjectsAsync(tc.Parameters.A, tc.Parameters.B);
+                if (!tc.Result.IsSuccess()) Assert.Fail(tc.FailResponse("Expected failure, but got success"));
+                Assert.AreEqual(tc.Result.SuccessValue, actual,
+                    tc.FailResponse("Task two objects result mismatch", tc.Result.SuccessValue, actual));
+            }
+            catch (Exception ex)
+            {
+                if (!tc.Result.IsFailure()) Assert.Fail(tc.FailResponse("Expected success, but got failure", ex));
+                Assert.IsInstanceOfType(ex, (Type)tc.Result.FailureValue,
+                    tc.FailResponse("Exception type mismatch", tc.Result.FailureValue!, ex.GetType(), ex));
+            }
+        }
+
+        private static async Task<bool> CompareObjectsAsync(object objA, object objB)
+        {
+            await Task.Yield();
+            if (objA == null) throw new ArgumentNullException(nameof(objA));
+            if (objB == null) throw new ArgumentNullException(nameof(objB));
+            
+            // Simulate some comparison logic
+            if (objA.GetType() != objB.GetType()) throw new InvalidOperationException("Objects must be same type");
+            
+            return objA.Equals(objB);
+        }
+
+        public static IEnumerable<object[]> TaskObjectComparison_AllCases()
+        {
+            yield return new object[] {
+                TestCase<(object A, object B), bool>.Create(
+                    "Task<bool> compare objects ok - equal strings",
+                    ("test", "test"),
+                    new SuccessResult<bool, Type>(true))
+            };
+            yield return new object[] {
+                TestCase<(object A, object B), bool>.Create(
+                    "Task<bool> compare objects ok - different strings",
+                    ("test1", "test2"),
+                    new SuccessResult<bool, Type>(false))
+            };
+            yield return new object[] {
+                TestCase<(object A, object B), bool>.Create(
+                    "Task<bool> compare objects ok - equal numbers",
+                    (42, 42),
+                    new SuccessResult<bool, Type>(true))
+            };
+            yield return new object[] {
+                TestCase<(object A, object B), bool>.Create(
+                    "Task<bool> compare objects fails - different types",
+                    ("test", 42),
+                    new FailureResult<bool, Type>(typeof(InvalidOperationException), "Operation failed."))
+            };
+            yield return new object[] {
+                TestCase<(object A, object B), bool>.Create(
+                    "Task<bool> compare objects fails when A is null",
+                    (null, "test"),
+                    new FailureResult<bool, Type>(typeof(ArgumentNullException), "Operation failed."))
+            };
+            yield return new object[] {
+                TestCase<(object A, object B), bool>.Create(
+                    "Task<bool> compare objects fails when B is null",
+                    ("test", null),
+                    new FailureResult<bool, Type>(typeof(ArgumentNullException), "Operation failed."))
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(TaskObjectComparison_AllCases), DynamicDataSourceType.Method)]
+        public async Task TaskObjectComparison_Test(TestCase<(object A, object B), bool> tc)
+        {
+            try
+            {
+                var actual = await CompareObjectsAsync(tc.Parameters.A, tc.Parameters.B);
+                if (!tc.Result.IsSuccess()) Assert.Fail(tc.FailResponse("Expected failure, but got success"));
+                Assert.AreEqual(tc.Result.SuccessValue, actual,
+                    tc.FailResponse("Task object comparison result mismatch", tc.Result.SuccessValue, actual));
             }
             catch (Exception ex)
             {
