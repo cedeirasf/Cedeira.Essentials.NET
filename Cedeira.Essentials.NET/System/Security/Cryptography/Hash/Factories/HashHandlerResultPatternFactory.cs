@@ -7,12 +7,13 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
     /// <summary>
     /// Factory class for creating instances of IHashHandlerResultPattern based on a provided IHashContext and IResultFactory.
     /// </summary>
-    public class HashHandlerResultPatternFactory : IHashHandlerResultPatternFactory 
+    public class HashHandlerResultPatternFactory : IHashHandlerResultPatternFactory
     {
         /// <summary>
         /// The factory used to create result objects.
         /// </summary>
-        private readonly IResultFactory  _resultFactory;
+        private readonly IResultFactory _resultFactory;
+
         /// <summary>
         /// The hashContext dto, used for computing and validating hashes.
         /// </summary>
@@ -26,7 +27,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
         public HashHandlerResultPatternFactory(IHashContext hashContext, IResultFactory resultFactory)
         {
             _resultFactory = resultFactory;
-            _hashContext = hashContext; 
+            _hashContext = hashContext;
         }
 
         /// <summary>
@@ -37,6 +38,5 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
         {
             return new HashHandlerResultPattern(_hashContext.HashAlgorithm, _hashContext.HashFormatter, _resultFactory);
         }
-
     }
 }

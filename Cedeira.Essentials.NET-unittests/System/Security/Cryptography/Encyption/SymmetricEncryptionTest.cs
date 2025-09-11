@@ -1,17 +1,16 @@
-﻿using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
-using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption;
-using System.Security;
-using Microsoft.Extensions.DependencyInjection;
-using System.Text;
+﻿using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption;
+using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Factories;
+using Microsoft.Extensions.DependencyInjection;
+using System.Security;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyption
 {
     [TestClass]
     public class SymmetricEncryptionTest
     {
-
         private Dictionary<string, (string? value, string? cipherValue)> _TestValidateEncryptionString;
 
         private Dictionary<string, (byte[]? value, byte[]? cipherValue)> _TestValidateEncryptionArrayByte;
@@ -201,7 +200,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                 {
                     Assert.ThrowsException<CryptographicException>(() =>
                     {
-                         symmetricEncryption.ThrowIfInvalidEncryption(test.Value.value, test.Value.cipherValue);
+                        symmetricEncryption.ThrowIfInvalidEncryption(test.Value.value, test.Value.cipherValue);
                     });
                 }
                 else
@@ -244,7 +243,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                 {
                     Assert.ThrowsException<CryptographicException>(() =>
                     {
-                         symmetricEncryption.ThrowIfInvalidEncryption(test.Value.value, test.Value.cipherValue);
+                        symmetricEncryption.ThrowIfInvalidEncryption(test.Value.value, test.Value.cipherValue);
                     });
                 }
                 else

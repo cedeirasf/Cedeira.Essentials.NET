@@ -22,7 +22,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
         /// </summary>
         private readonly Func<byte[], string> _hashFormatter;
 
-
         /// <summary>
         /// Initializes a new instance of the HashHandler class with the specified hash algorithm.
         /// </summary>
@@ -94,7 +93,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
         public string CalculateHash(SecureString input)
         {
             ValidateNull(input);
-        
+
             var bstr = Marshal.SecureStringToBSTR(input);
             try
             {

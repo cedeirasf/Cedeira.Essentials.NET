@@ -1,6 +1,5 @@
 ﻿using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories.Abstractions;
-using System.Security.Cryptography;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
 {
@@ -17,7 +16,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Factories
         /// <param name="hashContext">The context containing the hash algorithm and formatter configurations.</param>
         public HashHandlerFactory(IHashContext hashContext)
         {
-            _hashContext = hashContext; 
+            _hashContext = hashContext;
         }
 
         /// <summary>

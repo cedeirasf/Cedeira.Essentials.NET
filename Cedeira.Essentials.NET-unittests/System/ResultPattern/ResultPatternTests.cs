@@ -1,6 +1,4 @@
-﻿
-
-using Cedeira.Essentials.NET.System.ResultPattern;
+﻿using Cedeira.Essentials.NET.System.ResultPattern;
 using Cedeira.Essentials.NET.System.ResultPattern.Factories;
 
 namespace Cedeira.Essentials.NET_unittests.System.ResultPattern
@@ -168,7 +166,6 @@ namespace Cedeira.Essentials.NET_unittests.System.ResultPattern
             // Intentar acceder a SuccessValue debe lanzar una excepción
             var successValue = result.SuccessValue;
         }
-
 
         /// <summary>
         /// Prueba que un resultado exitoso sin valor asociado tenga el estado correcto.

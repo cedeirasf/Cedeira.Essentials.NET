@@ -94,6 +94,5 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions
         /// <param name="input"></param>
         /// <param name="hash"></param>
         void ThrowIfInvalidHash(StreamReader input, string hash);
-
     }
 }

@@ -22,7 +22,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Factori
         /// <param name="symmetricEncryptionContext">The context providing the symmetric algorithm for encryption.</param>
         public SymmetricEncryptionFactory(ISymmetricEncryptionContext symmetricEncryptionContext)
         {
-            _symmetricEncryptionContext = symmetricEncryptionContext;       
+            _symmetricEncryptionContext = symmetricEncryptionContext;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Factori
         /// provided by the <see cref="ISymmetricEncryptionContext"/>.
         /// </summary>
         /// <returns>An instance of <see cref="ISymmetricEncryption"/> configured with the appropriate algorithm.</returns>
-        public ISymmetricEncryption Create() 
+        public ISymmetricEncryption Create()
         {
             return new SymmetricEncryption(_symmetricEncryptionContext.SymmetricAlgorithm);
         }

@@ -282,7 +282,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
             Assert.IsTrue(ex.ContainsException("ArgumentOutOfRangeException"));
         }
 
-        #endregion
+        #endregion ContainsException Tests
 
         #region FindException Tests
 
@@ -454,6 +454,6 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Exceptions
             Assert.AreEqual("ArgumentOutOfRangeException", resultString.GetType().Name);
         }
 
-        #endregion
+        #endregion FindException Tests
     }
 }

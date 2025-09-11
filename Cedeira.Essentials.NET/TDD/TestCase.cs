@@ -10,7 +10,7 @@ namespace Cedeira.Essentials.NET.TDD
     {
         public P Parameters { get; private set; }
 
-        protected TestCase(string title, P parameters, IResult<R, Type> result): base(title, result)
+        protected TestCase(string title, P parameters, IResult<R, Type> result) : base(title, result)
         {
             Parameters = parameters;
         }
@@ -31,7 +31,6 @@ namespace Cedeira.Essentials.NET.TDD
             return this;
         }
 
-
         public string FailResponse(string details, Exception? reason = null)
         {
             return $"Fail test '{Title}': {details}{(reason is not null ? $", because {reason.FullMessage()}" : "")}";
@@ -46,10 +45,9 @@ namespace Cedeira.Essentials.NET.TDD
         {
             return $"Fail test '{Title}': {details}, expected {expectedObject}, but got {actualObject}{(reason is not null ? $", because {reason.FullMessage()}" : "")}";
         }
-
     }
 
-    public class TestCase<R> 
+    public class TestCase<R>
     {
         public string Title { get; private set; }
         public IResult<R, Type> Result { get; private set; }
@@ -81,8 +79,8 @@ namespace Cedeira.Essentials.NET.TDD
         public void RegisterDependencies(IServiceCollection services)
         {
             if (_dependencies.Any())
-            foreach (var dependency in _dependencies)
-                services.AddSingleton(dependency.Item2, dependency.Item1.Object);
+                foreach (var dependency in _dependencies)
+                    services.AddSingleton(dependency.Item2, dependency.Item1.Object);
         }
 
         public string FailResponse(string details, Exception? reason = null)
@@ -99,6 +97,5 @@ namespace Cedeira.Essentials.NET.TDD
         {
             return $"Fail test '{Title}': {details}, expected {expectedObject}, but got {actualObject}{(reason is not null ? $", because {reason.FullMessage()}" : "")}";
         }
-
     }
 }

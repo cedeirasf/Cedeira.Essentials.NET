@@ -116,21 +116,17 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                 }
                 else
                 {
-                    
                     _serviceCollection.AddSingleton<ISymmetricEncryptionContext>(
                         SymmetricEncryptionContext.CreateFromFullAlgorithmConfig(test.Value.algorithm, test.Value.cipherMode, test.Value.paddingMode, test.Value.key, test.Value.iV));
-
 
                     _serviceCollection.AddSingleton<IOptions<ISymmetricEncryptionContext>>(sp =>
                         new OptionsWrapper<ISymmetricEncryptionContext>(
                             sp.GetRequiredService<ISymmetricEncryptionContext>()));
 
-               
                     var serviceProvider = _serviceCollection.BuildServiceProvider();
                     var symmetricEncryptionContext = serviceProvider.GetService<ISymmetricEncryptionContext>();
                     var optionsSymmetricEncryptionContext = serviceProvider.GetService<IOptions<ISymmetricEncryptionContext>>();
 
-                 
                     Assert.IsNotNull(symmetricEncryptionContext);
                     Assert.IsNotNull(optionsSymmetricEncryptionContext);
                     Assert.AreEqual(symmetricEncryptionContext, optionsSymmetricEncryptionContext.Value);
@@ -148,7 +144,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
             _serviceCollection.AddSingleton<IOptions<ISymmetricEncryptionContext>>(sp =>
                 new OptionsWrapper<ISymmetricEncryptionContext>(
                     sp.GetRequiredService<ISymmetricEncryptionContext>()));
-           
+
             var serviceProvider = _serviceCollection.BuildServiceProvider();
             var symmetricEncryptionContext = serviceProvider.GetService<ISymmetricEncryptionContext>();
             var optionsSymmetricEncryptionContext = serviceProvider.GetService<IOptions<ISymmetricEncryptionContext>>();
@@ -171,7 +167,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                         test.Value.algorithm,
                         test.Value.cipherMode,
                         test.Value.paddingMode));
-                
+
                 _serviceCollection.AddSingleton<IOptions<ISymmetricEncryptionContext>>(sp =>
                     new OptionsWrapper<ISymmetricEncryptionContext>(
                         sp.GetRequiredService<ISymmetricEncryptionContext>()));
@@ -186,5 +182,4 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
             }
         }
     }
-
 }

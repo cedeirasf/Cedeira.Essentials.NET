@@ -10,7 +10,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Factori
     /// This class is responsible for providing the necessary context and result factory
     /// to create an instance of <see cref="SymmetricEncryptionResultPattern"/>.
     /// </remarks>
-    public class SymmetricEncryptionResultPatternFactory : ISymmetricEncryptionResultPatternFactory 
+    public class SymmetricEncryptionResultPatternFactory : ISymmetricEncryptionResultPatternFactory
     {
         /// <summary>
         /// Gets the symmetric algorithm used for encryption and decryption.
@@ -30,7 +30,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Factori
         public SymmetricEncryptionResultPatternFactory(ISymmetricEncryptionContext symmetricEncryptionContext, IResultFactory resultFactory)
         {
             _symmetricEncryptionContext = symmetricEncryptionContext;
-            _resultFactory = resultFactory;     
+            _resultFactory = resultFactory;
         }
 
         /// <summary>

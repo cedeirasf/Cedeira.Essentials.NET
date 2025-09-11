@@ -118,7 +118,3 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash.Fac
         }
     }
 }
-
-
-
-
