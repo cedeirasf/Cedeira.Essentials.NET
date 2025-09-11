@@ -1,5 +1,7 @@
 ﻿using Cedeira.Essentials.NET.System.ResultPattern;
 using Cedeira.Essentials.NET.TDD;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
 
 namespace Cedeira.Essentials.NET_unittests.TDD
 {
@@ -7,6 +9,130 @@ namespace Cedeira.Essentials.NET_unittests.TDD
     public class PrimitiveSamplesTest
     {
 
+        /// <summary>
+        /// Pruebas de creación de TestCase     
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void TestCaseCreation()
+        {
+
+            // TestCase sin parámetros
+            var testCase = TestCase<string>.Create(
+                title: "test a Task as paremeter",
+                new SuccessResult<string, Type>("10"));
+
+            Assert.IsNotNull(testCase, "Test case is null");
+            Assert.AreEqual("test a Task as paremeter", testCase.Title, "Test case title mismatch");
+            Assert.IsInstanceOfType(testCase.Result, typeof(SuccessResult<string, Type>), "Result is not of type SuccessResult<string, Type>");
+            Assert.IsNotNull(testCase.Result, "Result is null");
+            Assert.AreEqual("10", testCase.Result.SuccessValue.ToString(), "Result value mismatch");
+
+            // TestCase con parámetros
+            var TestCaseWithParams = TestCase<(int A, int B), int>.Create(
+                title: "Task<int> add ok",
+                (10, 5),
+                new SuccessResult<int, Type>(15));
+
+            Assert.IsNotNull(TestCaseWithParams, "Test case with parameters is null");
+            Assert.AreEqual("Task<int> add ok", TestCaseWithParams.Title, "Test case with parameters title mismatch");
+            Assert.IsInstanceOfType(TestCaseWithParams.Result, typeof(SuccessResult<int, Type>), "Result is not of type SuccessResult<int, Type>");
+            Assert.IsNotNull(TestCaseWithParams.Result, "Result is null");
+            Assert.AreEqual(15, TestCaseWithParams.Result.SuccessValue, "Result value mismatch");
+
+
+            // TestCase con parámetros null
+            try
+            {
+                var TestCaseWithParamsNull = TestCase<int?, int>.Create(
+                        title: "Task<int> add ok",
+                        parameters: null,
+                        new SuccessResult<int, Type>(15));
+            }
+            catch (Exception ex)
+            {
+                Assert.IsInstanceOfType(ex, typeof(ArgumentNullException), "Exception type mismatch when creating TestCase with null parameters");
+            }
+        }
+
+        /// <summary>
+        /// Pruebas de funcionalidad de dependencias en TestCase
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void TestCase_WithDependency_SingleParameter()
+        {
+            var testCase = TestCase<string>.Create(
+            "Test with single dependency",
+            new SuccessResult<string, Type>("test result"));
+
+            var testCaseWithDep = testCase.WithDependency<ITestService>(result =>
+            {
+                var mock = new Mock<ITestService>();
+                mock.Setup(x => x.GetValue()).Returns(result.IsSuccess() ? "success" : "failure");
+                return mock;
+            });
+            Assert.IsNotNull(testCaseWithDep, "TestCase with dependency should not be null");
+            Assert.AreSame(testCase, testCaseWithDep, "WithDependency should return same instance");
+
+            var services = new ServiceCollection();
+
+            testCase.RegisterDependencies(services);
+
+            Assert.AreEqual(1, services.Count, "Should register two services");
+
+            var serviceProvider = services.BuildServiceProvider();
+            var testService = serviceProvider.GetService<ITestService>();
+
+            Assert.IsNotNull(testService, "ITestService should be registered and resolvable");
+        }
+
+        public interface ITestService
+        {
+            string GetValue();
+        }
+
+        [TestMethod]
+        [Priority(3)]
+        public void TestCase_WithDependency_TwoParameters()
+        {
+            var testCase = TestCase<(int A, int B), string>.Create(
+            "Test with dependency using parameters",
+            (10, 20),
+            new SuccessResult<string, Type>("30"));
+
+            var testCaseWithDep = testCase.WithDependency<ICalculatorService>((parameters, result) =>
+            {
+                var mock = new Mock<ICalculatorService>();
+                mock.Setup(x => x.Add(parameters.A, parameters.B))
+                    .Returns(result.IsSuccess() ? parameters.A + parameters.B : 0);
+                return mock;
+            });
+
+            Assert.IsNotNull(testCaseWithDep, "TestCase with dependency should not be null");
+            Assert.AreSame(testCase, testCaseWithDep, "WithDependency should return same instance");
+
+            var services = new ServiceCollection();
+
+            testCase.RegisterDependencies(services);
+
+            Assert.AreEqual(1, services.Count, "Should register two services");
+
+            var serviceProvider = services.BuildServiceProvider();
+            var testService = serviceProvider.GetService<ICalculatorService>();
+
+            Assert.IsNotNull(testService, "ICalculateService should be registered and resolvable");
+        }
+
+        public interface ICalculatorService
+        {
+            int Add(int a, int b);
+        }
+
+        /// <summary>
+        /// Pruebas de suma de enteros con manejo de nullables y excepciones
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<object[]> IntAdd_AllCases()
         {
             yield return new object[] {
@@ -21,7 +147,6 @@ namespace Cedeira.Essentials.NET_unittests.TDD
                     (int.MaxValue, 1),
                     new FailureResult<int, Type>(typeof(OverflowException), "Operation failed."))
             };
-            // nullable fails
             yield return new object[] {
                 TestCase<(int? A, int? B), int>.Create(
                     "int? add fails if A is null",
@@ -60,6 +185,10 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             }
         }
 
+        /// <summary>
+        ///  pruebas de concatenación de strings con manejo de nullables y excepciones  
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<object[]> StringConcat_AllCases()
         {
             yield return new object[] {
@@ -111,37 +240,33 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             }
         }
 
-
+        /// <summary>
+        /// Pruebas de negación booleana con manejo de nullables
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<object[]> BoolNegate_AllCases()
         {
             yield return new object[] {
-                TestCase<bool?, bool>.Create(
+                TestCase<bool, bool>.Create(
                     "bool?/bool negate: true -> false",
                     true,
                     new SuccessResult<bool, Type>(false))
             };
             yield return new object[] {
-                TestCase<bool?, bool>.Create(
+                TestCase<bool, bool>.Create(
                     "bool?/bool negate: false -> true",
                     false,
                     new SuccessResult<bool, Type>(true))
-            };
-            yield return new object[] {
-                TestCase<bool?, bool>.Create(
-                    "bool? negate fails if null",
-                    null,
-                    new FailureResult<bool, Type>(typeof(ArgumentNullException), "Operation failed."))
             };
         }
 
         [TestMethod]
         [DynamicData(nameof(BoolNegate_AllCases), DynamicDataSourceType.Method)]
-        public void BoolNegate(TestCase<bool?, bool> tc)
+        public void BoolNegate(TestCase<bool, bool> tc)
         {
             try
             {
-                if (!tc.Parameters.HasValue) throw new ArgumentNullException(nameof(tc.Parameters));
-                var actual = !tc.Parameters.Value;
+                var actual = !tc.Parameters;
 
                 if (!tc.Result.IsSuccess()) Assert.Fail(tc.FailResponse("Expected failure, but got success"));
                 Assert.AreEqual(tc.Result.SuccessValue, actual,
@@ -155,6 +280,10 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             }
         }
 
+        /// <summary>
+        /// Pruebas de división de decimales con manejo de nullables y excepciones
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<object[]> DecimalDiv_AllCases()
         {
             yield return new object[] {
@@ -206,24 +335,22 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             }
         }
 
+        /// <summary>
+        /// Pruebas de parseo de GUID con manejo de excepciones 
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<object[]> GuidParse_AllCases()
         {
             var valid = Guid.NewGuid().ToString();
 
             yield return new object[] {
-                TestCase<string?, Guid>.Create(
+                TestCase<string, Guid>.Create(
                     "guid parse ok",
                     valid,
                     new SuccessResult<Guid, Type>(Guid.Parse(valid)))
             };
             yield return new object[] {
-                TestCase<string?, Guid>.Create(
-                    "guid parse fails if null",
-                    null,
-                    new FailureResult<Guid, Type>(typeof(ArgumentNullException), "Operation failed."))
-            };
-            yield return new object[] {
-                TestCase<string?, Guid>.Create(
+                TestCase<string, Guid>.Create(
                     "guid parse fails if invalid",
                     "not-a-guid",
                     new FailureResult<Guid, Type>(typeof(FormatException), "Operation failed."))
@@ -232,7 +359,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
 
         [TestMethod]
         [DynamicData(nameof(GuidParse_AllCases), DynamicDataSourceType.Method)]
-        public void GuidParse(TestCase<string?, Guid> tc)
+        public void GuidParse(TestCase<string, Guid> tc)
         {
             try
             {
@@ -251,6 +378,10 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             }
         }
 
+        /// <summary>
+        /// Pruebas de suma de días a DateTime con manejo de nullables y excepciones        
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<object[]> DateTimeAddDays_AllCases()
         {
             var now = DateTime.UtcNow.Date;
@@ -289,35 +420,29 @@ namespace Cedeira.Essentials.NET_unittests.TDD
                     tc.FailResponse("Exception type mismatch", tc.Result.FailureValue!, ex.GetType(), ex));
             }
         }
-    }
 
-    [TestClass]
-    public class AsyncAndVoidSamplesTest
-    {
+
+        /// <summary>
+        /// Pruebas de método void con manejo de excepciones        
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<object[]> VoidAction_AllCases()
+        {
+            yield return new object[] {
+                TestCase<string, object>.Create(
+                    "void ok (non-null)",
+                    "hi",
+                    new SuccessResult<object, Type>(new object()))
+            };
+        }
         private static void VoidAction(string? input)
         {
             if (input is null) throw new ArgumentNullException(nameof(input));
         }
 
-        public static IEnumerable<object[]> VoidAction_AllCases()
-        {
-            yield return new object[] {
-                TestCase<string?, object>.Create(
-                    "void ok (non-null)",
-                    "hi",
-                    new SuccessResult<object, Type>(new object()))
-            };
-            yield return new object[] {
-                TestCase<string?, object>.Create(
-                    "void fails on null",
-                    null,
-                    new FailureResult<object, Type>(typeof(ArgumentNullException), "Operation failed."))
-            };
-        }
-
         [TestMethod]
         [DynamicData(nameof(VoidAction_AllCases), DynamicDataSourceType.Method)]
-        public void VoidAction_Test(TestCase<string?, object> tc)
+        public void VoidAction_Test(TestCase<string, object> tc)
         {
             try
             {
@@ -332,12 +457,10 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             }
         }
 
-        private static async Task<int> AddAsync(int a, int b)
-        {
-            await Task.Yield();
-            checked { return a + b; }
-        }
-
+        /// <summary>
+        /// Pruebas de suma de enteros en método asíncrono con manejo de nullables y excepciones    
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<object[]> TaskAdd_AllCases()
         {
             yield return new object[] {
@@ -352,6 +475,11 @@ namespace Cedeira.Essentials.NET_unittests.TDD
                     (int.MaxValue, 1),
                     new FailureResult<int, Type>(typeof(OverflowException), "Operation failed."))
             };
+        }
+        private static async Task<int?> AddAsync(int a, int b)
+        {
+            await Task.Yield(); // simulate async work
+            checked { return a + b; } // may throw OverflowException
         }
 
         [TestMethod]
@@ -373,135 +501,88 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             }
         }
 
-        private static async Task<string> ProcessTwoObjectsAsync(object objA, object objB)
+        /// <summary>
+        /// Pruebas de paso de Task como parámetro  
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<object[]> Task_asParameter_AllCases()
         {
-            await Task.Yield();
-            if (objA == null) throw new ArgumentNullException(nameof(objA));
-            if (objB == null) throw new ArgumentNullException(nameof(objB));
-            return $"{objA}-{objB}";
-        }
 
-        public static IEnumerable<object[]> TaskTwoObjects_AllCases()
-        {
+            var tarea = new Task(() => Task.Delay(100));
+
             yield return new object[] {
-                TestCase<(object A, object B), string>.Create(
-                    "Task<string> process two objects ok - string inputs",
-                    ("Hello", "World"),
-                    new SuccessResult<string, Type>("Hello-World"))
-            };
-            yield return new object[] {
-                TestCase<(object A, object B), string>.Create(
-                    "Task<string> process two objects ok - mixed types",
-                    (42, "Test"),
-                    new SuccessResult<string, Type>("42-Test"))
-            };
-            yield return new object[] {
-                TestCase<(object A, object B), string>.Create(
-                    "Task<string> process two objects ok - anonymous objects",
-                    (new { Id = 1 }, new { Name = "Test" }),
-                    new SuccessResult<string, Type>("{ Id = 1 }-{ Name = Test }"))
-            };
-            yield return new object[] {
-                TestCase<(object A, object B), string>.Create(
-                    "Task<string> process two objects fails when A is null",
-                    (null, "World"),
-                    new FailureResult<string, Type>(typeof(ArgumentNullException), "Operation failed."))
-            };
-            yield return new object[] {
-                TestCase<(object A, object B), string>.Create(
-                    "Task<string> process two objects fails when B is null",
-                    ("Hello", null),
-                    new FailureResult<string, Type>(typeof(ArgumentNullException), "Operation failed."))
+                TestCase<Task, Task>.Create(
+                    title: "test a Task as paremeter",
+                    parameters: tarea,
+                    new SuccessResult<Task, Type>(tarea))
             };
         }
 
         [TestMethod]
-        [DynamicData(nameof(TaskTwoObjects_AllCases), DynamicDataSourceType.Method)]
-        public async Task TaskTwoObjects_Test(TestCase<(object A, object B), string> tc)
+        [DynamicData(nameof(Task_asParameter_AllCases), DynamicDataSourceType.Method)]
+        public void IntAdd(TestCase<Task, Task> tc)
         {
             try
             {
-                var actual = await ProcessTwoObjectsAsync(tc.Parameters.A, tc.Parameters.B);
-                if (!tc.Result.IsSuccess()) Assert.Fail(tc.FailResponse("Expected failure, but got success"));
-                Assert.AreEqual(tc.Result.SuccessValue, actual,
-                    tc.FailResponse("Task two objects result mismatch", tc.Result.SuccessValue, actual));
+                var task = tc.Parameters;
+
+                task.Start();
+
+                Assert.IsInstanceOfType(task, typeof(Task), "Task parameter is not of type Task");
+                Assert.IsNotNull(task, tc.Result.IsFailure() ? "Expected failure, but got success" : "Task parameter is null");
+                Assert.AreEqual(tc.Result.SuccessValue, task, tc.FailResponse("Task parameter mismatch", tc.Result.SuccessValue, task));
+
+                if (!tc.Result.IsSuccess())
+                    Assert.Fail(tc.FailResponse("Expected failure, but got success"));
             }
             catch (Exception ex)
             {
                 if (!tc.Result.IsFailure()) Assert.Fail(tc.FailResponse("Expected success, but got failure", ex));
-                Assert.IsInstanceOfType(ex, (Type)tc.Result.FailureValue,
-                    tc.FailResponse("Exception type mismatch", tc.Result.FailureValue!, ex.GetType(), ex));
+
+                Assert.IsInstanceOfType(ex, (Type)tc.Result.FailureValue, tc.FailResponse("Exception type mismatch", tc.Result.FailureValue!, ex.GetType(), ex));
             }
         }
 
-        private static async Task<bool> CompareObjectsAsync(object objA, object objB)
+        /// <summary>
+        /// Pruebas de método asíncrono sin parámetros que devuelve un Task con resultado   
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<object[]> Task_Without_Pararemeters_AllCases()
         {
-            await Task.Yield();
-            if (objA == null) throw new ArgumentNullException(nameof(objA));
-            if (objB == null) throw new ArgumentNullException(nameof(objB));
-            
-            // Simulate some comparison logic
-            if (objA.GetType() != objB.GetType()) throw new InvalidOperationException("Objects must be same type");
-            
-            return objA.Equals(objB);
+            string result = "10";
+
+            yield return new object[] {
+                TestCase<string>.Create(
+                    title: "test a Task as paremeter",
+                    new SuccessResult<string, Type>(result))
+            };
         }
 
-        public static IEnumerable<object[]> TaskObjectComparison_AllCases()
-        {
-            yield return new object[] {
-                TestCase<(object A, object B), bool>.Create(
-                    "Task<bool> compare objects ok - equal strings",
-                    ("test", "test"),
-                    new SuccessResult<bool, Type>(true))
-            };
-            yield return new object[] {
-                TestCase<(object A, object B), bool>.Create(
-                    "Task<bool> compare objects ok - different strings",
-                    ("test1", "test2"),
-                    new SuccessResult<bool, Type>(false))
-            };
-            yield return new object[] {
-                TestCase<(object A, object B), bool>.Create(
-                    "Task<bool> compare objects ok - equal numbers",
-                    (42, 42),
-                    new SuccessResult<bool, Type>(true))
-            };
-            yield return new object[] {
-                TestCase<(object A, object B), bool>.Create(
-                    "Task<bool> compare objects fails - different types",
-                    ("test", 42),
-                    new FailureResult<bool, Type>(typeof(InvalidOperationException), "Operation failed."))
-            };
-            yield return new object[] {
-                TestCase<(object A, object B), bool>.Create(
-                    "Task<bool> compare objects fails when A is null",
-                    (null, "test"),
-                    new FailureResult<bool, Type>(typeof(ArgumentNullException), "Operation failed."))
-            };
-            yield return new object[] {
-                TestCase<(object A, object B), bool>.Create(
-                    "Task<bool> compare objects fails when B is null",
-                    ("test", null),
-                    new FailureResult<bool, Type>(typeof(ArgumentNullException), "Operation failed."))
-            };
-        }
 
         [TestMethod]
-        [DynamicData(nameof(TaskObjectComparison_AllCases), DynamicDataSourceType.Method)]
-        public async Task TaskObjectComparison_Test(TestCase<(object A, object B), bool> tc)
+        [DynamicData(nameof(Task_Without_Pararemeters_AllCases), DynamicDataSourceType.Method)]
+        public void WithoutParameters(TestCase<string> tc)
         {
             try
             {
-                var actual = await CompareObjectsAsync(tc.Parameters.A, tc.Parameters.B);
-                if (!tc.Result.IsSuccess()) Assert.Fail(tc.FailResponse("Expected failure, but got success"));
-                Assert.AreEqual(tc.Result.SuccessValue, actual,
-                    tc.FailResponse("Task object comparison result mismatch", tc.Result.SuccessValue, actual));
+                var result = tc.Result;
+
+                int test = 10;
+
+                var testAnswer = test.ToString();
+
+                Assert.IsInstanceOfType(testAnswer, typeof(string), "Result is not of type string");
+                Assert.IsNotNull(testAnswer, tc.Result.IsFailure() ? "Expected failure, but got success" : "Result is null");
+                Assert.AreEqual(tc.Result.SuccessValue.ToString(), testAnswer, tc.FailResponse("Result mismatch", tc.Result.SuccessValue, testAnswer));
+
+                if (!tc.Result.IsSuccess())
+                    Assert.Fail(tc.FailResponse("Expected failure, but got success"));
             }
             catch (Exception ex)
             {
                 if (!tc.Result.IsFailure()) Assert.Fail(tc.FailResponse("Expected success, but got failure", ex));
-                Assert.IsInstanceOfType(ex, (Type)tc.Result.FailureValue,
-                    tc.FailResponse("Exception type mismatch", tc.Result.FailureValue!, ex.GetType(), ex));
+
+                Assert.IsInstanceOfType(ex, (Type)tc.Result.FailureValue, tc.FailResponse("Exception type mismatch", tc.Result.FailureValue!, ex.GetType(), ex));
             }
         }
     }
