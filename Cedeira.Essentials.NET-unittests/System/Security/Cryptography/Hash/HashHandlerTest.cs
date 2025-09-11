@@ -56,7 +56,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
         /// </summary>
         private string _exceptionMessage;
 
-
         /// <summary>
         /// Initializes the test setup with default values.
         /// </summary>
@@ -147,7 +146,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
                 {
                     handlerInstance.ThrowIfInvalidHash(testCase.Value.inputByte, testCase.Value.expectedHash);
                 }
-
             }
         }
 

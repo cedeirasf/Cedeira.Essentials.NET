@@ -8,15 +8,13 @@ namespace Cedeira.Essentials.NET_unittests.TDD
     [TestClass]
     public class PrimitiveSamplesTest
     {
-
         /// <summary>
-        /// Pruebas de creación de TestCase     
+        /// Pruebas de creación de TestCase
         /// </summary>
         [TestMethod]
         [Priority(1)]
         public void TestCaseCreation()
         {
-
             // TestCase sin parámetros
             var testCase = TestCase<string>.Create(
                 title: "test a Task as paremeter",
@@ -39,7 +37,6 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             Assert.IsInstanceOfType(TestCaseWithParams.Result, typeof(SuccessResult<int, Type>), "Result is not of type SuccessResult<int, Type>");
             Assert.IsNotNull(TestCaseWithParams.Result, "Result is null");
             Assert.AreEqual(15, TestCaseWithParams.Result.SuccessValue, "Result value mismatch");
-
 
             // TestCase con parámetros null
             try
@@ -73,7 +70,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
                 return mock;
             });
             Assert.IsNotNull(testCaseWithDep, "TestCase with dependency should not be null");
-            Assert.AreSame(testCase, testCaseWithDep,"WithDependency should return same instance");
+            Assert.AreSame(testCase, testCaseWithDep, "WithDependency should return same instance");
 
             var services = new ServiceCollection();
 
@@ -186,7 +183,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
         }
 
         /// <summary>
-        ///  pruebas de concatenación de strings con manejo de nullables y excepciones  
+        ///  pruebas de concatenación de strings con manejo de nullables y excepciones
         /// </summary>
         /// <returns></returns>
         public static IEnumerable<object[]> StringConcat_AllCases()
@@ -234,7 +231,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             }
             catch (Exception ex)
             {
-                if (!tc.Result.IsFailure()) Assert.Fail(tc.FailResponse("Expected success, but got failure", ex,ex));
+                if (!tc.Result.IsFailure()) Assert.Fail(tc.FailResponse("Expected success, but got failure", ex, ex));
                 Assert.IsInstanceOfType(ex, (Type)tc.Result.FailureValue,
                     tc.FailResponse("Exception type mismatch", tc.Result.FailureValue!, ex.GetType(), ex));
             }
@@ -336,7 +333,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
         }
 
         /// <summary>
-        /// Pruebas de parseo de GUID con manejo de excepciones 
+        /// Pruebas de parseo de GUID con manejo de excepciones
         /// </summary>
         /// <returns></returns>
         public static IEnumerable<object[]> GuidParse_AllCases()
@@ -379,7 +376,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
         }
 
         /// <summary>
-        /// Pruebas de suma de días a DateTime con manejo de nullables y excepciones        
+        /// Pruebas de suma de días a DateTime con manejo de nullables y excepciones
         /// </summary>
         /// <returns></returns>
         public static IEnumerable<object[]> DateTimeAddDays_AllCases()
@@ -421,9 +418,8 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             }
         }
 
-
         /// <summary>
-        /// Pruebas de método void con manejo de excepciones        
+        /// Pruebas de método void con manejo de excepciones
         /// </summary>
         /// <returns></returns>
         public static IEnumerable<object[]> VoidAction_AllCases()
@@ -435,6 +431,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
                     new SuccessResult<object, Type>(new object()))
             };
         }
+
         private static void VoidAction(string? input)
         {
             if (input is null) throw new ArgumentNullException(nameof(input));
@@ -458,7 +455,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
         }
 
         /// <summary>
-        /// Pruebas de suma de enteros en método asíncrono con manejo de nullables y excepciones    
+        /// Pruebas de suma de enteros en método asíncrono con manejo de nullables y excepciones
         /// </summary>
         /// <returns></returns>
         public static IEnumerable<object[]> TaskAdd_AllCases()
@@ -476,6 +473,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
                     new FailureResult<int, Type>(typeof(OverflowException), "Operation failed."))
             };
         }
+
         private static async Task<int?> AddAsync(int a, int b)
         {
             await Task.Yield(); // simulate async work
@@ -502,12 +500,11 @@ namespace Cedeira.Essentials.NET_unittests.TDD
         }
 
         /// <summary>
-        /// Pruebas de paso de Task como parámetro  
+        /// Pruebas de paso de Task como parámetro
         /// </summary>
         /// <returns></returns>
         public static IEnumerable<object[]> Task_asParameter_AllCases()
         {
-
             var tarea = new Task(() => Task.Delay(100));
 
             yield return new object[] {
@@ -544,7 +541,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
         }
 
         /// <summary>
-        /// Pruebas de método asíncrono sin parámetros que devuelve un Task con resultado   
+        /// Pruebas de método asíncrono sin parámetros que devuelve un Task con resultado
         /// </summary>
         /// <returns></returns>
         public static IEnumerable<object[]> Task_Without_Pararemeters_AllCases()
@@ -557,7 +554,6 @@ namespace Cedeira.Essentials.NET_unittests.TDD
                     new SuccessResult<string, Type>(result))
             };
         }
-
 
         [TestMethod]
         [DynamicData(nameof(Task_Without_Pararemeters_AllCases), DynamicDataSourceType.Method)]
@@ -580,7 +576,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             }
             catch (Exception ex)
             {
-                if (!tc.Result.IsFailure()) Assert.Fail(tc.FailResponse("Expected success, but got failure", ex,ex));
+                if (!tc.Result.IsFailure()) Assert.Fail(tc.FailResponse("Expected success, but got failure", ex, ex));
 
                 Assert.IsInstanceOfType(ex, (Type)tc.Result.FailureValue, tc.FailResponse("Exception type mismatch", tc.Result.FailureValue!, ex.GetType(), ex));
             }

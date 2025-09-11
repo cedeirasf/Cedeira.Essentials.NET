@@ -77,6 +77,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
             return Encoding.UTF8.GetString(Decryption(plainBytes));
         }
+
         /// <summary>
         /// Encrypts the specified SecureString.
         /// </summary>
@@ -89,7 +90,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
             var encryptor = _symmetricAlgortihm.CreateEncryptor(_symmetricAlgortihm.Key, _symmetricAlgortihm.IV);
 
             return input.Encrypt(encryptor);
-
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
             {
                 using (var writer = new StreamWriter(cryptoStream))
                 {
-                    input.BaseStream.Position = 0; 
+                    input.BaseStream.Position = 0;
 
                     writer.Write(input.ReadToEnd());
 
@@ -156,7 +156,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
             output.Position = 0;
 
             return new StreamReader(output);
-
         }
 
         /// <summary>
@@ -218,7 +217,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
             ValidateNull(input);
             ValidateNull(cipherInput);
 
-            bool result = true; 
+            bool result = true;
 
             var decryptedText = Decrypt(cipherInput);
 
@@ -250,7 +249,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         /// <param name="input">The original plain text input string to compare.</param>
         /// <param name="cipherInput">The encrypted input string to be decrypted and compared against the input.</param>
         /// <returns>Returns true if the decrypted text matches the original input; otherwise, throws a CryptographicException.</returns>
-        public void ThrowIfInvalidEncryption(string input, string cipherIput) 
+        public void ThrowIfInvalidEncryption(string input, string cipherIput)
         {
             if (!ValidateEncryption(input, cipherIput))
                 throw new CryptographicException("Encryption validation failed: The decrypted text does not match the original input.");
@@ -294,7 +293,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
                 throw new CryptographicException("Encryption validation failed: The decrypted text does not match the original input.");
         }
 
-
         /// <summary>
         /// Encrypts the specified byte array using the symmetric algorithm.
         /// </summary>
@@ -334,7 +332,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
             }
         }
 
-
         /// <summary>
         /// Validates that the specified input is not null.
         /// </summary>
@@ -347,4 +344,3 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         }
     }
 }
-

@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.Serialization;
 
 namespace Cedeira.Essentials.NET.System.Resilience.Fallback
@@ -28,7 +27,8 @@ namespace Cedeira.Essentials.NET.System.Resilience.Fallback
         /// Initializes a new instance of the <see cref="FallbackStrategyException"/> class.
         /// Use this constructor when no error message is needed.
         /// </summary>
-        public FallbackStrategyException() { }
+        public FallbackStrategyException()
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FallbackStrategyException"/> class with a specific error message.
@@ -53,4 +53,4 @@ namespace Cedeira.Essentials.NET.System.Resilience.Fallback
         /// <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
         protected FallbackStrategyException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
-} 
+}

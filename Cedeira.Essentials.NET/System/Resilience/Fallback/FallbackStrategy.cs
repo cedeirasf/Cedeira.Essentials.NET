@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-
-namespace Cedeira.Essentials.NET.System.Resilience.Fallback
+﻿namespace Cedeira.Essentials.NET.System.Resilience.Fallback
 {
     /// <summary>
     /// class that provides a fallback strategy for multiple value providers.
@@ -99,7 +97,6 @@ namespace Cedeira.Essentials.NET.System.Resilience.Fallback
                     {
                         return result;
                     }
-
                 }
                 catch (FallbackStrategyException)
                 {

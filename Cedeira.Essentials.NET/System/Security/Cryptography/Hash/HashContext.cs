@@ -23,7 +23,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
         /// </summary>
         /// <param name="algorithmName">The hash algorithm to use.</param>
         /// <param name="hashFormatter">Optional formatter for converting the hash to a string.</param>
-        protected HashContext(HashAlgorithm algorithmName, Func<byte[], string> hashFormatter) 
+        protected HashContext(HashAlgorithm algorithmName, Func<byte[], string> hashFormatter)
         {
             HashAlgorithm = algorithmName;
             HashFormatter = hashFormatter;
@@ -100,4 +100,3 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
         }
     }
 }
-

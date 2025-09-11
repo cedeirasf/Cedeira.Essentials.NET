@@ -33,7 +33,7 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encrypt
                 string inputString = Marshal.PtrToStringUni(inputPtr) ?? string.Empty;
 
                 Invariants.For(inputString).IsNotNullOrEmpty();
-                
+
                 inputBytes = Encoding.Unicode.GetBytes(inputString);
 
                 using var ms = new MemoryStream();
@@ -199,8 +199,5 @@ namespace Cedeira.Essentials.NET.Extensions.System.Security.Cryptography.Encrypt
                 Marshal.ZeroFreeGlobalAllocUnicode(ptr);
             }
         }
-
     }
 }
-
-

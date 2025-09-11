@@ -1,4 +1,4 @@
-﻿    using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstractions
 {
@@ -16,6 +16,6 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstrac
         /// Gets the <see cref="SymmetricAlgorithm"/> used for encryption and decryption.
         /// </summary>
         /// <value>The symmetric algorithm instance, such as AES, DES, or TripleDES.</value>
-        SymmetricAlgorithm SymmetricAlgorithm { get; }  
+        SymmetricAlgorithm SymmetricAlgorithm { get; }
     }
 }

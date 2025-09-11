@@ -38,16 +38,15 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
         public void SymmetricEncryptionResulPattern_Create()
         {
             _serviceCollection.AddSingleton((ISymmetricEncryptionContext)SymmetricEncryptionContext.Create());
-         
+
             _serviceCollection.AddSingleton(sp =>
                 new SymmetricEncryptionResultPatternFactory(sp.GetRequiredService<ISymmetricEncryptionContext>(), _resultFactory).Create());
-   
+
             var serviceProvider = _serviceCollection.BuildServiceProvider();
-      
+
             var symmetricEncryptionResultPattern = serviceProvider.GetService<ISymmetricEncryptionResultPattern>();
- 
+
             Assert.IsNotNull(symmetricEncryptionResultPattern);
         }
     }
-
 }

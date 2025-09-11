@@ -20,7 +20,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
         /// <summary>
         /// A dictionary to store test cases with byte array inputs, hash algorithms, expected states, and expected hashes.
         /// </summary>
-        private Dictionary<string, (byte[] inputByte, HashAlgorithm algorithm, bool expectedState, string expectedHash)> _testCasesInputByte; 
+        private Dictionary<string, (byte[] inputByte, HashAlgorithm algorithm, bool expectedState, string expectedHash)> _testCasesInputByte;
 
         /// <summary>
         /// A dictionary to store test cases with StreamReader inputs, hash algorithms, expected states, and expected hashes.
@@ -150,7 +150,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
 
             foreach (var testCase in _testCasesinputString)
             {
-                var handlerInstance = new HashHandlerResultPattern(testCase.Value.algorithm, _hashformatterBase64,  _resultFactory);
+                var handlerInstance = new HashHandlerResultPattern(testCase.Value.algorithm, _hashformatterBase64, _resultFactory);
 
                 var result = handlerInstance.CalculateHash(testCase.Value.inputName);
 
@@ -583,6 +583,3 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
         }
     }
 }
-
-
-

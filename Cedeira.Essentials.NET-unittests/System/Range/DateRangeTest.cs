@@ -62,7 +62,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Range
             Assert.IsTrue(dateRange.Equals(other));
         }
 
-
         [TestMethod]
         public void DateRange_OperatorEqual()
         {
@@ -95,7 +94,5 @@ namespace Cedeira.Essentials.NET_unittests.System.Range
             var exception = Assert.ThrowsException<ArgumentException>(() => new DateRange(DateTime.Now.AddDays(2), DateTime.Now));
             Assert.AreEqual("The start date must be earlier than or equal to the end date.", exception.Message);
         }
-
-
     }
 }

@@ -131,7 +131,5 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstrac
         /// <param name="cipherInput">The encrypted StreamReader to be decrypted and compared against the input.</param>
         /// <returns>Returns true if the decrypted StreamReader matches the original input; otherwise, false.</returns>
         void ThrowIfInvalidEncryption(StreamReader input, StreamReader cipherIput);
-
     }
-
 }

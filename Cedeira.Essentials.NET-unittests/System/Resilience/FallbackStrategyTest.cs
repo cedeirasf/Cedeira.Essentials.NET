@@ -11,7 +11,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Resilience
         public void Setup()
         {
             _user = new UserClassTest { Name = "John" };
-        }       
+        }
 
         [TestMethod]
         public void Coalesce_WithStringFunctions_ReturnsFirstNonEmptyValue()
@@ -26,6 +26,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Resilience
             var stringTest = FallbackStrategy.Coalesce(() => null, () => null, () => "c");
             Assert.AreEqual(stringTest, "c");
         }
+
         [TestMethod]
         public void Coalesce_WithEmptyStringAndNull_ReturnsFirstValidString()
         {
@@ -46,6 +47,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Resilience
             var dateTimeTest = FallbackStrategy.Coalesce(() => (DateTime?)null, () => DateTime.Now, () => DateTime.UtcNow);
             Assert.IsNotNull(dateTimeTest);
         }
+
         [TestMethod]
         public void Coalesce_WithDateTime_ReturnsFirstNonNullValue()
         {
