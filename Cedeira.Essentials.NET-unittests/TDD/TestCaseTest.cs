@@ -73,7 +73,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
                 return mock;
             });
             Assert.IsNotNull(testCaseWithDep, "TestCase with dependency should not be null");
-            Assert.AreSame(testCase, testCaseWithDep, "WithDependency should return same instance");
+            Assert.AreSame(testCase, testCaseWithDep,"WithDependency should return same instance");
 
             var services = new ServiceCollection();
 
@@ -234,7 +234,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             }
             catch (Exception ex)
             {
-                if (!tc.Result.IsFailure()) Assert.Fail(tc.FailResponse("Expected success, but got failure", ex));
+                if (!tc.Result.IsFailure()) Assert.Fail(tc.FailResponse("Expected success, but got failure", ex,ex));
                 Assert.IsInstanceOfType(ex, (Type)tc.Result.FailureValue,
                     tc.FailResponse("Exception type mismatch", tc.Result.FailureValue!, ex.GetType(), ex));
             }
@@ -537,7 +537,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             }
             catch (Exception ex)
             {
-                if (!tc.Result.IsFailure()) Assert.Fail(tc.FailResponse("Expected success, but got failure", ex));
+                if (!tc.Result.IsFailure()) Assert.Fail(tc.FailResponse("Expected success, but got failure", ex, "fail"));
 
                 Assert.IsInstanceOfType(ex, (Type)tc.Result.FailureValue, tc.FailResponse("Exception type mismatch", tc.Result.FailureValue!, ex.GetType(), ex));
             }
@@ -580,7 +580,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             }
             catch (Exception ex)
             {
-                if (!tc.Result.IsFailure()) Assert.Fail(tc.FailResponse("Expected success, but got failure", ex));
+                if (!tc.Result.IsFailure()) Assert.Fail(tc.FailResponse("Expected success, but got failure", ex,ex));
 
                 Assert.IsInstanceOfType(ex, (Type)tc.Result.FailureValue, tc.FailResponse("Exception type mismatch", tc.Result.FailureValue!, ex.GetType(), ex));
             }
