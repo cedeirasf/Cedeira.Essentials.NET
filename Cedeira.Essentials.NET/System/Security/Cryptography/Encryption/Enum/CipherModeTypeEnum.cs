@@ -14,6 +14,7 @@
         //     also be mangled. In addition, a bit in the subsequent block, in the same position
         //     as the original mangled bit, will be mangled.
         CBC = 1,
+
         //
         // Resumen:
         //     The Electronic Codebook (ECB) mode encrypts each block individually. Any blocks
@@ -27,6 +28,7 @@
         //     which allows blocks to be saved and inserted into the stream at other points
         //     without detection.
         ECB = 2,
+
         //
         // Resumen:
         //     The Cipher Feedback (CFB) mode processes small increments of plain text into

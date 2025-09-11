@@ -1,6 +1,5 @@
 ﻿using Cedeira.Essentials.NET.Diagnostics.Invariants;
 
-
 namespace Cedeira.Essentials.NET.System.Range
 {
     /// <summary>
@@ -17,6 +16,7 @@ namespace Cedeira.Essentials.NET.System.Range
         /// end date of the range
         /// </summary>
         public DateTime End { get; }
+
         /// <summary>
         /// duration of the range (end - start)
         /// </summary>
@@ -37,7 +37,6 @@ namespace Cedeira.Essentials.NET.System.Range
             {
                 if (value > end)
                     throw new ArgumentException();
-
             }, "The start date must be earlier than or equal to the end date.");
 
             Start = start;

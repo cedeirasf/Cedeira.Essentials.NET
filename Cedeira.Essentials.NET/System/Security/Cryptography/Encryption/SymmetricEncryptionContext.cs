@@ -84,9 +84,9 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
         /// <returns>A new instance of <see cref="SymmetricEncryptionContext"/>.</returns>
         public static SymmetricEncryptionContext CreateFromFullAlgorithmConfig(SymmetricAlgorithmTypeEnum symmetricAlgorithmName, CipherModeTypeEnum CipherMode, PaddingMode padingMode, string key, string iV)
         {
-            ValidateParameters(symmetricAlgorithmName, key,iV);
+            ValidateParameters(symmetricAlgorithmName, key, iV);
 
-            var symetricAlgorithmalgorithm = AlgorithmData.Where(x=>x.Key==symmetricAlgorithmName).Select(x=>x.Value.CreateAlgorithm).First().Invoke();
+            var symetricAlgorithmalgorithm = AlgorithmData.Where(x => x.Key == symmetricAlgorithmName).Select(x => x.Value.CreateAlgorithm).First().Invoke();
 
             symetricAlgorithmalgorithm.Key = Encoding.UTF8.GetBytes(key);
             symetricAlgorithmalgorithm.IV = Encoding.UTF8.GetBytes(iV);

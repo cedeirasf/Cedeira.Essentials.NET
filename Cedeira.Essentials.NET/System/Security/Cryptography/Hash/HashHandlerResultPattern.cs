@@ -38,7 +38,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
         /// <param name="hashAlgorithm">The hash algorithm to use.</param>
         /// <param name="hashFormatter">The function to format the hash bytes into a string.</param>
         /// <param name="resultFactory">The factory to create result objects.</param>
-        public HashHandlerResultPattern(HashAlgorithm hashAlgorithm, Func<byte[], string> hashFormatter,IResultFactory resultFactory)
+        public HashHandlerResultPattern(HashAlgorithm hashAlgorithm, Func<byte[], string> hashFormatter, IResultFactory resultFactory)
         {
             _resultFactory = resultFactory;
             _hashHandler = new HashHandler(hashAlgorithm, hashFormatter);
@@ -60,7 +60,7 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
             }
             catch (ArgumentException ex)
             {
-                result =_resultFactory.Failure<string>(ex.Message);
+                result = _resultFactory.Failure<string>(ex.Message);
             }
 
             return result;
@@ -150,12 +150,12 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
                     ? _resultFactory.Success(isValid)
                     : _resultFactory.Failure("Hashes do not match.");
             }
-            catch (ArgumentException ex) 
+            catch (ArgumentException ex)
             {
                 result = _resultFactory.Failure(ex.Message);
             }
 
-            return result; 
+            return result;
         }
 
         /// <summary>
@@ -235,6 +235,5 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash
 
             return result;
         }
-
     }
 }

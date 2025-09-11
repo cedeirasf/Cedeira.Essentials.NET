@@ -4,10 +4,10 @@ using System.Security;
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions
 {
     /// <summary>
-    /// Defines an interface for handling the calculation and validation of hashes, 
+    /// Defines an interface for handling the calculation and validation of hashes,
     /// returning results wrapped in an IResult structure.
     /// </summary>
-    public interface IHashHandlerResultPattern 
+    public interface IHashHandlerResultPattern
     {
         /// <summary>
         /// Calculates the hash of a string and returns the result.
@@ -68,7 +68,5 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions
         /// <param name="hash">The expected hash value to compare against.</param>
         /// <returns>IResult indicating whether the validation was successful.</returns>
         IResult HashValidate(StreamReader input, string hash);
-
-
     }
 }

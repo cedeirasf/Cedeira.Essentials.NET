@@ -1,10 +1,9 @@
 ﻿using System.Security.Cryptography;
-using System.Threading.Tasks;
 
 namespace Cedeira.Essentials.NET.System.Security.Cryptography.Hash.Abstractions
 {
     /// <summary>
-    /// Provides an interface for defining the context used in hashing operations, 
+    /// Provides an interface for defining the context used in hashing operations,
     /// including the hash algorithm and the formatter to convert the byte array result into a string.
     /// </summary>
     public interface IHashContext

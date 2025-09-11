@@ -110,9 +110,9 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
             try
             {
-               string response = _symmetricEncryption.Decrypt(input);
+                string response = _symmetricEncryption.Decrypt(input);
 
-               result = _resultFactory.Success(response);
+                result = _resultFactory.Success(response);
             }
             catch (ArgumentException ex)
             {
@@ -321,6 +321,5 @@ namespace Cedeira.Essentials.NET.System.Security.Cryptography.Encryption
 
             return result;
         }
-
     }
 }

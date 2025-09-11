@@ -1,11 +1,8 @@
-﻿
-
-namespace Cedeira.Essentials.NET.Diagnostics.Invariants
+﻿namespace Cedeira.Essentials.NET.Diagnostics.Invariants
 {
     [TestClass]
     public class InvariantValidatorTests
     {
-       
         [TestMethod]
         public void IsEqual_ShouldPass_WhenValuesAreEqual()
         {
@@ -80,7 +77,6 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             var validator = Invariants.For(primitiveString);
             validator.IsNotNullOrEmpty("");
         }
-
 
         [TestMethod]
         public void MaximumLength_ShouldPass_WhenValueLengthIsLessThanMax()
@@ -160,7 +156,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
                 {
                     throw new ArgumentException();
                 }
-            }, "Value must be positive.");  
+            }, "Value must be positive.");
         }
 
         [TestMethod]
@@ -253,7 +249,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         public void GreaterThanShouldPass_WhenValueDatetime()
         {
             var today = DateTime.Now.Date;
-            Invariants.For(today.AddDays(1)).GreaterThan(today); 
+            Invariants.For(today.AddDays(1)).GreaterThan(today);
         }
 
         [TestMethod]
@@ -289,10 +285,8 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        
         public void LessThanShouldPass_WhenValueNull()
         {
-            
             Invariants.For<int?>(null).LessThan(0);
         }
 
@@ -307,7 +301,6 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         [ExpectedException(typeof(ArgumentNullException))]
         public void LessThanShouldPass_WhenEspectNull()
         {
-
             Invariants.For<int?>(5).LessThan(null);
         }
 
@@ -360,7 +353,7 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
         public void GreaterThanShouldPass_WhenEspectIsObject()
         {
             object Objeto = new object();
-            Invariants.For <object?>(5).LessThan(Objeto);
+            Invariants.For<object?>(5).LessThan(Objeto);
         }
 
         [TestMethod]
@@ -411,5 +404,84 @@ namespace Cedeira.Essentials.NET.Diagnostics.Invariants
             validator.IsNotNullOrWhiteSpace("");
         }
 
+        [TestMethod]
+        public void InvariantValidator_ValidateErrorMessage_Tests()
+        {
+            var validator = Invariants.For("test");
+
+            Assert.ThrowsException<ArgumentNullException>(() => validator.IsNotNull(null));
+        }
+
+        [TestMethod]
+        public void InvariantValidator_MatchesRegex_Tests()
+        {
+            var validator = Invariants.For("abc123");
+
+            Assert.ThrowsException<FormatException>(() => validator.MatchesRegex(@"^\d+$", "Only numbers allowed"));
+
+            Assert.ThrowsException<ArgumentNullException>(() => validator.MatchesRegex(null, "Valid error message"));
+
+            Assert.ThrowsException<ArgumentNullException>(() => validator.MatchesRegex("", "Valid error message"));
+
+            Assert.ThrowsException<ArgumentNullException>(() => validator.MatchesRegex(@"^\d+$", null));
+
+            Assert.ThrowsException<ArgumentException>(() => validator.MatchesRegex(@"[", "Invalid regex pattern"));
+        }
+
+        [TestMethod]
+        public void InvariantValidator_MaximumLength_Tests()
+        {
+            var validator = Invariants.For("hello");
+
+            Assert.ThrowsException<ArgumentException>(() => validator.MaximumLength(3, "String too long"));
+
+            Assert.ThrowsException<ArgumentException>(() => validator.MaximumLength(-1, "Valid error message"));
+
+            Assert.ThrowsException<ArgumentNullException>(() => validator.MaximumLength(10, null));
+
+            Assert.ThrowsException<ArgumentNullException>(() => validator.MaximumLength(10, ""));
+        }
+
+        [TestMethod]
+        public void InvariantValidator_IsNotNull_Tests()
+        {
+            var validValidator = Invariants.For("not null");
+
+            var nullValidator = Invariants.For<string>(null);
+            Assert.ThrowsException<ArgumentNullException>(() => nullValidator.IsNotNull("Value is null"));
+
+            var validator = Invariants.For("test");
+            Assert.ThrowsException<ArgumentNullException>(() => validator.IsNotNull(null));
+
+            Assert.ThrowsException<ArgumentNullException>(() => validator.IsNotNull(""));
+        }
+
+        [TestMethod]
+        public void InvariantValidator_IsEqual_WithCustomMessage_Tests()
+        {
+            var validator = Invariants.For(10);
+
+            Assert.ThrowsException<ArgumentException>(() => validator.IsEqual(20, "Values are not equal"));
+
+            Assert.ThrowsException<ArgumentNullException>(() => validator.IsEqual(10, null));
+
+            Assert.ThrowsException<ArgumentNullException>(() => validator.IsEqual(10, ""));
+
+            var stringValidator = Invariants.For("hello");
+            Assert.ThrowsException<ArgumentException>(() => stringValidator.IsEqual("world", "Strings don't match"));
+        }
+
+        [TestMethod]
+        public void InvariantValidator_IsEqual_DefaultMessage_Tests()
+        {
+            var validator = Invariants.For(42);
+
+            var exception = Assert.ThrowsException<ArgumentException>(() => validator.IsEqual(99));
+            Assert.IsTrue(exception.Message.Contains("Value must be equal to 99"),
+                "Default error message should contain expected value");
+
+            var nullValidator = Invariants.For<string>(null);
+            Assert.ThrowsException<ArgumentException>(() => nullValidator.IsEqual("not null"));
+        }
     }
 }

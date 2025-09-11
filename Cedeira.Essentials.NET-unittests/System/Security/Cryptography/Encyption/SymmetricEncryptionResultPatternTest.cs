@@ -5,7 +5,6 @@ using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Abstraction
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Enum;
 using Cedeira.Essentials.NET.System.Security.Cryptography.Encryption.Factories;
 using Microsoft.Extensions.DependencyInjection;
-using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
@@ -35,14 +34,13 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
         /// </summary>
         private Dictionary<string, (SymmetricAlgorithmTypeEnum algorithm, CipherModeTypeEnum cipherMode, string key, string iV, PaddingMode paddingMode, StreamReader expectedResponse, bool expectedResult)> TestEncryptionsInputStreamReader;
 
+        private Dictionary<string, (string? value, string? cipherValue, bool expectedResult)> _TestValidateEncryptionString;
 
-            private Dictionary<string, (string? value, string? cipherValue, bool expectedResult)> _TestValidateEncryptionString;
+        private Dictionary<string, (byte[]? value, byte[]? cipherValue, bool expectedResult)> _TestValidateEncryptionArrayByte;
 
-            private Dictionary<string, (byte[]? value, byte[]? cipherValue, bool expectedResult)> _TestValidateEncryptionArrayByte;
+        private Dictionary<string, (SecureString? value, SecureString? cipherValue, bool expectedResult)> _TestValidateEncryptionSecureString;
 
-            private Dictionary<string, (SecureString? value, SecureString? cipherValue, bool expectedResult)> _TestValidateEncryptionSecureString;
-
-            private Dictionary<string, (StreamReader? value, StreamReader? cipherValue, bool expectedResult)> _TestValidateEncryptionStreamReader;
+        private Dictionary<string, (StreamReader? value, StreamReader? cipherValue, bool expectedResult)> _TestValidateEncryptionStreamReader;
 
         /// <summary>
         /// Key of 8 bytes.
@@ -100,7 +98,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
         private byte[] _inputByteFake;
 
-        private SecureString _inputSecureStringFake;    
+        private SecureString _inputSecureStringFake;
 
         /// <summary>
         /// Service collection for dependency injection.
@@ -111,7 +109,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
         /// Initialization  IResultFactory
         /// </summary>
         private IResultFactory _resultFactory;
-
 
         /// <summary>
         /// Test initialization method to set up keys, IVs, and decyption a encryption methods
@@ -352,7 +349,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
             foreach (var test in TestEncryptionsInputStreamReader)
             {
-
                 _serviceCollection.AddSingleton((ISymmetricEncryptionContext)SymmetricEncryptionContext.CreateFromFullAlgorithmConfig(test.Value.algorithm, test.Value.cipherMode, test.Value.paddingMode, test.Value.key, test.Value.iV));
                 _serviceCollection.AddSingleton(sp => new SymmetricEncryptionResultPatternFactory(sp.GetRequiredService<ISymmetricEncryptionContext>(), _resultFactory).Create());
 
@@ -392,7 +388,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
             }
         }
 
-
         /// <summary>
         /// Test method to create symmetric encryption context and test validate method wiht a StreamReader input
         /// </summary>
@@ -431,12 +426,10 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
                 }
                 else
                 {
-
                     var result = symmetricEncryptionResultPattern.ValidateEncryption(test.Value.value, test.Value.cipherValue);
 
                     Assert.IsTrue(result.IsFailure());
                 }
-
             }
         }
 
@@ -479,7 +472,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
                     Assert.IsTrue(result.IsFailure());
                 }
-
             }
         }
 
@@ -522,7 +514,6 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
                     Assert.IsTrue(result.IsFailure());
                 }
-
             }
         }
 
@@ -565,16 +556,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Encyptio
 
                     Assert.IsTrue(result.IsFailure());
                 }
-
             }
         }
-
-
-
     }
-
 }
-
-
-
-

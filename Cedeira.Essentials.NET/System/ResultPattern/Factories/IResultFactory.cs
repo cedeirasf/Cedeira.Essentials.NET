@@ -1,7 +1,7 @@
 ﻿namespace Cedeira.Essentials.NET.System.ResultPattern.Factories
 {
     /// <summary>
-    /// Define una interfaz de fábrica para instanciar objetos de resultado 
+    /// Define una interfaz de fábrica para instanciar objetos de resultado
     /// </summary>
     public interface IResultFactory
     {
@@ -24,7 +24,6 @@
         /// <param name="errorMessage">El mensaje que describe el error.</param>
         /// <returns>Un resultado de fallo.</returns>
         IResult Failure(string errorMessage);
-
 
         /// <summary>
         /// Crea un resultado de éxito con el valor especificado
@@ -80,5 +79,4 @@
         /// <returns>Un resultado de fallo</returns>
         IResult<TSuccess, TFailure> Failure<TSuccess, TFailure>(TFailure error, string errorMessage);
     }
-
 }

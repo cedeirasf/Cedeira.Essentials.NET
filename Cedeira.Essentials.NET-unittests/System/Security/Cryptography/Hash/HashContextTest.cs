@@ -252,6 +252,7 @@ namespace Cedeira.Essentials.NET_unittests.System.Security.Cryptography.Hash
                 }
             }
         }
+
         /// <summary>
         /// Tests that the HashContext is correctly registered in the service collection and test some algotihms.
         /// </summary>
