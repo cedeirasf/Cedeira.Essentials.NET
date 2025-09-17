@@ -581,5 +581,32 @@ namespace Cedeira.Essentials.NET_unittests.TDD
                 Assert.IsInstanceOfType(ex, (Type)tc.Result.FailureValue, tc.FailResponse("Exception type mismatch", tc.Result.FailureValue!, ex.GetType(), ex));
             }
         }
+
+        public static IEnumerable<object[]> ProceduralCases()
+        {
+            yield return new object[] { TestCase<string, Unit>.Create("Case 1", "Parameter 1") };
+            yield return new object[] { TestCase<string, Unit>.Create("Case 2", "Parameter 2") };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(ProceduralCases), DynamicDataSourceType.Method)]
+        public void Create_WithValidParameters_ReturnsTestCaseWithUnitSuccess(TestCase<string, Unit> tc)
+        {
+            try
+            {
+                var title = tc.Title;
+                var parameters = tc.Parameters;
+
+                Assert.IsNotNull(tc, "TestCase should not be null");
+                Assert.AreEqual(title, tc.Title, "Title mismatch");
+                Assert.AreEqual(parameters, tc.Parameters, "Parameters mismatch");
+                Assert.IsInstanceOfType(tc.Result, typeof(SuccessResult<Unit, Type>), "Result should be SuccessResult<Unit, Type>");
+                Assert.AreEqual(Unit.Value, tc.Result.SuccessValue, "SuccessValue should be Unit.Value");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(tc.FailResponse("Procedural test failed", ex));
+            }
+        }
     }
 }
