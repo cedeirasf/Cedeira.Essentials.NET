@@ -6,6 +6,11 @@ using Moq;
 
 namespace Cedeira.Essentials.NET.TDD
 {
+    public struct Unit
+    {
+        public static readonly Unit Value = new Unit();
+    }
+
     public class TestCase<P, R> : TestCase<R>
     {
         public P Parameters { get; private set; }
@@ -15,35 +20,34 @@ namespace Cedeira.Essentials.NET.TDD
             Parameters = parameters;
         }
 
-        public static TestCase<P, R> Create(string title, P parameters, IResult<R, Type> result)
+        public static TestCase<P, R> Create(string title, P parameters, IResult<R, Type>? result = null)
         {
             Invariants.For(title).IsNotNull("Title is required");
             Invariants.For(parameters).IsNotNull("Parameters are required");
-            Invariants.For(result).IsNotNull("Result is required");
 
-            return new TestCase<P, R>(title, parameters, result);
+            var finalResult = result ?? new SuccessResult<R, Type>(default!);
+
+            return new TestCase<P, R>(title, parameters, finalResult);
+        }
+
+        public static TestCase<P, Unit> Create(string title, P parameters)
+        {
+            Invariants.For(title).IsNotNull("Title is required");
+            Invariants.For(parameters).IsNotNull("Parameters are required");
+
+            return new TestCase<P, Unit>(
+                title,
+                parameters,
+                new SuccessResult<Unit, Type>(Unit.Value)
+            );
         }
 
         public TestCase<P, R> WithDependency<M>(Func<P, IResult<R, Type>, Mock<M>> dependencyFactory) where M : class
         {
-            var mock = dependencyFactory(Parameters, Result);
+            var safeResult = Result ?? new SuccessResult<R, Type>(default!);
+            var mock = dependencyFactory(Parameters, safeResult);
             _dependencies.Add((mock, typeof(M)));
             return this;
-        }
-
-        public string FailResponse(string details, Exception? reason = null)
-        {
-            return $"Fail test '{Title}': {details}{(reason is not null ? $", because {reason.FullMessage()}" : "")}";
-        }
-
-        public string FailResponse(string details, object expectedObject, Exception? reason = null)
-        {
-            return $"Fail test '{Title}': {details}, expected {expectedObject}{(reason is not null ? $", because {reason.FullMessage()}" : "")}";
-        }
-
-        public string FailResponse(string details, object expectedObject, object actualObject, Exception? reason = null)
-        {
-            return $"Fail test '{Title}': {details}, expected {expectedObject}, but got {actualObject}{(reason is not null ? $", because {reason.FullMessage()}" : "")}";
         }
     }
 
