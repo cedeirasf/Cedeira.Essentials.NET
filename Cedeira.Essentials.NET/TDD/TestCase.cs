@@ -50,20 +50,20 @@ namespace Cedeira.Essentials.NET.TDD
             return this;
         }
 
-        public string FailResponse(string details, Exception? reason = null)
-        {
-            return $"Fail test '{Title}': {details}{(reason is not null ? $", because {reason.FullMessage()}" : "")}";
-        }
+        //public string FailResponse(string details, Exception? reason = null)
+        //{
+        //    return $"Fail test '{Title}': {details}{(reason is not null ? $", because {reason.FullMessage()}" : "")}";
+        //}
 
-        public string FailResponse(string details, object expectedObject, Exception? reason = null)
-        {
-            return $"Fail test '{Title}': {details}, expected {expectedObject}{(reason is not null ? $", because {reason.FullMessage()}" : "")}";
-        }
+        //public string FailResponse(string details, object expectedObject, Exception? reason = null)
+        //{
+        //    return $"Fail test '{Title}': {details}, expected {expectedObject}{(reason is not null ? $", because {reason.FullMessage()}" : "")}";
+        //}
 
-        public string FailResponse(string details, object expectedObject, object actualObject, Exception? reason = null)
-        {
-            return $"Fail test '{Title}': {details}, expected {expectedObject}, but got {actualObject}{(reason is not null ? $", because {reason.FullMessage()}" : "")}";
-        }
+        //public string FailResponse(string details, object expectedObject, object actualObject, Exception? reason = null)
+        //{
+        //    return $"Fail test '{Title}': {details}, expected {expectedObject}, but got {actualObject}{(reason is not null ? $", because {reason.FullMessage()}" : "")}";
+        //}
     }
 
     public class TestCase<R>
