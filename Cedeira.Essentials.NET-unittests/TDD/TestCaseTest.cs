@@ -597,6 +597,8 @@ namespace Cedeira.Essentials.NET_unittests.TDD
                 var title = tc.Title;
                 var parameters = tc.Parameters;
 
+                var testcaseresult = TestCase<string,Unit>.Create(title, parameters);   
+
                 Assert.IsNotNull(tc, "TestCase should not be null");
                 Assert.AreEqual(title, tc.Title, "Title mismatch");
                 Assert.AreEqual(parameters, tc.Parameters, "Parameters mismatch");
