@@ -610,5 +610,359 @@ namespace Cedeira.Essentials.NET_unittests.TDD
                 Assert.Fail(tc.FailResponse("Procedural test failed", ex));
             }
         }
+
+        /// <summary>
+        /// Casos de prueba para callbacks sin parámetros
+        /// </summary>
+        public static IEnumerable<object[]> Callback_NoParameters_AllCases()
+        {
+            yield return new object[]
+            {
+                TestCase<int>.Create(
+                    "Test callbacks no parameters",
+                    new SuccessResult<int, Type>(42))
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(Callback_NoParameters_AllCases), DynamicDataSourceType.Method)]
+        [Priority(4)]
+        public void Callback_NoParameters(TestCase<int> tc)
+        {
+            var executed = new List<string>();
+
+            tc.Setup = t => executed.Add($"setup:{t.Title}");
+            tc.Teardown = t => executed.Add($"teardown:{t.Title}");
+
+            var result = tc.Run(() => 42);
+
+            Assert.AreEqual(42, result, "Execution result mismatch");
+            CollectionAssert.AreEqual(
+                new[] { $"setup:{tc.Title}", $"teardown:{tc.Title}" },
+                executed,
+                "Callbacks did not execute in expected order");
+        }
+
+        /// <summary>
+        /// Casos de prueba para callbacks con parámetros
+        /// </summary>
+        public static IEnumerable<object[]> Callback_WithParameters_AllCases()
+        {
+            yield return new object[]
+            {
+                TestCase<(int A, int B), int>.Create(
+                    "Test callbacks with parameters",
+                    (2, 3),
+                    new SuccessResult<int, Type>(5))
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(Callback_WithParameters_AllCases), DynamicDataSourceType.Method)]
+        [Priority(5)]
+        public void Callback_WithParameters(TestCase<(int A, int B), int> tc)
+        {
+            var executed = new List<string>();
+
+            tc.Setup = t => executed.Add($"setup:{t.Title}");
+            tc.Teardown = t => executed.Add($"teardown:{t.Title}");
+
+            var result = tc.Run(p => p.A + p.B);
+
+            Assert.AreEqual(5, result, "Execution result mismatch");
+            CollectionAssert.AreEqual(
+                new[] { $"setup:{tc.Title}", $"teardown:{tc.Title}" },
+                executed,
+                "Callbacks did not execute in expected order");
+        }
+
+        /// <summary>
+        /// Casos de prueba para callbacks ejecutados manualmente
+        /// </summary>
+        public static IEnumerable<object[]> Callback_Manual_AllCases()
+        {
+            yield return new object[]
+            {
+                TestCase<string>.Create(
+                    "Test manual callbacks",
+                    new SuccessResult<string, Type>("ok"))
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(Callback_Manual_AllCases), DynamicDataSourceType.Method)]
+        [Priority(6)]
+        public void Callback_Manual(TestCase<string> tc)
+        {
+            var executed = new List<string>();
+
+            tc.Setup = t => executed.Add($"setup:{t.Title}");
+            tc.Teardown = t => executed.Add($"teardown:{t.Title}");
+
+            // Ejecución manual
+            tc.RunSetup();
+            executed.Add("execute");
+            tc.RunTeardown();
+
+            CollectionAssert.AreEqual(
+                new[] { $"setup:{tc.Title}", "execute", $"teardown:{tc.Title}" },
+                executed,
+                "Manual execution order mismatch");
+        }
+
+        /// <summary>
+        /// Casos de prueba cuando no se configuran callbacks
+        /// </summary>
+        public static IEnumerable<object[]> Callback_None_AllCases()
+        {
+            yield return new object[]
+            {
+                TestCase<int>.Create(
+                    "Test callbacks none",
+                    new SuccessResult<int, Type>(99))
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(Callback_None_AllCases), DynamicDataSourceType.Method)]
+        [Priority(7)]
+        public void Callback_None(TestCase<int> tc)
+        {
+            // No se configuran Setup ni Teardown
+            var result = tc.Run(() => 99);
+
+            Assert.AreEqual(99, result, "Execution result mismatch when no callbacks defined");
+        }
+
+        /// <summary>
+        /// Casos de prueba para verificar que el estado no se acumula entre ejecuciones de Run
+        /// </summary>
+        public static IEnumerable<object[]> Callback_StateIsolation_AllCases()
+        {
+            yield return new object[]
+            {
+        TestCase<int>.Create(
+            "Test state isolation",
+            new SuccessResult<int, Type>(0))
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(Callback_StateIsolation_AllCases), DynamicDataSourceType.Method)]
+        [Priority(8)]
+        public void Callback_StateIsolation(TestCase<int> tc)
+        {
+            var counter = 0;
+
+            tc.Setup = t => counter++;
+
+            var r1 = tc.Run(() => 100);
+
+            var r2 = tc.Run(() => 200);
+
+            Assert.AreEqual(100, r1, "First run result mismatch");
+            Assert.AreEqual(200, r2, "Second run result mismatch");
+
+            Assert.AreEqual(2, counter, "Setup should run once per test execution, ensuring state isolation");
+        }
+
+        /// <summary>
+        /// Casos de prueba para verificar que Teardown limpia recursos (carpeta temporal)
+        /// </summary>
+        public static IEnumerable<object[]> Callback_CreateFolder_AllCases()
+        {
+            yield return new object[]
+            {
+        TestCase<string, string>.Create(
+            "Test folder creation and cleanup",
+            "tempFolder",
+            new SuccessResult<string, Type>("tempFolder"))
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(Callback_CreateFolder_AllCases), DynamicDataSourceType.Method)]
+        [Priority(9)]
+        public void Callback_CreateFolderAndCleanup(TestCase<string, string> tc)
+        {
+            string folderPath = Path.Combine(Path.GetTempPath(), tc.Parameters);
+
+            // Setup: crear carpeta
+            tc.Setup = t =>
+            {
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+            };
+
+            // Teardown: eliminar carpeta
+            tc.Teardown = t =>
+            {
+                if (Directory.Exists(folderPath))
+                    Directory.Delete(folderPath, true);
+            };
+
+            tc.Run(p =>
+            {
+                Assert.IsTrue(Directory.Exists(folderPath), "Folder should exist during test execution");
+                return folderPath;
+            });
+
+            // Después de Run, Teardown ya se ejecutó: la carpeta debe desaparecer
+            Assert.IsFalse(Directory.Exists(folderPath), "Folder should be deleted after test execution");
+        }
+
+        /// <summary>
+        /// Casos de prueba: RunSetup ejecuta Setup correctamente
+        /// </summary>
+        public static IEnumerable<object[]> RunSetup_Executes_AllCases()
+        {
+            yield return new object[]
+            {
+        TestCase<string, int>.Create(
+            "RunSetup executes",
+            "param",
+            new SuccessResult<int, Type>(1))
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(RunSetup_Executes_AllCases), DynamicDataSourceType.Method)]
+        [Priority(10)]
+        public void RunSetup_Executes(TestCase<string, int> tc)
+        {
+            var executed = new List<string>();
+            tc.Setup = t => executed.Add("setup");
+
+            tc.RunSetup();
+
+            CollectionAssert.AreEqual(new[] { "setup" }, executed, "Setup should have been executed");
+        }
+
+        /// <summary>
+        /// Casos de prueba: RunSetup no hace nada si Setup es null
+        /// </summary>
+        public static IEnumerable<object[]> RunSetup_Null_AllCases()
+        {
+            yield return new object[]
+            {
+        TestCase<string, int>.Create(
+            "RunSetup null",
+            "param",
+            new SuccessResult<int, Type>(1))
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(RunSetup_Null_AllCases), DynamicDataSourceType.Method)]
+        [Priority(11)]
+        public void RunSetup_Null(TestCase<string, int> tc)
+        {
+            tc.Setup = null;
+            tc.RunSetup();
+            Assert.IsTrue(true, "RunSetup with null should not throw");
+        }
+
+        /// <summary>
+        /// Casos de prueba: RunSetup envuelve excepciones
+        /// </summary>
+        public static IEnumerable<object[]> RunSetup_Exception_AllCases()
+        {
+            yield return new object[]
+            {
+        TestCase<string, int>.Create(
+            "RunSetup throws",
+            "param",
+            new SuccessResult<int, Type>(1))
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(RunSetup_Exception_AllCases), DynamicDataSourceType.Method)]
+        [Priority(12)]
+        public void RunSetup_Exception(TestCase<string, int> tc)
+        {
+            tc.Setup = t => throw new InvalidOperationException("Boom");
+
+            var ex = Assert.ThrowsException<Exception>(() => tc.RunSetup());
+            StringAssert.Contains(ex.Message, "Error in setup of test", "Exception message should contain context info");
+            Assert.IsInstanceOfType(ex.InnerException, typeof(InvalidOperationException), "Inner exception should be preserved");
+        }
+
+        /// <summary>
+        /// Casos de prueba: RunTeardown ejecuta Teardown correctamente
+        /// </summary>
+        public static IEnumerable<object[]> RunTeardown_Executes_AllCases()
+        {
+            yield return new object[]
+            {
+        TestCase<string, int>.Create(
+            "RunTeardown executes",
+            "param",
+            new SuccessResult<int, Type>(1))
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(RunTeardown_Executes_AllCases), DynamicDataSourceType.Method)]
+        [Priority(13)]
+        public void RunTeardown_Executes(TestCase<string, int> tc)
+        {
+            var executed = new List<string>();
+            tc.Teardown = t => executed.Add("teardown");
+
+            tc.RunTeardown();
+
+            CollectionAssert.AreEqual(new[] { "teardown" }, executed, "Teardown should have been executed");
+        }
+
+        /// <summary>
+        /// Casos de prueba: RunTeardown no hace nada si Teardown es null
+        /// </summary>
+        public static IEnumerable<object[]> RunTeardown_Null_AllCases()
+        {
+            yield return new object[]
+            {
+        TestCase<string, int>.Create(
+            "RunTeardown null",
+            "param",
+            new SuccessResult<int, Type>(1))
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(RunTeardown_Null_AllCases), DynamicDataSourceType.Method)]
+        [Priority(14)]
+        public void RunTeardown_Null(TestCase<string, int> tc)
+        {
+            tc.Teardown = null;
+            tc.RunTeardown();
+            Assert.IsTrue(true, "RunTeardown with null should not throw");
+        }
+
+        /// <summary>
+        /// Casos de prueba: RunTeardown envuelve excepciones
+        /// </summary>
+        public static IEnumerable<object[]> RunTeardown_Exception_AllCases()
+        {
+            yield return new object[]
+            {
+        TestCase<string, int>.Create(
+            "RunTeardown throws",
+            "param",
+            new SuccessResult<int, Type>(1))
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(RunTeardown_Exception_AllCases), DynamicDataSourceType.Method)]
+        [Priority(15)]
+        public void RunTeardown_Exception(TestCase<string, int> tc)
+        {
+            tc.Teardown = t => throw new InvalidOperationException("Boom");
+
+            var ex = Assert.ThrowsException<Exception>(() => tc.RunTeardown());
+            StringAssert.Contains(ex.Message, "Error in teardown of test", "Exception message should contain context info");
+            Assert.IsInstanceOfType(ex.InnerException, typeof(InvalidOperationException), "Inner exception should be preserved");
+        }
     }
 }
