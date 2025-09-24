@@ -14,6 +14,8 @@ namespace Cedeira.Essentials.NET.TDD
     public class TestCase<P, R> : TestCase<R>
     {
         public P Parameters { get; private set; }
+        public Action<TestCase<P, R>>? Setup { get; set; }
+        public Action<TestCase<P, R>>? Teardown { get; set; }
 
         protected TestCase(string title, P parameters, IResult<R, Type> result) : base(title, result)
         {
@@ -49,10 +51,6 @@ namespace Cedeira.Essentials.NET.TDD
             _dependencies.Add((mock, typeof(M)));
             return this;
         }
-
-        public Action<TestCase<P, R>>? Setup { get; set; }
-
-        public Action<TestCase<P, R>>? Teardown { get; set; }
 
         public void RunSetup()
         {
