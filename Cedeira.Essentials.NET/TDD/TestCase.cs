@@ -14,6 +14,8 @@ namespace Cedeira.Essentials.NET.TDD
     public class TestCase<P, R> : TestCase<R>
     {
         public P Parameters { get; private set; }
+        public Action<TestCase<P, R>>? Setup { get; set; }
+        public Action<TestCase<P, R>>? Teardown { get; set; }
 
         protected TestCase(string title, P parameters, IResult<R, Type> result) : base(title, result)
         {
@@ -49,6 +51,43 @@ namespace Cedeira.Essentials.NET.TDD
             _dependencies.Add((mock, typeof(M)));
             return this;
         }
+
+        public void RunSetup()
+        {
+            if (Setup != null)
+            {
+                try { Setup(this); }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error in setup of test '{Title}': {ex.Message}", ex);
+                }
+            }
+        }
+
+        public void RunTeardown()
+        {
+            if (Teardown != null)
+            {
+                try { Teardown(this); }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error in teardown of test '{Title}': {ex.Message}", ex);
+                }
+            }
+        }
+
+        public R Run(Func<P, R> execute)
+        {
+            RunSetup();
+            try
+            {
+                return execute(Parameters);
+            }
+            finally
+            {
+                RunTeardown();
+            }
+        }
     }
 
     public class TestCase<R>
@@ -57,6 +96,9 @@ namespace Cedeira.Essentials.NET.TDD
         public IResult<R, Type> Result { get; private set; }
 
         protected List<(Mock, Type)> _dependencies;
+
+        public Action<TestCase<R>>? Setup { get; set; }
+        public Action<TestCase<R>>? Teardown { get; set; }
 
         protected TestCase(string title, IResult<R, Type> result)
         {
@@ -100,6 +142,43 @@ namespace Cedeira.Essentials.NET.TDD
         public string FailResponse(string details, object expectedObject, object actualObject, Exception? reason = null)
         {
             return $"Fail test '{Title}': {details}, expected {expectedObject}, but got {actualObject}{(reason is not null ? $", because {reason.FullMessage()}" : "")}";
+        }
+
+        public void RunSetup()
+        {
+            if (Setup != null)
+            {
+                try { Setup(this); }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error in setup of test '{Title}': {ex.Message}", ex);
+                }
+            }
+        }
+
+        public void RunTeardown()
+        {
+            if (Teardown != null)
+            {
+                try { Teardown(this); }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error in teardown of test '{Title}': {ex.Message}", ex);
+                }
+            }
+        }
+
+        public R Run(Func<R> execute)
+        {
+            RunSetup();
+            try
+            {
+                return execute();
+            }
+            finally
+            {
+                RunTeardown();
+            }
         }
     }
 }
