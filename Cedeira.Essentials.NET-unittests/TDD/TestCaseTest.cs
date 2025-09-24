@@ -964,5 +964,58 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             StringAssert.Contains(ex.Message, "Error in teardown of test", "Exception message should contain context info");
             Assert.IsInstanceOfType(ex.InnerException, typeof(InvalidOperationException), "Inner exception should be preserved");
         }
+
+        /// <summary>
+        /// Casos de prueba: RunSetup lanza excepción en TestCase<R>
+        /// </summary>
+        public static IEnumerable<object[]> RunSetup_Exception_AllCases_R()
+        {
+            yield return new object[]
+            {
+        TestCase<int>.Create(
+            "RunSetup throws (R)",
+            new SuccessResult<int, Type>(1))
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(RunSetup_Exception_AllCases_R), DynamicDataSourceType.Method)]
+        [Priority(20)]
+        public void RunSetup_Exception_R(TestCase<int> tc)
+        {
+            tc.Setup = t => throw new InvalidOperationException("Boom");
+
+            var ex = Assert.ThrowsException<Exception>(() => tc.RunSetup());
+
+            StringAssert.Contains(ex.Message, "Error in setup of test", "Exception message should contain context info");
+            Assert.IsInstanceOfType(ex.InnerException, typeof(InvalidOperationException), "Inner exception should be preserved");
+        }
+
+        /// <summary>
+        /// Casos de prueba: RunTeardown lanza excepción en TestCase<R>;
+        /// </summary>
+        public static IEnumerable<object[]> RunTeardown_Exception_AllCases_R()
+        {
+            yield return new object[]
+            {
+        TestCase<int>.Create(
+            "RunTeardown throws (R)",
+            new SuccessResult<int, Type>(1))
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(RunTeardown_Exception_AllCases_R), DynamicDataSourceType.Method)]
+        [Priority(21)]
+        public void RunTeardown_Exception_R(TestCase<int> tc)
+        {
+            tc.Teardown = t => throw new InvalidOperationException("Boom");
+
+            var ex = Assert.ThrowsException<Exception>(() => tc.RunTeardown());
+
+            StringAssert.Contains(ex.Message, "Error in teardown of test", "Exception message should contain context info");
+            Assert.IsInstanceOfType(ex.InnerException, typeof(InvalidOperationException), "Inner exception should be preserved");
+        }
+
     }
 }
