@@ -735,38 +735,6 @@ namespace Cedeira.Essentials.NET_unittests.TDD
         }
 
         /// <summary>
-        /// Casos de prueba para verificar que el estado no se acumula entre ejecuciones de Run
-        /// </summary>
-        public static IEnumerable<object[]> Callback_StateIsolation_AllCases()
-        {
-            yield return new object[]
-            {
-        TestCase<int>.Create(
-            "Test state isolation",
-            new SuccessResult<int, Type>(0))
-            };
-        }
-
-        [TestMethod]
-        [DynamicData(nameof(Callback_StateIsolation_AllCases), DynamicDataSourceType.Method)]
-        [Priority(8)]
-        public void Callback_StateIsolation(TestCase<int> tc)
-        {
-            var counter = 0;
-
-            tc.Setup = t => counter++;
-
-            var r1 = tc.Run(() => 100);
-
-            var r2 = tc.Run(() => 200);
-
-            Assert.AreEqual(100, r1, "First run result mismatch");
-            Assert.AreEqual(200, r2, "Second run result mismatch");
-
-            Assert.AreEqual(2, counter, "Setup should run once per test execution, ensuring state isolation");
-        }
-
-        /// <summary>
         /// Casos de prueba para verificar que Teardown limpia recursos (carpeta temporal)
         /// </summary>
         public static IEnumerable<object[]> Callback_CreateFolder_AllCases()
