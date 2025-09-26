@@ -618,25 +618,26 @@ namespace Cedeira.Essentials.NET_unittests.TDD
         {
             yield return new object[]
             {
-                TestCase<int>.Create(
+                TestCase<Unit>.Create(
                     "Test callbacks no parameters",
-                    new SuccessResult<int, Type>(42))
+                    new SuccessResult<Unit, Type>(Unit.Value))
             };
         }
 
         [TestMethod]
         [DynamicData(nameof(Callback_NoParameters_AllCases), DynamicDataSourceType.Method)]
         [Priority(4)]
-        public void Callback_NoParameters(TestCase<int> tc)
+        public void Callback_NoParameters(TestCase<Unit> tc)
         {
             var executed = new List<string>();
 
             tc.Setup = t => executed.Add($"setup:{t.Title}");
             tc.Teardown = t => executed.Add($"teardown:{t.Title}");
 
-            var result = tc.Run(() => 42);
+            var result = tc.Run(() => Unit.Value);
 
-            Assert.AreEqual(42, result, "Execution result mismatch");
+            Assert.AreEqual(tc.Result.SuccessValue, result, "Execution result mismatch");
+
             CollectionAssert.AreEqual(
                 new[] { $"setup:{tc.Title}", $"teardown:{tc.Title}" },
                 executed,
@@ -669,7 +670,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
 
             var result = tc.Run(p => p.A + p.B);
 
-            Assert.AreEqual(5, result, "Execution result mismatch");
+            Assert.AreEqual(tc.Result.SuccessValue, result, "Execution result mismatch");
             CollectionAssert.AreEqual(
                 new[] { $"setup:{tc.Title}", $"teardown:{tc.Title}" },
                 executed,
@@ -681,18 +682,19 @@ namespace Cedeira.Essentials.NET_unittests.TDD
         /// </summary>
         public static IEnumerable<object[]> Callback_Manual_AllCases()
         {
+            string title = "Test manual callbacks";
             yield return new object[]
             {
-                TestCase<string>.Create(
-                    "Test manual callbacks",
-                    new SuccessResult<string, Type>("ok"))
+                TestCase<string[]>.Create(
+                    title: title,
+                    new SuccessResult<string[], Type>(new[] { $"setup:{title}", "execute", $"teardown:{title}" }))
             };
         }
 
         [TestMethod]
         [DynamicData(nameof(Callback_Manual_AllCases), DynamicDataSourceType.Method)]
         [Priority(6)]
-        public void Callback_Manual(TestCase<string> tc)
+        public void Callback_Manual(TestCase<string[]> tc)
         {
             var executed = new List<string>();
 
@@ -705,7 +707,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             tc.RunTeardown();
 
             CollectionAssert.AreEqual(
-                new[] { $"setup:{tc.Title}", "execute", $"teardown:{tc.Title}" },
+                tc.Result.SuccessValue,
                 executed,
                 "Manual execution order mismatch");
         }
@@ -731,7 +733,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             // No se configuran Setup ni Teardown
             var result = tc.Run(() => 99);
 
-            Assert.AreEqual(99, result, "Execution result mismatch when no callbacks defined");
+            Assert.AreEqual(tc.Result.SuccessValue, result, "Execution result mismatch when no callbacks defined");
         }
 
         /// <summary>
@@ -786,24 +788,24 @@ namespace Cedeira.Essentials.NET_unittests.TDD
         {
             yield return new object[]
             {
-        TestCase<string, int>.Create(
+        TestCase<string, string[]>.Create(
             "RunSetup executes",
             "param",
-            new SuccessResult<int, Type>(1))
+            new SuccessResult<string[], Type>(new[] { "setup" }))
             };
         }
 
         [TestMethod]
         [DynamicData(nameof(RunSetup_Executes_AllCases), DynamicDataSourceType.Method)]
         [Priority(10)]
-        public void RunSetup_Executes(TestCase<string, int> tc)
+        public void RunSetup_Executes(TestCase<string, string[]> tc)
         {
             var executed = new List<string>();
             tc.Setup = t => executed.Add("setup");
 
             tc.RunSetup();
 
-            CollectionAssert.AreEqual(new[] { "setup" }, executed, "Setup should have been executed");
+            CollectionAssert.AreEqual(tc.Result.SuccessValue, executed, "Setup should have been executed");
         }
 
         /// <summary>
@@ -813,21 +815,22 @@ namespace Cedeira.Essentials.NET_unittests.TDD
         {
             yield return new object[]
             {
-        TestCase<string, int>.Create(
+        TestCase<string, bool>.Create(
             "RunSetup null",
             "param",
-            new SuccessResult<int, Type>(1))
+            new SuccessResult<bool, Type>(true))
             };
         }
 
         [TestMethod]
         [DynamicData(nameof(RunSetup_Null_AllCases), DynamicDataSourceType.Method)]
         [Priority(11)]
-        public void RunSetup_Null(TestCase<string, int> tc)
+        public void RunSetup_Null(TestCase<string, bool> tc)
         {
             tc.Setup = null;
             tc.RunSetup();
-            Assert.IsTrue(true, "RunSetup with null should not throw");
+            tc.Run(() => true);
+            Assert.IsTrue(tc.Result.SuccessValue, "RunSetup with null should not throw");
         }
 
         /// <summary>
@@ -837,20 +840,20 @@ namespace Cedeira.Essentials.NET_unittests.TDD
         {
             yield return new object[]
             {
-        TestCase<string, int>.Create(
+        TestCase<string, Unit>.Create(
             "RunSetup throws",
             "param",
-            new SuccessResult<int, Type>(1))
+            new SuccessResult<Unit, Type>(Unit.Value))
             };
         }
 
         [TestMethod]
         [DynamicData(nameof(RunSetup_Exception_AllCases), DynamicDataSourceType.Method)]
         [Priority(12)]
-        public void RunSetup_Exception(TestCase<string, int> tc)
+        public void RunSetup_Exception(TestCase<string, Unit> tc)
         {
             tc.Setup = t => throw new InvalidOperationException("Boom");
-
+            tc.Run(() => Unit.Value);
             var ex = Assert.ThrowsException<Exception>(() => tc.RunSetup());
             StringAssert.Contains(ex.Message, "Error in setup of test", "Exception message should contain context info");
             Assert.IsInstanceOfType(ex.InnerException, typeof(InvalidOperationException), "Inner exception should be preserved");
@@ -863,24 +866,24 @@ namespace Cedeira.Essentials.NET_unittests.TDD
         {
             yield return new object[]
             {
-        TestCase<string, int>.Create(
+        TestCase<string, string[]>.Create(
             "RunTeardown executes",
             "param",
-            new SuccessResult<int, Type>(1))
+            new SuccessResult<string[], Type>(new[] { "teardown" }))
             };
         }
 
         [TestMethod]
         [DynamicData(nameof(RunTeardown_Executes_AllCases), DynamicDataSourceType.Method)]
         [Priority(13)]
-        public void RunTeardown_Executes(TestCase<string, int> tc)
+        public void RunTeardown_Executes(TestCase<string, string[]> tc)
         {
             var executed = new List<string>();
             tc.Teardown = t => executed.Add("teardown");
-
+            tc.Run(() => []);
             tc.RunTeardown();
 
-            CollectionAssert.AreEqual(new[] { "teardown" }, executed, "Teardown should have been executed");
+            CollectionAssert.AreEqual(tc.Result.SuccessValue, executed, "Teardown should have been executed");
         }
 
         /// <summary>
@@ -890,21 +893,21 @@ namespace Cedeira.Essentials.NET_unittests.TDD
         {
             yield return new object[]
             {
-        TestCase<string, int>.Create(
+        TestCase<string, bool>.Create(
             "RunTeardown null",
             "param",
-            new SuccessResult<int, Type>(1))
+            new SuccessResult<bool, Type>(true))
             };
         }
 
         [TestMethod]
         [DynamicData(nameof(RunTeardown_Null_AllCases), DynamicDataSourceType.Method)]
         [Priority(14)]
-        public void RunTeardown_Null(TestCase<string, int> tc)
+        public void RunTeardown_Null(TestCase<string, bool> tc)
         {
             tc.Teardown = null;
             tc.RunTeardown();
-            Assert.IsTrue(true, "RunTeardown with null should not throw");
+            Assert.IsTrue(tc.Result.SuccessValue, "RunTeardown with null should not throw");
         }
 
         /// <summary>
@@ -914,17 +917,17 @@ namespace Cedeira.Essentials.NET_unittests.TDD
         {
             yield return new object[]
             {
-        TestCase<string, int>.Create(
+        TestCase<string, Unit>.Create(
             "RunTeardown throws",
             "param",
-            new SuccessResult<int, Type>(1))
+            new SuccessResult<Unit, Type>(Unit.Value))
             };
         }
 
         [TestMethod]
         [DynamicData(nameof(RunTeardown_Exception_AllCases), DynamicDataSourceType.Method)]
         [Priority(15)]
-        public void RunTeardown_Exception(TestCase<string, int> tc)
+        public void RunTeardown_Exception(TestCase<string, Unit> tc)
         {
             tc.Teardown = t => throw new InvalidOperationException("Boom");
 
@@ -984,6 +987,5 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             StringAssert.Contains(ex.Message, "Error in teardown of test", "Exception message should contain context info");
             Assert.IsInstanceOfType(ex.InnerException, typeof(InvalidOperationException), "Inner exception should be preserved");
         }
-
     }
 }
