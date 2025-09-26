@@ -842,8 +842,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             {
         TestCase<string, Unit>.Create(
             "RunSetup throws",
-            "param",
-            new SuccessResult<Unit, Type>(Unit.Value))
+            "param")
             };
         }
 
@@ -919,8 +918,7 @@ namespace Cedeira.Essentials.NET_unittests.TDD
             {
         TestCase<string, Unit>.Create(
             "RunTeardown throws",
-            "param",
-            new SuccessResult<Unit, Type>(Unit.Value))
+            "param")
             };
         }
 
