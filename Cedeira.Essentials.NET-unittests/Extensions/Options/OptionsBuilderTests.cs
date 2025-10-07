@@ -3,13 +3,13 @@ using Cedeira.Essentials.NET.Extensions.Options;
 namespace Cedeira.Essentials.NET_unittests.Extensions.Options
 {
     /// <summary>
-    /// Contiene pruebas unitarias para la clase <see cref="OptionsBuilder{T}"/>.
+    /// This class contains unit tests for the <see cref="OptionsBuilder{T}"/> class.
     /// </summary>
     [TestClass]
     public class OptionsBuilderTests
     {
         /// <summary>
-        /// Clase de prueba concreta para probar OptionsBuilder.
+        /// Concrete test class for testing OptionsBuilder.
         /// </summary>
         private class TestOptions
         {
@@ -19,7 +19,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Options
         }
 
         /// <summary>
-        /// Implementación concreta de OptionsBuilder para pruebas.
+        /// Concrete implementation of OptionsBuilder for testing.
         /// </summary>
         private class TestOptionsBuilder : OptionsBuilder<TestOptions>
         {
@@ -55,35 +55,35 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Options
         }
 
         /// <summary>
-        /// Prueba que OptionsBuilder sea una clase abstracta y no se pueda instanciar directamente.
+        /// Test that OptionsBuilder is an abstract class and cannot be instantiated directly.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(MissingMethodException))]
         public void OptionsBuilder_ShouldBeAbstract()
         {
-            // Intentar instanciar directamente OptionsBuilder debe fallar
+            // Try to instantiate OptionsBuilder directly should fail
             var builder = Activator.CreateInstance(typeof(OptionsBuilder<TestOptions>));
         }
 
         /// <summary>
-        /// Prueba que una implementación concreta de OptionsBuilder pueda construir opciones correctamente.
+        /// Test that a concrete implementation of OptionsBuilder can build options correctly.
         /// </summary>
         [TestMethod]
         public void ConcreteOptionsBuilder_ShouldBuildOptionsCorrectly()
         {
-            // Arrange
+            // Arrange:
             var expectedName = "TestName";
             var expectedValue = 42;
             var expectedIsEnabled = true;
 
-            // Act
+            // Act:
             var options = new TestOptionsBuilder()
                 .WithName(expectedName)
                 .WithValue(expectedValue)
                 .WithIsEnabled(expectedIsEnabled)
                 .Build();
 
-            // Assert
+            // Assert:
             Assert.IsNotNull(options);
             Assert.AreEqual(expectedName, options.Name);
             Assert.AreEqual(expectedValue, options.Value);
@@ -91,15 +91,15 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Options
         }
 
         /// <summary>
-        /// Prueba que OptionsBuilder pueda construir opciones con valores por defecto.
+        /// Test that OptionsBuilder can build options with default values.
         /// </summary>
         [TestMethod]
         public void OptionsBuilder_ShouldBuildOptionsWithDefaultValues()
         {
-            // Act
+            // Act:
             var options = new TestOptionsBuilder().Build();
 
-            // Assert
+            // Assert:
             Assert.IsNotNull(options);
             Assert.AreEqual(string.Empty, options.Name);
             Assert.AreEqual(0, options.Value);
@@ -107,33 +107,33 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Options
         }
 
         /// <summary>
-        /// Prueba que OptionsBuilder pueda construir opciones con configuración parcial.
+        /// Test that OptionsBuilder can build options with partial configuration.
         /// </summary>
         [TestMethod]
         public void OptionsBuilder_ShouldBuildOptionsWithPartialConfiguration()
         {
-            // Arrange
+            // Arrange:
             var expectedName = "PartialTest";
 
-            // Act
+            // Act:
             var options = new TestOptionsBuilder()
                 .WithName(expectedName)
                 .Build();
 
-            // Assert
+            // Assert:
             Assert.IsNotNull(options);
             Assert.AreEqual(expectedName, options.Name);
-            Assert.AreEqual(0, options.Value); // Valor por defecto
-            Assert.AreEqual(false, options.IsEnabled); // Valor por defecto
+            Assert.AreEqual(0, options.Value); // Default value
+            Assert.AreEqual(false, options.IsEnabled); // Default value
         }
 
         /// <summary>
-        /// Prueba que OptionsBuilder pueda construir múltiples instancias independientes.
+        /// Test that OptionsBuilder can build multiple independent instances.
         /// </summary>
         [TestMethod]
         public void OptionsBuilder_ShouldBuildMultipleIndependentInstances()
         {
-            // Arrange
+            // Arrange:
             var builder1 = new TestOptionsBuilder()
                 .WithName("First")
                 .WithValue(1)
@@ -144,11 +144,11 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Options
                 .WithValue(2)
                 .WithIsEnabled(false);
 
-            // Act
+            // Act:
             var options1 = builder1.Build();
             var options2 = builder2.Build();
 
-            // Assert
+            // Assert:
             Assert.IsNotNull(options1);
             Assert.IsNotNull(options2);
             Assert.AreNotSame(options1, options2);
@@ -161,24 +161,24 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Options
         }
 
         /// <summary>
-        /// Prueba que OptionsBuilder pueda construir opciones con configuración fluida (method chaining).
+        /// Test that OptionsBuilder can build options with fluent configuration (method chaining).
         /// </summary>
         [TestMethod]
         public void OptionsBuilder_ShouldSupportFluentConfiguration()
         {
-            // Arrange
+            // Arrange:
             var expectedName = "FluentTest";
             var expectedValue = 100;
             var expectedIsEnabled = true;
 
-            // Act
+            // Act:
             var options = new TestOptionsBuilder()
                 .WithName(expectedName)
                 .WithValue(expectedValue)
                 .WithIsEnabled(expectedIsEnabled)
                 .Build();
 
-            // Assert
+            // Assert:
             Assert.IsNotNull(options);
             Assert.AreEqual(expectedName, options.Name);
             Assert.AreEqual(expectedValue, options.Value);
@@ -186,24 +186,24 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Options
         }
 
         /// <summary>
-        /// Prueba que OptionsBuilder pueda construir opciones con valores null y valores por defecto.
+        /// Test that OptionsBuilder can build options with null and default values.
         /// </summary>
         [TestMethod]
         public void OptionsBuilder_ShouldHandleNullAndDefaultValues()
         {
-            // Arrange
+            // Arrange:
             string? nullName = null;
             var expectedValue = 0;
             var expectedIsEnabled = false;
 
-            // Act
+            // Act:
             var options = new TestOptionsBuilder()
                 .WithName(nullName ?? string.Empty)
                 .WithValue(expectedValue)
                 .WithIsEnabled(expectedIsEnabled)
                 .Build();
 
-            // Assert
+            // Assert:
             Assert.IsNotNull(options);
             Assert.AreEqual(string.Empty, options.Name);
             Assert.AreEqual(expectedValue, options.Value);
@@ -211,24 +211,24 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Options
         }
 
         /// <summary>
-        /// Prueba que OptionsBuilder pueda construir opciones con valores extremos.
+        /// Test that OptionsBuilder can build options with extreme values.
         /// </summary>
         [TestMethod]
         public void OptionsBuilder_ShouldHandleExtremeValues()
         {
-            // Arrange
+            // Arrange:
             var expectedName = "ExtremeTest";
             var expectedValue = int.MaxValue;
             var expectedIsEnabled = true;
 
-            // Act
+            // Act:
             var options = new TestOptionsBuilder()
                 .WithName(expectedName)
                 .WithValue(expectedValue)
                 .WithIsEnabled(expectedIsEnabled)
                 .Build();
 
-            // Assert
+            // Assert:
             Assert.IsNotNull(options);
             Assert.AreEqual(expectedName, options.Name);
             Assert.AreEqual(expectedValue, options.Value);
@@ -236,24 +236,24 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Options
         }
 
         /// <summary>
-        /// Prueba que OptionsBuilder pueda construir opciones con valores negativos.
+        /// Test that OptionsBuilder can build options with negative values.
         /// </summary>
         [TestMethod]
         public void OptionsBuilder_ShouldHandleNegativeValues()
         {
-            // Arrange
+            // Arrange:
             var expectedName = "NegativeTest";
             var expectedValue = -42;
             var expectedIsEnabled = false;
 
-            // Act
+            // Act:
             var options = new TestOptionsBuilder()
                 .WithName(expectedName)
                 .WithValue(expectedValue)
                 .WithIsEnabled(expectedIsEnabled)
                 .Build();
 
-            // Assert
+            // Assert:
             Assert.IsNotNull(options);
             Assert.AreEqual(expectedName, options.Name);
             Assert.AreEqual(expectedValue, options.Value);
@@ -261,18 +261,18 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Options
         }
 
         /// <summary>
-        /// Prueba que OptionsBuilder pueda construir opciones con cadenas vacías y espacios en blanco.
+        /// Test that OptionsBuilder can build options with empty and whitespace strings.
         /// </summary>
         [TestMethod]
         public void OptionsBuilder_ShouldHandleEmptyAndWhitespaceStrings()
         {
-            // Arrange
+            // Arrange:
             var emptyName = string.Empty;
             var whitespaceName = "   ";
             var expectedValue = 0;
             var expectedIsEnabled = false;
 
-            // Act
+            // Act:
             var options1 = new TestOptionsBuilder()
                 .WithName(emptyName)
                 .WithValue(expectedValue)
@@ -285,7 +285,7 @@ namespace Cedeira.Essentials.NET_unittests.Extensions.Options
                 .WithIsEnabled(expectedIsEnabled)
                 .Build();
 
-            // Assert
+            // Assert:
             Assert.IsNotNull(options1);
             Assert.IsNotNull(options2);
             Assert.AreEqual(emptyName, options1.Name);
