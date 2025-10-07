@@ -411,3 +411,6 @@ docs/
 
 # NuGet configuration files
 nuget.config
+
+**/[Tt]emp/
+**/[Tt]mp/
